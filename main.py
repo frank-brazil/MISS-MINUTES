@@ -1,9 +1,11 @@
 from app.api.app import app, create_app
-from app.core.ai import AIModel
-from app.providers.openai_provider import OpenAIProvider
+from app.config.settings import load_config
+from app.runtime.runtime import MissMinutesRuntime
 
 if __name__ == "__main__":
     import uvicorn
 
-    configured: AIModel = OpenAIProvider()
-    uvicorn.run(create_app(ai_model=configured), host="127.0.0.1", port=8000)
+    config = load_config()
+    runtime = MissMinutesRuntime(config)
+    app_instance = create_app(runtime=runtime)
+    uvicorn.run(app_instance, host="127.0.0.1", port=8000)
