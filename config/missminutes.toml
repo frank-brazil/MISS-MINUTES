@@ -1,0 +1,47 @@
+# MISSMINUTES default configuration
+# Override with environment variables or provide a custom TOML file.
+
+[ai]
+provider = "openai"
+model = "gpt-4o-mini"
+timeout_seconds = 60.0
+
+[voice]
+enabled = false
+stt_provider = "openai"
+tts_provider = "openai"
+wake_word = ""
+language_mode = "auto"
+continuous_listening = false
+local_only = false
+
+[avatar]
+enabled = false
+theme = "default"
+window_behavior = "taskbar"
+
+[security]
+policy_mode = "default"
+confirmation_required = true
+audit_enabled = true
+audit_max_events = 1000
+
+[distributed]
+enabled = false
+master_host = "127.0.0.1"
+master_port = 8100
+auth_token = ""
+max_retries = 2
+max_concurrent_dispatch = 4
+dispatch_timeout = 30.0
+
+[browser]
+enabled = false
+allowed_domains = []
+
+[filesystem]
+allowed_roots = []
+
+[vision]
+enabled = false
+provider = "local"
