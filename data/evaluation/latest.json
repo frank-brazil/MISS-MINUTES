@@ -1,0 +1,986 @@
+{
+  "run_id": "b5ae5006-230a-41f5-b4d0-a78cc6e5e7ab",
+  "started_at": "2026-09-16T23:22:38.082353+00:00",
+  "completed_at": "2026-09-16T23:22:38.176586+00:00",
+  "environment": {
+    "mode": "deterministic",
+    "python_version": "3.13.7",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "deterministic_fakes_used": [
+      "FakeSpeechToText",
+      "FakeTextToSpeech",
+      "FakeLanguageDetector",
+      "FakeAIModel",
+      "FakeResearchProvider",
+      "FakeVisionProvider",
+      "FakeOcrProvider",
+      "FakeActionExecutor",
+      "FakeObservationProvider",
+      "FakeVerifier",
+      "FakeCritic",
+      "FakePredictor",
+      "FakeWorkerTransport",
+      "FakeMasterTransport",
+      "FakeWorkerExecutor",
+      "FakeBrowserProvider",
+      "FakeAvatarRenderer",
+      "InMemoryMemory"
+    ],
+    "live_providers_used": []
+  },
+  "results": [
+    {
+      "metric": "stt_word_error_rate",
+      "scenario": "STT Quality",
+      "case_id": null,
+      "value": 0.0,
+      "status": "pass",
+      "evidence": "reference='Find my project files in the Documents folder', hypothesis='Find my project files in the Documents folder'",
+      "limitations": "Deterministic fixture only; no real audio or real STT provider.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "stt_character_error_rate",
+      "scenario": "STT Quality",
+      "case_id": null,
+      "value": 0.0,
+      "status": "pass",
+      "evidence": "reference='Find my project files in the Documents folder', hypothesis='Find my project files in the Documents folder'",
+      "limitations": "Deterministic fixture only; no real audio or real STT provider.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "stt_word_error_rate",
+      "scenario": "STT Quality",
+      "case_id": null,
+      "value": 0.125,
+      "status": "fail",
+      "evidence": "reference='Open the browser and search for recent news', hypothesis='Open the browser and search for recent news about'",
+      "limitations": "Deterministic fixture only; no real audio or real STT provider.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "stt_character_error_rate",
+      "scenario": "STT Quality",
+      "case_id": null,
+      "value": 0.13953488372093023,
+      "status": "fail",
+      "evidence": "reference='Open the browser and search for recent news', hypothesis='Open the browser and search for recent news about'",
+      "limitations": "Deterministic fixture only; no real audio or real STT provider.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "stt_word_error_rate",
+      "scenario": "STT Quality",
+      "case_id": null,
+      "value": 0.0,
+      "status": "pass",
+      "evidence": "reference='Mujhe apne project ki files dhoondho', hypothesis='Mujhe apne project ki files dhoondho'",
+      "limitations": "Deterministic fixture only; no real audio or real STT provider.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "stt_character_error_rate",
+      "scenario": "STT Quality",
+      "case_id": null,
+      "value": 0.0,
+      "status": "pass",
+      "evidence": "reference='Mujhe apne project ki files dhoondho', hypothesis='Mujhe apne project ki files dhoondho'",
+      "limitations": "Deterministic fixture only; no real audio or real STT provider.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "stt_word_error_rate",
+      "scenario": "STT Quality",
+      "case_id": null,
+      "value": 0.0,
+      "status": "pass",
+      "evidence": "reference='Mujhe project folder mein README file dikhao', hypothesis='Mujhe project folder mein README file dikhao'",
+      "limitations": "Deterministic fixture only; no real audio or real STT provider.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "stt_character_error_rate",
+      "scenario": "STT Quality",
+      "case_id": null,
+      "value": 0.0,
+      "status": "pass",
+      "evidence": "reference='Mujhe project folder mein README file dikhao', hypothesis='Mujhe project folder mein README file dikhao'",
+      "limitations": "Deterministic fixture only; no real audio or real STT provider.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "stt_word_error_rate",
+      "scenario": "STT Quality",
+      "case_id": null,
+      "value": 0.0,
+      "status": "pass",
+      "evidence": "reference='Stop', hypothesis='Stop'",
+      "limitations": "Deterministic fixture only; no real audio or real STT provider.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "stt_character_error_rate",
+      "scenario": "STT Quality",
+      "case_id": null,
+      "value": 0.0,
+      "status": "pass",
+      "evidence": "reference='Stop', hypothesis='Stop'",
+      "limitations": "Deterministic fixture only; no real audio or real STT provider.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "stt_word_error_rate",
+      "scenario": "STT Quality",
+      "case_id": null,
+      "value": 0.0,
+      "status": "pass",
+      "evidence": "reference='', hypothesis=''",
+      "limitations": "Deterministic fixture only; no real audio or real STT provider.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "stt_character_error_rate",
+      "scenario": "STT Quality",
+      "case_id": null,
+      "value": 0.0,
+      "status": "pass",
+      "evidence": "reference='', hypothesis=''",
+      "limitations": "Deterministic fixture only; no real audio or real STT provider.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "language_detection_accuracy",
+      "scenario": "Language Detection",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "8/8 correct",
+      "limitations": "Fixture-based detection; no real speech input.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "language_detection_accuracy",
+      "scenario": "Language Detection",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "text='Find my project files', expected=english, actual=english",
+      "limitations": "Fixture-based detection; no real speech input.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "language_detection_accuracy",
+      "scenario": "Language Detection",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "text='Mujhe apni files dhoondho', expected=hindi, actual=hindi",
+      "limitations": "Fixture-based detection; no real speech input.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "language_detection_accuracy",
+      "scenario": "Language Detection",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "text='Yaar project folder khol de', expected=hindi, actual=hindi",
+      "limitations": "Fixture-based detection; no real speech input.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "language_detection_accuracy",
+      "scenario": "Language Detection",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "text='Read the configuration file and tell me ', expected=english, actual=english",
+      "limitations": "Fixture-based detection; no real speech input.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "language_detection_accuracy",
+      "scenario": "Language Detection",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "text='Ye kya kar raha hai? Check karo', expected=hindi, actual=hindi",
+      "limitations": "Fixture-based detection; no real speech input.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "language_detection_accuracy",
+      "scenario": "Language Detection",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "text='Research recent developments in AI agent', expected=english, actual=english",
+      "limitations": "Fixture-based detection; no real speech input.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "language_detection_accuracy",
+      "scenario": "Language Detection",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "text='Meri help karo is code ko samajhne mein', expected=hindi, actual=hindi",
+      "limitations": "Fixture-based detection; no real speech input.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "language_detection_accuracy",
+      "scenario": "Language Detection",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "text='Bhai ye file delete mat karna', expected=hindi, actual=hindi",
+      "limitations": "Fixture-based detection; no real speech input.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "routing_correct_rate",
+      "scenario": "Tool/Agent Routing",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "8/8 correct",
+      "limitations": "Capability-based routing only; no LLM-based intent classification.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "routing_correct_rate",
+      "scenario": "Tool/Agent Routing",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "task='Find my DSA notes PDF in my college fold', expected=coding, actual=coding",
+      "limitations": "Capability-based routing only; no LLM-based intent classification.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "routing_correct_rate",
+      "scenario": "Tool/Agent Routing",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "task='Check what processes are running on my l', expected=system, actual=system",
+      "limitations": "Capability-based routing only; no LLM-based intent classification.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "routing_correct_rate",
+      "scenario": "Tool/Agent Routing",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "task='Analyze the error in my code and explain', expected=coding, actual=coding",
+      "limitations": "Capability-based routing only; no LLM-based intent classification.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "routing_correct_rate",
+      "scenario": "Tool/Agent Routing",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "task='Research current information about quant', expected=research, actual=research",
+      "limitations": "Capability-based routing only; no LLM-based intent classification.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "routing_correct_rate",
+      "scenario": "Tool/Agent Routing",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "task='Take a screenshot of the current screen', expected=vision, actual=vision",
+      "limitations": "Capability-based routing only; no LLM-based intent classification.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "routing_correct_rate",
+      "scenario": "Tool/Agent Routing",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "task='Create a new file with the report conten', expected=coding, actual=coding",
+      "limitations": "Capability-based routing only; no LLM-based intent classification.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "routing_correct_rate",
+      "scenario": "Tool/Agent Routing",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "task='Analyze this screenshot and describe wha', expected=vision, actual=vision",
+      "limitations": "Capability-based routing only; no LLM-based intent classification.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "routing_correct_rate",
+      "scenario": "Tool/Agent Routing",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "task='Edit the configuration file to change th', expected=coding, actual=coding",
+      "limitations": "Capability-based routing only; no LLM-based intent classification.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "planning_valid_plan_rate",
+      "scenario": "Planning Success",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "3/3 valid",
+      "limitations": "ManualPlanner only; no LLM-based planning.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "planning_valid_plan_rate",
+      "scenario": "Planning Success",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "task='Research AI agents and create a report', steps=3, min=3",
+      "limitations": "ManualPlanner only; no LLM-based planning.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "planning_valid_plan_rate",
+      "scenario": "Planning Success",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "task='Find files and summarize', steps=3, min=2",
+      "limitations": "ManualPlanner only; no LLM-based planning.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "planning_valid_plan_rate",
+      "scenario": "Planning Success",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "task='Check system status', steps=3, min=1",
+      "limitations": "ManualPlanner only; no LLM-based planning.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "research_citation_presence",
+      "scenario": "Research/Source Quality",
+      "case_id": null,
+      "value": 0.6666666666666666,
+      "status": "fail",
+      "evidence": "2/3 have citations",
+      "limitations": "Fixture-based research; no real web search.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "research_source_coverage",
+      "scenario": "Research/Source Quality",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "Avg coverage across 3 queries",
+      "limitations": "Fixture-based research; no real web search.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "research_source_coverage",
+      "scenario": "Research/Source Quality",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "query='quantum computing', expected=2, actual=2",
+      "limitations": "Fixture-based research; no real web search.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "research_source_coverage",
+      "scenario": "Research/Source Quality",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "query='AI agents', expected=1, actual=1",
+      "limitations": "Fixture-based research; no real web search.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "research_source_coverage",
+      "scenario": "Research/Source Quality",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "query='empty query', expected=0, actual=0",
+      "limitations": "Fixture-based research; no real web search.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "computer_task_success_rate",
+      "scenario": "Computer Task Completion",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "3/3 succeeded",
+      "limitations": "FakeActionExecutor; no real filesystem operations.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "computer_task_success_rate",
+      "scenario": "Computer Task Completion",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "action='Read file /test/file.txt', success=True",
+      "limitations": "FakeActionExecutor; no real filesystem operations.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "computer_task_success_rate",
+      "scenario": "Computer Task Completion",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "action='Search files *.py', success=True",
+      "limitations": "FakeActionExecutor; no real filesystem operations.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "computer_task_success_rate",
+      "scenario": "Computer Task Completion",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "action='Create file /tmp/test.txt', success=True",
+      "limitations": "FakeActionExecutor; no real filesystem operations.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "computer_safe_failure_rate",
+      "scenario": "Computer Task Completion",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "3 unsafe actions denied by policy",
+      "limitations": "Security policy evaluation; no real destructive commands.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "browser_safe_action_rate",
+      "scenario": "Browser Success",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "HTTPS navigation succeeded",
+      "limitations": "FakeBrowserProvider; no real browser.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "browser_unsafe_scheme_rejected",
+      "scenario": "Browser Success",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "Unsafe schemes rejected by policy",
+      "limitations": "Policy enforcement; no real browser.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "browser_domain_policy_respected",
+      "scenario": "Browser Success",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "Domain policy enforced",
+      "limitations": "FakeBrowserProvider; no real browser.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "vision_observation_accuracy",
+      "scenario": "Vision Understanding",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "image=screenshot_desktop_001, observation_provided=True",
+      "limitations": "FakeVisionProvider; no real screenshot analysis.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "vision_observation_accuracy",
+      "scenario": "Vision Understanding",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "image=screenshot_browser_001, observation_provided=True",
+      "limitations": "FakeVisionProvider; no real screenshot analysis.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "vision_untrusted_text_handling",
+      "scenario": "Vision Understanding",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "Screen text treated as observation data only",
+      "limitations": "Structural guarantee; no real untrusted text test.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "distributed_dispatch_success",
+      "scenario": "Distributed Scheduling/Recovery",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "assignment_id=8215105c-5b09-41b3-9357-98f9dbe06ccd",
+      "limitations": "FakeWorkerTransport; no real distributed workers.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "distributed_duplicate_prevention",
+      "scenario": "Distributed Scheduling/Recovery",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "Duplicate task IDs rejected by queue",
+      "limitations": "Structural guarantee in DistributedTaskQueue.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "security_allow_allowed",
+      "scenario": "Security Reliability",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "action='read file /home/user/project/README.md', expected=allow",
+      "limitations": "ConservativePolicy; no real security integration test.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "security_deny_denied",
+      "scenario": "Security Reliability",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "action='delete system files /etc/passwd', expected=deny",
+      "limitations": "ConservativePolicy; no real security integration test.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "security_deny_denied",
+      "scenario": "Security Reliability",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "action='execute arbitrary terminal command rm -rf /', expected=deny",
+      "limitations": "ConservativePolicy; no real security integration test.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "security_deny_denied",
+      "scenario": "Security Reliability",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "action='navigate browser to javascript:alert(1)', expected=deny",
+      "limitations": "ConservativePolicy; no real security integration test.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "security_allow_allowed",
+      "scenario": "Security Reliability",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "action='navigate browser to https://example.com', expected=allow",
+      "limitations": "ConservativePolicy; no real security integration test.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "security_confirm_allowed",
+      "scenario": "Security Reliability",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "action='write file to /tmp/output.txt', expected=confirm",
+      "limitations": "ConservativePolicy; no real security integration test.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "security_untrusted_vision_text",
+      "scenario": "Security Reliability",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "Untrusted screen text remains observation data",
+      "limitations": "Structural guarantee.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "voice_latency_capture_to_stt_ms",
+      "scenario": "Voice Latency",
+      "case_id": null,
+      "value": 150.0,
+      "status": "not_measured",
+      "evidence": "Fixture value: 150.0ms",
+      "limitations": "Deterministic fixture only; no real microphone, STT, TTS, or hardware measurement.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "voice_latency_stt_to_orchestrator_ms",
+      "scenario": "Voice Latency",
+      "case_id": null,
+      "value": 80.0,
+      "status": "not_measured",
+      "evidence": "Fixture value: 80.0ms",
+      "limitations": "Deterministic fixture only; no real microphone, STT, TTS, or hardware measurement.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "voice_latency_orchestrator_to_tts_ms",
+      "scenario": "Voice Latency",
+      "case_id": null,
+      "value": 120.0,
+      "status": "not_measured",
+      "evidence": "Fixture value: 120.0ms",
+      "limitations": "Deterministic fixture only; no real microphone, STT, TTS, or hardware measurement.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "voice_latency_tts_to_playback_start_ms",
+      "scenario": "Voice Latency",
+      "case_id": null,
+      "value": 50.0,
+      "status": "not_measured",
+      "evidence": "Fixture value: 50.0ms",
+      "limitations": "Deterministic fixture only; no real microphone, STT, TTS, or hardware measurement.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "voice_latency_interruption_response_ms",
+      "scenario": "Voice Latency",
+      "case_id": null,
+      "value": 30.0,
+      "status": "not_measured",
+      "evidence": "Fixture value: 30.0ms",
+      "limitations": "Deterministic fixture only; no real microphone, STT, TTS, or hardware measurement.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "voice_interruption_response",
+      "scenario": "Voice Latency",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "Interruption stops playback and transitions to listening",
+      "limitations": "Structural guarantee; no real audio playback test.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "avatar_event_propagation",
+      "scenario": "Avatar Synchronization",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "event=voice_listening, expected=listening, actual=listening",
+      "limitations": "FakeAvatarRenderer and AvatarStateMachine; no real rendering.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "avatar_event_propagation",
+      "scenario": "Avatar Synchronization",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "event=thinking, expected=thinking, actual=thinking",
+      "limitations": "FakeAvatarRenderer and AvatarStateMachine; no real rendering.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "avatar_event_propagation",
+      "scenario": "Avatar Synchronization",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "event=speaking, expected=speaking, actual=speaking",
+      "limitations": "FakeAvatarRenderer and AvatarStateMachine; no real rendering.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "avatar_event_propagation",
+      "scenario": "Avatar Synchronization",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "event=interruption, expected=listening, actual=listening",
+      "limitations": "FakeAvatarRenderer and AvatarStateMachine; no real rendering.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "avatar_voice_avatar_sync",
+      "scenario": "Avatar Synchronization",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "Voice events trigger avatar state changes",
+      "limitations": "Event propagation tested via state machine; no real lip-sync timing.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "memory_retrieval_success",
+      "scenario": "Memory Retrieval",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "query='dark theme', expected>=1, actual=1",
+      "limitations": "InMemoryMemory; no semantic/vector search.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "memory_retrieval_success",
+      "scenario": "Memory Retrieval",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "query='quantum physics lecture notes', expected>=0, actual=0",
+      "limitations": "InMemoryMemory; no semantic/vector search.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "memory_retrieval_success",
+      "scenario": "Memory Retrieval",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "query='password', expected>=0, actual=0",
+      "limitations": "InMemoryMemory; no semantic/vector search.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "e2e_task_completion_rate",
+      "scenario": "End-to-End Task Completion",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "plan_steps=3",
+      "limitations": "Manual pipeline; no real end-to-end orchestration.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "reliability_no_infinite_loops",
+      "scenario": "Reliability",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "scenario=success_first_iteration, iterations=1, max=3",
+      "limitations": "FakeActionExecutor; no real problem-solving engine.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "reliability_no_infinite_loops",
+      "scenario": "Reliability",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "scenario=success_after_replan, iterations=2, max=3",
+      "limitations": "FakeActionExecutor; no real problem-solving engine.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "reliability_no_infinite_loops",
+      "scenario": "Reliability",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "scenario=repeated_failures, iterations=3, max=3",
+      "limitations": "FakeActionExecutor; no real problem-solving engine.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "reliability_no_infinite_loops",
+      "scenario": "Reliability",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "scenario=timeout, iterations=1, max=5",
+      "limitations": "FakeActionExecutor; no real problem-solving engine.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "verification_accuracy",
+      "scenario": "Verification",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "2/2 correct",
+      "limitations": "FakeVerifier with deterministic heuristics.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "verification_accuracy",
+      "scenario": "Verification",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "expected=verified, actual=verified",
+      "limitations": "FakeVerifier with deterministic heuristics.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "verification_accuracy",
+      "scenario": "Verification",
+      "case_id": null,
+      "value": 1.0,
+      "status": "pass",
+      "evidence": "expected=failed, actual=failed",
+      "limitations": "FakeVerifier with deterministic heuristics.",
+      "mode": "deterministic"
+    },
+    {
+      "metric": "verification_accuracy",
+      "scenario": "Prediction Calibration",
+      "case_id": null,
+      "value": 1.0,
+      "status": "not_measured",
+      "evidence": "Heuristic prediction produced; no calibrated ground truth",
+      "limitations": "FakePredictor produces heuristic estimates, not calibrated probabilities. Prediction calibration NOT_MEASURED.",
+      "mode": "deterministic"
+    }
+  ],
+  "reliability_results": [
+    {
+      "scenario_id": "6ab070ca-5223-52dc-8aed-7167bf869190",
+      "scenario_name": "provider_failure",
+      "status": "pass",
+      "details": "Provider failure raised structured error as expected",
+      "evidence": "Exception raised and caught",
+      "mode": "deterministic"
+    },
+    {
+      "scenario_id": "84d3ae88-4dbf-5ff9-be9a-0909a7d636a5",
+      "scenario_name": "tool_failure",
+      "status": "pass",
+      "details": "Tool failure captured with structured error",
+      "evidence": "success=False, error=simulated action failure",
+      "mode": "deterministic"
+    },
+    {
+      "scenario_id": "3e16450f-9c73-51df-8bc2-b28cc2aeda6f",
+      "scenario_name": "agent_failure",
+      "status": "pass",
+      "details": "Agent failure captured with structured error",
+      "evidence": "RuntimeError raised and caught",
+      "mode": "deterministic"
+    },
+    {
+      "scenario_id": "01d5ff60-80cc-50fc-947e-3010b94bad9c",
+      "scenario_name": "planner_failure",
+      "status": "pass",
+      "details": "Planner failure captured with structured error",
+      "evidence": "RuntimeError raised and caught",
+      "mode": "deterministic"
+    },
+    {
+      "scenario_id": "77674e3d-670e-5f03-b2d2-d35a24296446",
+      "scenario_name": "timeout",
+      "status": "pass",
+      "details": "Timeout enforced correctly",
+      "evidence": "asyncio.TimeoutError raised",
+      "mode": "deterministic"
+    },
+    {
+      "scenario_id": "b9063fe5-061b-592a-96ae-7be15df72bdf",
+      "scenario_name": "cancellation",
+      "status": "pass",
+      "details": "Cancellation respected",
+      "evidence": "Task cancelled successfully",
+      "mode": "deterministic"
+    },
+    {
+      "scenario_id": "e4c4b715-59e7-5d8e-829e-fa097d642f4e",
+      "scenario_name": "verification_failure",
+      "status": "pass",
+      "details": "Verification failure correctly identified",
+      "evidence": "status=failed",
+      "mode": "deterministic"
+    },
+    {
+      "scenario_id": "f9226bd2-ef4c-5f28-9019-2dd85639e345",
+      "scenario_name": "inconclusive_verification",
+      "status": "pass",
+      "details": "Inconclusive verification handled correctly: inconclusive",
+      "evidence": "status=inconclusive",
+      "mode": "deterministic"
+    },
+    {
+      "scenario_id": "dce2c207-0a5e-5062-a113-1751eda7d2ad",
+      "scenario_name": "worker_failure",
+      "status": "pass",
+      "details": "Worker failure captured with structured error",
+      "evidence": "Exception raised on dispatch",
+      "mode": "deterministic"
+    },
+    {
+      "scenario_id": "ba0b7e4d-a9a2-5b6f-b24e-ca4eaaf5753c",
+      "scenario_name": "worker_heartbeat_timeout",
+      "status": "pass",
+      "details": "Worker registered, heartbeat timeout test structure valid",
+      "evidence": "worker_status=available",
+      "mode": "deterministic"
+    },
+    {
+      "scenario_id": "c12b1145-1b8c-53f7-910d-f39f01f2b702",
+      "scenario_name": "browser_failure",
+      "status": "pass",
+      "details": "Browser failure captured with structured error",
+      "evidence": "Exception raised on start",
+      "mode": "deterministic"
+    },
+    {
+      "scenario_id": "8b4de2d9-13ae-5c14-8c9d-f619c141ef88",
+      "scenario_name": "voice_interruption",
+      "status": "pass",
+      "details": "Voice interruption handled correctly",
+      "evidence": "Playback stopped on interruption",
+      "mode": "deterministic"
+    },
+    {
+      "scenario_id": "6ba644b2-ba80-59ad-aa77-23c744ff9509",
+      "scenario_name": "tts_failure",
+      "status": "pass",
+      "details": "TTS failure captured with structured error",
+      "evidence": "Exception raised on synthesize",
+      "mode": "deterministic"
+    },
+    {
+      "scenario_id": "d9a06f51-6e38-54b9-9dbe-c2d815c52255",
+      "scenario_name": "stt_failure",
+      "status": "pass",
+      "details": "STT failure captured with structured error",
+      "evidence": "Exception raised on transcribe",
+      "mode": "deterministic"
+    },
+    {
+      "scenario_id": "14bea4be-ff04-53cb-bb89-72f5fdd5b215",
+      "scenario_name": "avatar_renderer_failure",
+      "status": "pass",
+      "details": "Fake avatar renderer produced frame without error",
+      "evidence": "frame_type=RenderFrame",
+      "mode": "deterministic"
+    }
+  ],
+  "summary": {
+    "total_metrics": 82,
+    "pass_count": 73,
+    "fail_count": 3,
+    "inconclusive_count": 0,
+    "not_measured_count": 6,
+    "not_applicable_count": 0,
+    "reliability_pass": 15,
+    "reliability_fail": 0,
+    "reliability_not_applicable": 0
+  }
+}
