@@ -26,8 +26,8 @@ from app.browser.models import (
     BrowserDownload,
     BrowserNavigation,
     BrowserPageContent,
-    BrowserSession,
     BrowserScreenshot,
+    BrowserSession,
     BrowserTypeResult,
     TextEntryAction,
 )
@@ -118,7 +118,7 @@ class PlaywrightBrowserProvider(BrowserProvider):
 
     async def close_session(self, session_id: str) -> None:
         page = self._pages.pop(session_id, None)
-        session = self._sessions.pop(session_id, None)
+        self._sessions.pop(session_id, None)
         if page is not None:
             await page.close()
 
@@ -280,9 +280,10 @@ class PlaywrightBrowserProvider(BrowserProvider):
         *,
         destination: str | Path,
     ) -> BrowserDownload:
-        from app.browser.errors import BrowserDownloadError
         import asyncio
         import os
+
+        from app.browser.errors import BrowserDownloadError
 
         page = self._page(session_id)
         destination_path = Path(destination)

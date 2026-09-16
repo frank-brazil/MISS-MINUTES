@@ -9,16 +9,12 @@ E — Voice interruption
 """
 
 import asyncio
-
-import pytest
+from collections.abc import Sequence
 
 from app.config.schema import MissMinutesConfig
-from app.runtime.runtime import MissMinutesRuntime
 from app.core.ai import AIMessage, AIModel, AIResponse, ToolDefinition
-from app.core.task import Task, TaskStatus
+from app.runtime.runtime import MissMinutesRuntime
 from app.security.models import PermissionCategory, RiskLevel
-from app.security.policy import DenyAllPolicy
-from collections.abc import Sequence
 
 
 def _run(coro):
@@ -106,7 +102,7 @@ def test_scenario_c_security_denial():
         runtime = MissMinutesRuntime(config)
         await runtime.startup()
         assert runtime.security is not None
-        from app.security.models import Permission, PermissionRequest, SecurityContext, PermissionCategory, RiskLevel
+        from app.security.models import Permission, PermissionRequest, SecurityContext
         permission = Permission(
             category=PermissionCategory.EXECUTE,
             action="test:denied",
@@ -133,13 +129,14 @@ def test_scenario_c_security_denial():
 def test_scenario_distributed_failure_reroute():
     """Worker failure is handled gracefully — coordinator produces a synthetic failure."""
     async def flow():
-        from app.distributed.coordinator import DistributedCoordinator
-        from app.distributed.registry import WorkerRegistry
-        from app.distributed.queue import DistributedTaskQueue
-        from app.distributed.fakes import FakeWorkerTransport
-        from app.distributed.executor import FakeWorkerExecutor
-        from app.distributed.models import DistributedTask, WorkerInfo
         from uuid import uuid4
+
+        from app.distributed.coordinator import DistributedCoordinator
+        from app.distributed.executor import FakeWorkerExecutor
+        from app.distributed.fakes import FakeWorkerTransport
+        from app.distributed.models import DistributedTask, WorkerInfo
+        from app.distributed.queue import DistributedTaskQueue
+        from app.distributed.registry import WorkerRegistry
 
         worker_executor = FakeWorkerExecutor(output="task done")
         # Transport that always fails (simulating unreachable worker)
@@ -194,7 +191,7 @@ class _InterruptibleTTS:
         self.interrupted = False
 
     async def synthesize(self, text, *, language=None):
-        from app.voice.base import TextToSpeechRequest, TextToSpeechResult, AudioData
+        from app.voice.base import AudioData, TextToSpeechResult
         self.playing = True
         # Simulate interruption check
         if self.interrupted:

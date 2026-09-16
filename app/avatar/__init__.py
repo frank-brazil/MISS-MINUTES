@@ -7,13 +7,13 @@ from app.avatar.assets import (
 )
 from app.avatar.clockface import ClockFace, ClockHandState
 from app.avatar.config import AvatarConfig, AvatarProportions
-from app.avatar.controller import AvatarController, AvatarSignal, SIGNAL_MAP
+from app.avatar.controller import SIGNAL_MAP, AvatarController, AvatarSignal
 from app.avatar.events import AvatarEvent, AvatarEventLog, AvatarEventType
 from app.avatar.expression import (
+    PREDEFINED_EXPRESSION_NAMES,
     AvatarExpression,
     ExpressionController,
     ExpressionSet,
-    PREDEFINED_EXPRESSION_NAMES,
     UnknownExpressionError,
 )
 from app.avatar.eyes import (
@@ -63,7 +63,7 @@ from app.avatar.voice_adapter import (
     VOICE_EVENT_SIGNAL_MAP,
     VoiceAvatarAdapter,
 )
-from app.avatar.walking import WalkConfig, WalkState, WalkingController, WalkingFrame
+from app.avatar.walking import WalkConfig, WalkingController, WalkingFrame, WalkState
 from app.avatar.window import AvatarWindow, AvatarWindowConfig, FakeAvatarWindow
 
 __all__ = [

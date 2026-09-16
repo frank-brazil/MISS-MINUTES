@@ -31,7 +31,6 @@ from app.distributed.config import DistributedConfig
 from app.distributed.events import DistributedEvent, DistributedEventType
 from app.distributed.executor import WorkerExecutor
 from app.distributed.models import (
-    AssignmentStatus,
     DistributedTask,
     DistributedTaskResult,
     DistributedTaskStatus,
@@ -46,8 +45,8 @@ from app.distributed.scheduler import (
 )
 from app.distributed.transport import (
     TransportError,
-    WorkerUnreachableError,
     WorkerTransport,
+    WorkerUnreachableError,
 )
 from app.security.manager import SecurityManager, as_security_manager
 from app.security.models import (

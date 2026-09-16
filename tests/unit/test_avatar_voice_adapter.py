@@ -1,6 +1,5 @@
 """Voice connection boundary: translates voice events into avatar signals."""
 
-import pytest
 
 from app.avatar.controller import AvatarController, AvatarSignal
 from app.avatar.models import AvatarState

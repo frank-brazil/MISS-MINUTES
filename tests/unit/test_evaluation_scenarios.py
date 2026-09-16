@@ -1,5 +1,6 @@
 """Tests for evaluation scenario dataset building."""
 
+from app.evaluation.models import EvaluationCategory
 from app.evaluation.scenarios import (
     ALL_SCENARIOS,
     build_all_cases,
@@ -34,7 +35,6 @@ from app.evaluation.scenarios import (
     build_voice_cases,
     build_voice_scenario,
 )
-from app.evaluation.models import EvaluationCategory, ReliabilityScenario
 
 
 class TestAllScenarios:

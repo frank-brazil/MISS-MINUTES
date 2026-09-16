@@ -8,8 +8,8 @@ from app.core.task import Task
 from app.research.base import ResearchResponse
 from app.solver.events import ExecutionEvent, ExecutionEventType
 from app.solver.session import (
-    AttemptSummary,
     DEFAULT_MAX_ITERATIONS,
+    AttemptSummary,
     ProblemSolvingSession,
     ProblemSolvingStatus,
 )

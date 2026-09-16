@@ -5,8 +5,8 @@ phase, accumulated metadata, and cancellation. The orchestrating service
 drives transitions; the session itself knows nothing about providers.
 """
 
-from enum import StrEnum
 import time
+from enum import StrEnum
 from typing import Callable
 from uuid import UUID, uuid4
 

@@ -15,12 +15,12 @@ from app.tools.screenshot import (
 )
 from app.tools.system_info import SystemInfoTool
 from app.tools.terminal import (
+    DEFAULT_ALLOWED_COMMANDS,
     ApprovedTerminalArguments,
     ApprovedTerminalTool,
     CommandEntry,
     CommandExecutor,
     CommandOutput,
-    DEFAULT_ALLOWED_COMMANDS,
     SubprocessCommandExecutor,
     TerminalConfig,
 )

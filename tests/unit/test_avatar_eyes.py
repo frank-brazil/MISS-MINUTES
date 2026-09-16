@@ -105,10 +105,12 @@ def test_auto_blink_disabled_when_period_zero():
 
 
 def test_auto_blink_jitter_is_deterministic_and_bounded():
-    make = lambda: EyeController(
-        now_fn=lambda: 0.0,
-        eye_config=EyeConfig(auto_blink_period_seconds=2.0, blink_jitter_seconds=0.3),
-    )
+    def make():
+        return EyeController(
+            now_fn=lambda: 0.0,
+            eye_config=EyeConfig(auto_blink_period_seconds=2.0, blink_jitter_seconds=0.3),
+        )
+
     first = make()
     second = make()
     first.state(0.0)

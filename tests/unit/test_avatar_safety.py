@@ -7,8 +7,6 @@ dependency, no network, no foreign runtime import. These tests pin that down.
 import re
 from pathlib import Path
 
-import pytest
-
 from app.avatar.controller import AvatarController, AvatarSignal
 from app.avatar.renderer import FakeAvatarRenderer
 

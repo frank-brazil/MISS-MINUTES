@@ -12,7 +12,6 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from app.agents.base import Agent
 from app.agents.coding import CodingAgent
 from app.agents.critic import CriticAgent
 from app.agents.prediction import PredictionAgent
@@ -24,26 +23,20 @@ from app.avatar.controller import AvatarController
 from app.avatar.voice_adapter import VoiceAvatarAdapter
 from app.config.schema import MissMinutesConfig
 from app.core.ai import AIModel
-from app.core.critic import Critic, FakeCritic
+from app.core.critic import FakeCritic
 from app.core.orchestrator import Orchestrator
 from app.core.planner import Planner
-from app.core.prediction import FakePredictor, Predictor
-from app.core.problem_solver import FakeProblemSolver, ProblemSolver
+from app.core.prediction import FakePredictor
 from app.core.routing import AgentRouter
-from app.core.verification import FakeVerifier, Verifier
+from app.core.verification import FakeVerifier
 from app.memory.base import Memory
 from app.research.base import ResearchProvider
 from app.runtime.audit import RequestAuditTrail
 from app.runtime.capabilities import CapabilityRegistry
 from app.runtime.errors import (
-    RequestCancelledError,
-    RequestTimeoutError,
-    RuntimeBaseError,
     StartupError,
-    VoiceServiceError,
 )
 from app.runtime.request import UnifiedRequest, UnifiedResponse
-from app.security.audit import InMemoryAuditStore
 from app.security.confirmation import ConfirmationManager
 from app.security.manager import SecurityManager
 from app.security.policy import (
@@ -53,17 +46,13 @@ from app.security.policy import (
     SecurityPolicy,
 )
 from app.solver.actions import ActionExecutor
-from app.solver.engine import ProblemSolvingEngine
-from app.solver.fakes import FakeActionExecutor, FakeObservationProvider
 from app.solver.observation import ObservationProvider
-from app.tools.base import Tool
 from app.tools.calculator import CalculatorTool
 from app.tools.file_config import FileToolConfig
 from app.tools.file_create import FileCreateTool
 from app.tools.file_edit import FileEditTool
 from app.tools.file_read import FileReadTool
 from app.tools.file_search import FileSearchTool
-from app.tools.screenshot import ScreenshotTool, UnsupportedScreenshotProvider
 from app.tools.system_info import SystemInfoTool
 from app.tools.terminal import ApprovedTerminalTool
 from app.voice.base import SpeechToText, TextToSpeech
@@ -266,10 +255,8 @@ class MissMinutesRuntime:
         self, task: Any, *, timeout_seconds: float | None = None
     ) -> UnifiedResponse:
         """Process a pre-built Task through orchestration."""
-        from app.core.task import Task
 
         request_id = str(id(task)) if not hasattr(task, "task_id") else str(task.task_id)
-        request = UnifiedRequest(source="text", text=getattr(task, "description", ""))
         self._audit.record(request_id, "accepted", detail="pre-built task")
         self._request_count += 1
 
@@ -306,7 +293,6 @@ class MissMinutesRuntime:
 
     async def _initialize_security(self) -> None:
         policy = _build_security_policy(self._config)
-        store = InMemoryAuditStore() if self._config.security.audit_enabled else None
         self._security = SecurityManager(
             policy=policy,
             confirmation=ConfirmationManager() if self._config.security.confirmation_required else None,
@@ -343,7 +329,6 @@ class MissMinutesRuntime:
 
     async def _initialize_agents(self) -> None:
         """Register agents based on available subsystems."""
-        router = self._orchestrator.agent_router
 
         # Always register these agents
         self._orchestrator.register_agent(SystemAgent())
@@ -664,9 +649,6 @@ class MissMinutesRuntime:
 
         No hardware, no network, no external dependencies required.
         """
-        from app.avatar.config import AvatarConfig as AvatarCfg
-        from app.avatar.renderer import FakeAvatarRenderer
-        from app.browser.fakes import FakeBrowserProvider
         from app.research.fakes import FakeResearchProvider
         from app.voice.fakes import FakeLanguageDetector
 

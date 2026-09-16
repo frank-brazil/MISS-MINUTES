@@ -9,7 +9,7 @@ import asyncio
 import logging
 from uuid import UUID
 
-from app.distributed.config import HEARTBEAT_INTERVAL_SECONDS, DistributedConfig
+from app.distributed.config import DistributedConfig
 from app.distributed.executor import WorkerExecutor
 from app.distributed.models import (
     DistributedTask,

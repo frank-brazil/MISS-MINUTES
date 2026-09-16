@@ -18,13 +18,12 @@ import logging
 from dataclasses import dataclass
 from uuid import UUID
 
+from app.core.planner import PlanStep
 from app.distributed.coordinator import DistributedCoordinator
 from app.distributed.models import (
     DistributedTask,
     DistributedTaskStatus,
-    WorkerCapability,
 )
-from app.core.planner import PlanStep
 
 _poll_interval: float = 0.02
 _max_polls: int = 500

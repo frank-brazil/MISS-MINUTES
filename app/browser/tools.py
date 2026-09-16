@@ -22,7 +22,7 @@ from urllib.parse import urlsplit
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.browser.errors import BrowserError, BrowserSessionError
+from app.browser.errors import BrowserError
 from app.browser.models import TextEntryAction
 from app.browser.policy import UrlPolicy, UrlValidationError
 from app.browser.provider import BrowserProvider

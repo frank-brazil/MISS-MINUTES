@@ -1,7 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from pydantic import BaseModel
+
+if TYPE_CHECKING:
+    from app.core.ai import ToolDefinition
 
 
 def _strip_schema_titles(value: Any) -> Any:
@@ -61,9 +64,9 @@ class Tool(ABC):
         return self.input_schema.model_validate(kwargs)
 
     def to_tool_definition(self) -> "ToolDefinition":
-        from app.core.ai import ToolDefinition
+        from app.core.ai import ToolDefinition as _ToolDefinition
 
-        return ToolDefinition(
+        return _ToolDefinition(
             name=self.name,
             description=self.description,
             parameters=_strip_schema_titles(self.input_schema.model_json_schema()),

@@ -2,8 +2,6 @@
 
 import json
 
-import pytest
-
 from app.avatar.assets import (
     CHARACTER_JSON,
     EXPRESSIONS_JSON,

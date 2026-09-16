@@ -3,8 +3,8 @@ import pytest
 from app.agents.base import Agent, AgentResult
 from app.core.routing import (
     AgentRouter,
-    AgentSelection,
     AgentRoutingError,
+    AgentSelection,
     NoMatchingAgentError,
     UnknownCapabilityError,
 )

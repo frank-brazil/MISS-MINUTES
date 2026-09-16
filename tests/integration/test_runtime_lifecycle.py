@@ -6,11 +6,8 @@ shutdown — all using the headless test mode with all fakes.
 
 import asyncio
 
-import pytest
-
 from app.config.schema import MissMinutesConfig
 from app.runtime.runtime import MissMinutesRuntime
-from app.runtime.errors import StartupError
 
 
 def _run(coro):

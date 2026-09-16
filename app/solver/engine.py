@@ -31,7 +31,7 @@ from uuid import UUID
 from app.agents.base import Agent, AgentResult
 from app.core.critic import Critic, Critique, CritiqueRequest, Severity
 from app.core.planner import Plan, Planner
-from app.core.prediction import DecisionAnalysis, Predictor, PredictionRequest
+from app.core.prediction import DecisionAnalysis, PredictionRequest, Predictor
 from app.core.problem_solver import Problem, ProblemAnalysis, ProblemSolver
 from app.core.routing import (
     AgentRouter,
@@ -61,8 +61,8 @@ from app.solver.observation import (
 )
 from app.solver.result import ProblemSolvingResult
 from app.solver.session import (
-    AttemptSummary,
     DEFAULT_MAX_ITERATIONS,
+    AttemptSummary,
     ProblemSolvingSession,
     ProblemSolvingStatus,
 )

@@ -6,11 +6,11 @@ from pydantic import ValidationError
 from app.core.permissions import ToolPermission
 from app.tools.base import Tool, ToolResult
 from app.tools.terminal import (
+    DEFAULT_ALLOWED_COMMANDS,
     ApprovedTerminalTool,
     CommandEntry,
     CommandExecutor,
     CommandOutput,
-    DEFAULT_ALLOWED_COMMANDS,
     SubprocessCommandExecutor,
     TerminalConfig,
 )

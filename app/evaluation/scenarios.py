@@ -7,7 +7,6 @@ Scenarios are labeled A-J following the PRD specification.
 """
 
 import uuid
-from typing import Any
 
 from app.evaluation.datasets import (
     AVATAR_EVENT_FIXTURES,
@@ -16,8 +15,8 @@ from app.evaluation.datasets import (
     LANGUAGE_DETECTION_FIXTURES,
     MEMORY_FIXTURES,
     PLANNING_FIXTURES,
-    RESEARCH_FIXTURES,
     RELIABILITY_SCENARIOS,
+    RESEARCH_FIXTURES,
     ROUTING_FIXTURES,
     SECURITY_FIXTURES,
     STT_FIXTURES,
@@ -27,9 +26,7 @@ from app.evaluation.datasets import (
 from app.evaluation.models import (
     EvaluationCase,
     EvaluationCategory,
-    EvaluationMetric,
     EvaluationScenario,
-    FailureCategory,
     ReliabilityScenario,
     RoutingDecision,
     RoutingMetadata,

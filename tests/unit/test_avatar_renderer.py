@@ -6,8 +6,8 @@ from pydantic import ValidationError
 from app.avatar.config import AvatarConfig
 from app.avatar.expression import AvatarExpression
 from app.avatar.eyes import EyeState
-from app.avatar.mouth import MouthShape, MouthState
 from app.avatar.models import AvatarPart, AvatarPose, AvatarState, AvatarTransform
+from app.avatar.mouth import MouthShape, MouthState
 from app.avatar.renderer import (
     AvatarRenderer,
     FakeAvatarRenderer,

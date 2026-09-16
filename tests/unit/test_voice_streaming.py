@@ -4,7 +4,7 @@ from uuid import uuid4
 import pytest
 
 from app.voice.audio import AudioFrame
-from app.voice.base import AudioData, TextToSpeechRequest
+from app.voice.base import TextToSpeechRequest
 from app.voice.streaming import (
     FakeStreamingSTTProvider,
     FakeStreamingTTSProvider,

@@ -6,7 +6,6 @@ record everything they see.
 """
 
 import logging
-from collections.abc import Mapping
 from datetime import UTC, datetime
 from uuid import UUID
 
@@ -21,8 +20,8 @@ from app.distributed.models import (
 from app.distributed.transport import (
     MasterTransport,
     TransportError,
-    WorkerUnreachableError,
     WorkerTransport,
+    WorkerUnreachableError,
 )
 
 

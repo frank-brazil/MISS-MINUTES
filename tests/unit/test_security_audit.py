@@ -5,7 +5,6 @@ from app.security.models import (
     AuditEvent,
     Permission,
     PermissionCategory,
-    PermissionDecision,
     PermissionRequest,
     RiskLevel,
     SecurityDecision,
@@ -94,7 +93,6 @@ def test_max_events_retention() -> None:
 def test_age_based_cleanup() -> None:
     base = datetime.now(UTC)
     store = InMemoryAuditStore(max_age_seconds=100)
-    logger = AuditLogger(store)
 
     old = AuditEvent(
         timestamp=base - timedelta(seconds=500),

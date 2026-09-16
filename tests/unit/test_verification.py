@@ -7,6 +7,7 @@ from pydantic import ValidationError
 
 from app.core.verification import (
     CONFIDENCE_RANGE_DESCRIPTION,
+    VERIFICATION_NOT_SUCCESS_NOTICE,
     Evidence,
     EvidenceKind,
     FakeVerifier,
@@ -15,7 +16,6 @@ from app.core.verification import (
     VerificationResult,
     VerificationStatus,
     Verifier,
-    VERIFICATION_NOT_SUCCESS_NOTICE,
 )
 
 

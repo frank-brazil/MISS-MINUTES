@@ -1,4 +1,3 @@
-import asyncio
 
 import pytest
 
@@ -9,11 +8,8 @@ from app.security.models import (
     ConfirmationStatus,
     Permission,
     PermissionCategory,
-    PermissionDecision,
-    PermissionRequest,
     PermissionRule,
     RiskLevel,
-    SecurityContext,
 )
 from app.security.policy import (
     AllowDenyPolicy,

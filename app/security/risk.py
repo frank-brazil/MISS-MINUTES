@@ -9,6 +9,7 @@ its category default; a category that is not known at all is reported as
 """
 
 import re
+
 from app.security.models import PermissionCategory, RiskLevel
 
 #: Default risk for each supported permission category.

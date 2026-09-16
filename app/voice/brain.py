@@ -19,8 +19,8 @@ from typing import ClassVar
 
 from pydantic import BaseModel, field_validator
 
-from app.core.ai import AIMessage, AIModel, AIResponse
-from app.core.orchestrator import Orchestrator, OrchestrationResult
+from app.core.ai import AIMessage, AIModel
+from app.core.orchestrator import OrchestrationResult, Orchestrator
 from app.core.task import Task
 from app.voice.language import ResponseStyle
 

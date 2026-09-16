@@ -18,7 +18,6 @@ from uuid import UUID
 from app.security.models import (
     AuditEvent,
     PermissionRequest,
-    SecurityContext,
     SecurityDecision,
 )
 from app.security.redaction import redact_string

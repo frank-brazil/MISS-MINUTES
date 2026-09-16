@@ -16,7 +16,7 @@ from datetime import datetime
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, FastAPI, HTTPException
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 from app.distributed.auth import build_auth_dependency
 from app.distributed.config import DistributedConfig

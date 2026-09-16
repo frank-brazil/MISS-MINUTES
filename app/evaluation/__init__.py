@@ -8,6 +8,8 @@ No API keys, network access, microphone, browser, or GUI are required.
 """
 
 from app.evaluation.models import (
+    REGRESSION_GATES,
+    EnvironmentInfo,
     EvaluationCase,
     EvaluationCategory,
     EvaluationMetric,
@@ -16,10 +18,8 @@ from app.evaluation.models import (
     EvaluationRun,
     EvaluationScenario,
     EvaluationSummary,
-    EnvironmentInfo,
     FailureCategory,
     RegressionGate,
-    REGRESSION_GATES,
     ReliabilityResult,
     ReliabilityScenario,
     ResultClassification,

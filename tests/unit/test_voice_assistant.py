@@ -23,7 +23,6 @@ from app.voice.brain import (
 )
 from app.voice.events import VoiceEventLog, VoiceEventType
 from app.voice.fakes import (
-    FakeAIModel,
     FakeLanguageDetector,
     FakeSpeechToText,
     FakeTextToSpeech,

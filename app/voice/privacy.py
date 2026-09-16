@@ -8,7 +8,6 @@ content is reduced to length-only metadata for events.
 
 import logging
 import time
-from collections.abc import Iterable
 from enum import StrEnum
 from typing import Callable
 from uuid import UUID, uuid4

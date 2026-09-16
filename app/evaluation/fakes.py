@@ -9,6 +9,7 @@ duplicating them.
 
 from __future__ import annotations
 
+from datetime import timedelta
 from typing import Any
 
 from app.core.critic import FakeCritic
@@ -17,21 +18,18 @@ from app.core.prediction import FakePredictor
 from app.core.verification import FakeVerifier
 from app.distributed.executor import FakeWorkerExecutor
 from app.distributed.fakes import FakeMasterTransport, FakeWorkerTransport
-from app.memory.base import Memory, MemoryRecord, MemoryQueryResult
-from app.research.fakes import FakeResearchProvider
-from app.research.base import SearchResult, Source
-from app.solver.fakes import FakeActionExecutor, FakeObservationProvider
-from app.vision.fakes import FakeOcrProvider, FakeVisionProvider
-from app.voice.fakes import FakeAIModel, FakeLanguageDetector, FakeSpeechToText, FakeTextToSpeech
-
 from app.evaluation.datasets import (
     LANGUAGE_DETECTION_FIXTURES,
     RESEARCH_FIXTURES,
     STT_FIXTURES,
 )
-from app.research.base import Source
+from app.memory.base import Memory, MemoryQueryResult, MemoryRecord
+from app.research.base import SearchResult, Source
+from app.research.fakes import FakeResearchProvider
+from app.solver.fakes import FakeActionExecutor, FakeObservationProvider
+from app.vision.fakes import FakeOcrProvider, FakeVisionProvider
+from app.voice.fakes import FakeAIModel, FakeLanguageDetector, FakeSpeechToText, FakeTextToSpeech
 from app.voice.language import LanguageDetectionResult
-from datetime import timedelta
 
 
 class InMemoryMemory(Memory):

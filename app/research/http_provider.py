@@ -11,7 +11,6 @@ endpoint are surfaced as evidence. Credentials come from the environment and
 are never serialized into logs.
 """
 
-import logging
 import os
 from typing import Any
 

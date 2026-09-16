@@ -8,7 +8,7 @@ from typing import ClassVar
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from app.core.path_safety import PathSafetyError, PathSafety
+from app.core.path_safety import PathSafety, PathSafetyError
 from app.core.permissions import ToolPermission
 from app.tools.base import Tool, ToolResult
 from app.tools.file_config import FileToolConfig

@@ -77,8 +77,8 @@ def test_fake_output_auto_stop_after_polls() -> None:
     provider = FakeAudioOutputProvider(auto_stop_after=2)
     _run(provider.play(_audio()))
     assert provider.is_speaking() is True
-    poll_two = provider.is_speaking()
-    poll_three = provider.is_speaking()
+    provider.is_speaking()
+    provider.is_speaking()
     assert provider.is_speaking() is False
 
 

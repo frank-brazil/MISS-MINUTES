@@ -8,11 +8,11 @@ from pydantic import ValidationError
 from app.core.critic import (
     CONFIDENCE_RANGE_DESCRIPTION,
     CRITIQUE_IS_ESTIMATE_NOTICE,
+    Critic,
     Critique,
     CritiqueAspect,
     CritiquePoint,
     CritiqueRequest,
-    Critic,
     FakeCritic,
     Severity,
 )

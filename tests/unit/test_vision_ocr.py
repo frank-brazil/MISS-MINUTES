@@ -4,7 +4,6 @@ import pytest
 
 from app.vision.fakes import FakeOcrProvider
 from app.vision.models import (
-    BoundingBox,
     ImageInput,
     TextRegion,
 )

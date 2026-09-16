@@ -1,10 +1,9 @@
 from abc import ABC, abstractmethod
+from datetime import UTC, datetime
 from typing import Any, ClassVar
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
-
-from datetime import UTC, datetime
 
 
 def _utc_now() -> datetime:

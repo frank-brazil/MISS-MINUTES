@@ -127,7 +127,6 @@ def test_events_and_health():
 
 def test_master_auth_enforced_when_token_set():
     client, _, _ = _master_client(token="shared")
-    info = WorkerInfo(worker_name="w1")
     # No token -> unauthorized
     assert client.get("/distributed/workers").status_code == 401
     # Correct token -> ok

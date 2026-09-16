@@ -5,7 +5,6 @@ from openai import AsyncOpenAI
 
 from app.voice.base import SpeechInput, SpeechToText, SpeechToTextResult
 
-
 OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
 STT_MODEL_ENV = "MISSMINUTES_STT_MODEL"
 STT_LANGUAGE_ENV = "MISSMINUTES_STT_LANGUAGE"

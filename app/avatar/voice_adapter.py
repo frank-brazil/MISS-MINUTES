@@ -10,10 +10,9 @@ published ``VoiceEvent``/``VoiceSessionState`` types.
 from typing import Mapping
 
 from app.avatar.controller import AvatarController, AvatarSignal
-from app.avatar.models import AvatarState as _S
+from app.avatar.models import AvatarState as AvatarStateAlias
 from app.voice.events import VoiceEvent, VoiceEventType
 from app.voice.session import VoiceSessionState
-
 
 VOICE_EVENT_SIGNAL_MAP: Mapping[VoiceEventType, AvatarSignal] = {
     VoiceEventType.SESSION_STARTED: AvatarSignal.IDLE,
@@ -34,16 +33,16 @@ VOICE_EVENT_SIGNAL_MAP: Mapping[VoiceEventType, AvatarSignal] = {
 }
 
 
-SESSION_STATE_MAP: Mapping[VoiceSessionState, _S] = {
-    VoiceSessionState.IDLE: _S.IDLE,
-    VoiceSessionState.LISTENING: _S.LISTENING,
-    VoiceSessionState.CAPTURING: _S.LISTENING,
-    VoiceSessionState.TRANSCRIBING: _S.THINKING,
-    VoiceSessionState.THINKING: _S.THINKING,
-    VoiceSessionState.SPEAKING: _S.SPEAKING,
-    VoiceSessionState.INTERRUPTED: _S.INTERRUPTED,
-    VoiceSessionState.STOPPED: _S.IDLE,
-    VoiceSessionState.ERROR: _S.ERROR,
+SESSION_STATE_MAP: Mapping[VoiceSessionState, AvatarStateAlias] = {
+    VoiceSessionState.IDLE: AvatarStateAlias.IDLE,
+    VoiceSessionState.LISTENING: AvatarStateAlias.LISTENING,
+    VoiceSessionState.CAPTURING: AvatarStateAlias.LISTENING,
+    VoiceSessionState.TRANSCRIBING: AvatarStateAlias.THINKING,
+    VoiceSessionState.THINKING: AvatarStateAlias.THINKING,
+    VoiceSessionState.SPEAKING: AvatarStateAlias.SPEAKING,
+    VoiceSessionState.INTERRUPTED: AvatarStateAlias.INTERRUPTED,
+    VoiceSessionState.STOPPED: AvatarStateAlias.IDLE,
+    VoiceSessionState.ERROR: AvatarStateAlias.ERROR,
 }
 
 
@@ -68,9 +67,9 @@ class VoiceAvatarAdapter:
             return False
         return self._controller.handle(signal)
 
-    def translate_session_state(self, state: VoiceSessionState) -> _S:
+    def translate_session_state(self, state: VoiceSessionState) -> AvatarStateAlias:
         if state not in SESSION_STATE_MAP:
-            return _S.IDLE
+            return AvatarStateAlias.IDLE
         return SESSION_STATE_MAP[state]
 
     def replay(self, events: "object") -> int:

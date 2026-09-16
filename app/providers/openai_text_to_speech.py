@@ -10,7 +10,6 @@ from app.voice.base import (
     TextToSpeechResult,
 )
 
-
 OPENAI_API_KEY_ENV = "OPENAI_API_KEY"
 TTS_MODEL_ENV = "MISSMINUTES_TTS_MODEL"
 TTS_VOICE_ENV = "MISSMINUTES_TTS_VOICE"

@@ -7,7 +7,6 @@ from typing import ClassVar
 
 from app.vision.models import (
     DetectedElement,
-    ImageInput,
     TextRegion,
     VisionRequest,
     VisionResult,

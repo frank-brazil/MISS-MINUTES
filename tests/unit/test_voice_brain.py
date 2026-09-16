@@ -7,7 +7,6 @@ from pydantic import ValidationError
 from app.core.ai import AIMessage, AIModel, AIResponse, ToolCall, ToolDefinition
 from app.core.orchestrator import Orchestrator
 from app.core.permissions import ToolPermission
-from app.core.task import Task
 from app.security.policy import DenyAllPolicy
 from app.tools.base import Tool, ToolArguments, ToolResult
 from app.voice.brain import (
@@ -146,7 +145,7 @@ def test_orchestrator_brain_cannot_bypass_security() -> None:
     orchestrator.register_tool(tool)
     brain = OrchestratorVoiceBrain(orchestrator)
 
-    result = _run(brain.respond(_request("Delete all project files.")))
+    _run(brain.respond(_request("Delete all project files.")))
 
     assert tool.called is False
     assert orchestrator.security is not None

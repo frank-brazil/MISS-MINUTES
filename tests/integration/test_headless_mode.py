@@ -6,8 +6,6 @@ no network, all fakes, deterministic behavior.
 
 import asyncio
 
-import pytest
-
 from app.config.schema import MissMinutesConfig
 from app.runtime.runtime import MissMinutesRuntime
 

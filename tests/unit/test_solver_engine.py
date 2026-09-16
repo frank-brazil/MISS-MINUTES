@@ -13,7 +13,7 @@ from app.core.critic import (
     FakeCritic,
     Severity,
 )
-from app.core.planner import Plan, PlanStep, Planner
+from app.core.planner import Plan, Planner, PlanStep
 from app.core.prediction import FakePredictor
 from app.core.problem_solver import (
     Hypothesis,
@@ -34,9 +34,9 @@ from app.core.verification import (
 from app.memory.base import Memory, MemoryQueryResult, MemoryRecord
 from app.research.fakes import FakeResearchProvider
 from app.solver.actions import ActionExecutor, ActionRequest, ActionResult
+from app.solver.engine import ProblemSolvingEngine
 from app.solver.events import ExecutionEventType
 from app.solver.fakes import FakeActionExecutor, FakeObservationProvider
-from app.solver.engine import ProblemSolvingEngine
 from app.solver.observation import (
     ObservationProvider,
     ObservationRequest,

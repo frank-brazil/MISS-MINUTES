@@ -1,7 +1,7 @@
 import asyncio
 
 from app.agents.base import Agent, AgentResult
-from app.core.orchestrator import Orchestrator, OrchestrationResult
+from app.core.orchestrator import OrchestrationResult, Orchestrator
 from app.core.planner import ManualPlanner
 from app.core.problem_solver import FakeProblemSolver
 from app.core.routing import AgentRouter
