@@ -3,8 +3,8 @@ import asyncio
 import pytest
 
 from app.vision.fakes import (
-    FakeVisionProvider,
     FailingVisionProvider,
+    FakeVisionProvider,
 )
 from app.vision.models import (
     BoundingBox,

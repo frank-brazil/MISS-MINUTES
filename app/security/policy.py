@@ -25,7 +25,6 @@ from typing import Iterable
 
 from app.security.models import (
     PermissionCategory,
-    PermissionDecision,
     PermissionRequest,
     PermissionRule,
     RiskLevel,

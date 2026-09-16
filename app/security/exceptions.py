@@ -10,25 +10,25 @@ class SecurityError(Exception):
     """Base exception for the security and permissions system."""
 
 
-class PermissionDenied(SecurityError):
+class PermissionDeniedError(SecurityError):
     """An operation was explicitly refused by a policy decision."""
 
 
-class ConfirmationRequired(SecurityError):
+class ConfirmationRequiredError(SecurityError):
     """An operation needs an explicit human approval before it may run."""
 
 
-class AuthenticationFailed(SecurityError):
+class AuthenticationFailedError(SecurityError):
     """A caller could not be authenticated for a protected operation."""
 
 
-class InvalidSecurityContext(SecurityError):
+class InvalidSecurityContextError(SecurityError):
     """A request referenced a security context that was missing or invalid."""
 
 
-class PolicyViolation(SecurityError):
+class PolicyViolationError(SecurityError):
     """A policy was malformed, contradictory, or violated its own rules."""
 
 
-class WorkerNotAuthorized(SecurityError):
+class WorkerNotAuthorizedError(SecurityError):
     """A distributed worker is not authorized for the requested operation."""

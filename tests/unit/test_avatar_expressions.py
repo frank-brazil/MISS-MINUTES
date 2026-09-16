@@ -5,10 +5,10 @@ from pydantic import ValidationError
 
 from app.avatar.expression import (
     DEFAULT_EXPRESSIONS,
+    PREDEFINED_EXPRESSION_NAMES,
     AvatarExpression,
     ExpressionController,
     ExpressionSet,
-    PREDEFINED_EXPRESSION_NAMES,
     UnknownExpressionError,
 )
 from app.avatar.mouth import MouthController, MouthShape, MouthState

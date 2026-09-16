@@ -6,9 +6,9 @@ offline fake providers used by tests and development.
 """
 
 from app.vision.fakes import (
+    FailingVisionProvider,
     FakeOcrProvider,
     FakeVisionProvider,
-    FailingVisionProvider,
 )
 from app.vision.models import (
     DEFAULT_MAX_IMAGE_BYTES,

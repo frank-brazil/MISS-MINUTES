@@ -3,7 +3,13 @@
 import pytest
 from pydantic import ValidationError
 
-from app.avatar.gestures import GESTURE_SPECS, GestureController, GestureFrame, GestureKind, GestureSpec
+from app.avatar.gestures import (
+    GESTURE_SPECS,
+    GestureController,
+    GestureFrame,
+    GestureKind,
+    GestureSpec,
+)
 
 
 def test_gesture_specs_all_present():

@@ -5,7 +5,6 @@ import pytest
 
 from app.core.ai import AIMessage, AIModel, AIResponse
 from app.voice.base import (
-    AudioData,
     SpeechInput,
     SpeechToText,
     SpeechToTextResult,

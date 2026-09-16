@@ -12,16 +12,11 @@ from __future__ import annotations
 import asyncio
 from typing import Any
 
-from app.core.task import Task, TaskStatus
-from app.core.planner import ManualPlanner
-from app.core.verification import FakeVerifier, VerificationStatus
-from app.solver.engine import ProblemSolvingEngine
-from app.solver.session import ProblemSolvingStatus
-
+from app.core.task import Task
+from app.core.verification import VerificationStatus
 from app.evaluation.datasets import RELIABILITY_SCENARIOS
 from app.evaluation.fakes import EvaluationEnvironment
 from app.evaluation.models import (
-    EvaluationMode,
     ReliabilityResult,
     ReliabilityScenario,
     ResultClassification,
@@ -36,7 +31,7 @@ async def _test_provider_failure(env: EvaluationEnvironment) -> ReliabilityResul
     env.configure_for_failure(ai_fail=True)
     task = Task(description="Test provider failure handling")
     try:
-        result = await env.ai_model.chat(task.description)
+        await env.ai_model.chat(task.description)
         return ReliabilityResult(
             scenario_id=_scenario_id("provider_failure"),
             scenario_name="provider_failure",
@@ -98,7 +93,7 @@ async def _test_agent_failure(env: EvaluationEnvironment) -> ReliabilityResult:
     agent = FailingAgent()
     task = Task(description="Test agent failure")
     try:
-        result = await agent.execute(task)
+        await agent.execute(task)
         return ReliabilityResult(
             scenario_id=_scenario_id("agent_failure"),
             scenario_name="agent_failure",
@@ -128,7 +123,7 @@ async def _test_planner_failure(env: EvaluationEnvironment) -> ReliabilityResult
     planner = FailingPlanner()
     task = Task(description="Test planner failure")
     try:
-        result = await planner.plan(task)
+        await planner.plan(task)
         return ReliabilityResult(
             scenario_id=_scenario_id("planner_failure"),
             scenario_name="planner_failure",
@@ -195,7 +190,7 @@ async def _test_cancellation(env: EvaluationEnvironment) -> ReliabilityResult:
 
 
 async def _test_verification_failure(env: EvaluationEnvironment) -> ReliabilityResult:
-    from app.core.verification import VerificationExpectation, ObservedResult
+    from app.core.verification import ObservedResult, VerificationExpectation
 
     expectation = VerificationExpectation(
         description="Expected outcome",
@@ -225,7 +220,7 @@ async def _test_verification_failure(env: EvaluationEnvironment) -> ReliabilityR
 
 
 async def _test_inconclusive_verification(env: EvaluationEnvironment) -> ReliabilityResult:
-    from app.core.verification import VerificationExpectation, ObservedResult
+    from app.core.verification import ObservedResult, VerificationExpectation
 
     expectation = VerificationExpectation(
         description="Ambiguous outcome",
@@ -264,7 +259,7 @@ async def _test_worker_failure(env: EvaluationEnvironment) -> ReliabilityResult:
     )
     env.worker_transport.fail = True
     try:
-        assignment = await env.worker_transport.dispatch_task(task)
+        await env.worker_transport.dispatch_task(task)
         return ReliabilityResult(
             scenario_id=_scenario_id("worker_failure"),
             scenario_name="worker_failure",
@@ -282,8 +277,8 @@ async def _test_worker_failure(env: EvaluationEnvironment) -> ReliabilityResult:
 
 
 async def _test_heartbeat_timeout(env: EvaluationEnvironment) -> ReliabilityResult:
-    from app.distributed.registry import WorkerRegistry
     from app.distributed.models import WorkerInfo, WorkerStatus
+    from app.distributed.registry import WorkerRegistry
 
     registry = WorkerRegistry()
     worker = WorkerInfo(
@@ -363,7 +358,7 @@ async def _test_tts_failure(env: EvaluationEnvironment) -> ReliabilityResult:
 
     request = TextToSpeechRequest(text="Hello", language="en")
     try:
-        result = await env.tts.synthesize(request)
+        await env.tts.synthesize(request)
         return ReliabilityResult(
             scenario_id=_scenario_id("tts_failure"),
             scenario_name="tts_failure",
@@ -386,7 +381,7 @@ async def _test_stt_failure(env: EvaluationEnvironment) -> ReliabilityResult:
 
     request = SpeechInput(audio=b"test", sample_rate=16000)
     try:
-        result = await env.stt.transcribe(request)
+        await env.stt.transcribe(request)
         return ReliabilityResult(
             scenario_id=_scenario_id("stt_failure"),
             scenario_name="stt_failure",

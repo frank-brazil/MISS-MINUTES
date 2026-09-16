@@ -133,7 +133,6 @@ def test_url_with_embedded_credentials_rejected(tmp_path: Path) -> None:
 def test_download_symlink_escape_blocked(tmp_path: Path) -> None:
     bundle = _bundle(tmp_path)
     _run(bundle.start())
-    root = tmp_path / "downloads"
 
     victim_file = tmp_path / "victim.txt"
     victim_file.write_text("secret-data")
@@ -159,7 +158,6 @@ def test_download_symlink_escape_blocked(tmp_path: Path) -> None:
 def test_download_parent_traversal_blocked(tmp_path: Path) -> None:
     bundle = _bundle(tmp_path)
     _run(bundle.start())
-    root = tmp_path / "downloads"
     result = _run(
         bundle.download_tool.execute(
             url="http://localhost/f.bin",

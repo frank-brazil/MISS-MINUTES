@@ -6,8 +6,8 @@ from collections.abc import Sequence
 from openai import AsyncOpenAI
 
 from app.core.ai import (
-    AIModel,
     AIMessage,
+    AIModel,
     AIResponse,
     ToolCall,
     ToolDefinition,

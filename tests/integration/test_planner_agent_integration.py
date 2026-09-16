@@ -10,23 +10,19 @@ Verifies that:
 
 import asyncio
 from collections.abc import Sequence
-from uuid import UUID
 
 import pytest
+from fastapi.testclient import TestClient
 from pydantic import ValidationError
 
 from app.agents.base import Agent, AgentResult
+from app.api.app import create_app
 from app.core.orchestrator import (
-    AgentExecutionResult,
     Orchestrator,
     PlanExecutionError,
-    PlanStepResult,
 )
-from app.core.planner import Plan, PlanStep, Planner
+from app.core.planner import Plan, Planner, PlanStep
 from app.core.task import Task, TaskStatus
-from fastapi.testclient import TestClient
-from app.api.app import create_app
-
 
 # ------------------------------------------------------------------
 # Test doubles

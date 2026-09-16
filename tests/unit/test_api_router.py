@@ -2,14 +2,13 @@
 
 import asyncio
 from collections.abc import Sequence
-from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
 from app.api.router import create_task, health, root
 from app.api.schemas import TaskRequest
 from app.core.ai import AIMessage, AIModel, AIResponse, ToolDefinition
-from app.core.orchestrator import Orchestrator, OrchestrationResult
+from app.core.orchestrator import OrchestrationResult, Orchestrator
 from app.core.task import TaskStatus
 
 

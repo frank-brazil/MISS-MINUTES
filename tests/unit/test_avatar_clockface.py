@@ -1,6 +1,5 @@
 """Clock-face component: markings, hands, angles and validation."""
 
-import math
 
 import pytest
 from pydantic import ValidationError

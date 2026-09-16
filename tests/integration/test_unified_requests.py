@@ -4,14 +4,12 @@ Tests the full pipeline from input → normalization → orchestration → respo
 """
 
 import asyncio
-
-import pytest
+from collections.abc import Sequence
 
 from app.config.schema import MissMinutesConfig
-from app.runtime.runtime import MissMinutesRuntime
-from app.runtime.request import UnifiedRequest, UnifiedResponse
 from app.core.ai import AIMessage, AIModel, AIResponse, ToolDefinition
-from collections.abc import Sequence
+from app.runtime.request import UnifiedRequest, UnifiedResponse
+from app.runtime.runtime import MissMinutesRuntime
 
 
 def _run(coro):

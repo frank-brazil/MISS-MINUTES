@@ -96,5 +96,4 @@ class ProblemSolvingSession(BaseModel):
 
 
 from app.research.base import ResearchResponse  # noqa: E402
-
 from app.solver.events import ExecutionEvent  # noqa: E402

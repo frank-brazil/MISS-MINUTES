@@ -54,10 +54,10 @@ def test_solver_sources_do_not_reach_into_browser_or_vision() -> None:
 
 
 def test_engine_defaults_are_deterministic_fakes() -> None:
-    from app.core.routing import AgentRouter
     from app.agents.base import Agent, AgentResult
     from app.core.planner import ManualPlanner
     from app.core.problem_solver import FakeProblemSolver
+    from app.core.routing import AgentRouter
 
     class TrivialAgent(Agent):
         name = "trivial-agent"
@@ -77,12 +77,12 @@ def test_engine_defaults_are_deterministic_fakes() -> None:
 
 
 def test_results_never_leak_tracebacks_or_reasoning() -> None:
-    from app.core.routing import AgentRouter
     from app.agents.base import Agent, AgentResult
-    from app.core.planner import ManualPlanner
-    from app.core.problem_solver import FakeProblemSolver
-    from app.core.prediction import FakePredictor
     from app.core.critic import FakeCritic
+    from app.core.planner import ManualPlanner
+    from app.core.prediction import FakePredictor
+    from app.core.problem_solver import FakeProblemSolver
+    from app.core.routing import AgentRouter
     from app.core.verification import FakeVerifier
 
     class TrivialAgent(Agent):
@@ -138,10 +138,10 @@ class RecordingMemory(Memory):
 
 
 def test_memory_never_contains_raw_task_content() -> None:
-    from app.core.routing import AgentRouter
     from app.agents.base import Agent, AgentResult
     from app.core.planner import ManualPlanner
     from app.core.problem_solver import FakeProblemSolver
+    from app.core.routing import AgentRouter
     from app.core.verification import FakeVerifier
 
     class TrivialAgent(Agent):

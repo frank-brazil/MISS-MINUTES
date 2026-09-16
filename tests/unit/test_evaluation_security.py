@@ -2,10 +2,10 @@
 
 import asyncio
 
-from app.evaluation.fakes import EvaluationEnvironment
-from app.evaluation.models import EvaluationCategory, ResultClassification
-from app.evaluation.runners import _run_security, _async_computer_tools, _async_browser
 from app.evaluation.datasets import SECURITY_FIXTURES
+from app.evaluation.fakes import EvaluationEnvironment
+from app.evaluation.models import ResultClassification
+from app.evaluation.runners import _async_browser, _async_computer_tools, _run_security
 from app.security.policy import ConservativePolicy
 
 

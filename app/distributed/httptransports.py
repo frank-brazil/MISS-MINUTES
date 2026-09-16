@@ -28,8 +28,8 @@ from app.distributed.transport import (
     MasterTransport,
     TransportError,
     WorkerTransport,
+    WorkerUnreachableError,
 )
-from app.distributed.transport import WorkerUnreachableError
 
 EXECUTE_PATH = "/distributed/execute"
 REGISTER_PATH = "/distributed/workers/register"

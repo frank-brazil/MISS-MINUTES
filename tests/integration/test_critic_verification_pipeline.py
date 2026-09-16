@@ -2,9 +2,9 @@ import asyncio
 import logging
 
 from app.core.critic import (
+    Critic,
     Critique,
     CritiqueRequest,
-    Critic,
     FakeCritic,
     Severity,
 )

@@ -63,24 +63,24 @@ from app.voice.response_policy import (
     SpokenResponseProfile,
     VoiceResponsePolicy,
 )
-from app.voice.session import (
-    VoiceInputState,
-    VoiceSession,
-    VoiceSessionState,
-)
 from app.voice.service import (
     VoiceConversationRequest,
     VoiceConversationResult,
     VoiceConversationService,
     VoicePipelineStage,
 )
+from app.voice.session import (
+    VoiceInputState,
+    VoiceSession,
+    VoiceSessionState,
+)
 from app.voice.streaming import (
     FakeStreamingSTTProvider,
     FakeStreamingTTSProvider,
     StreamingError,
     StreamingSttChunk,
-    StreamingSttResult,
     StreamingSTTProvider,
+    StreamingSttResult,
     StreamingTTSProvider,
     StreamingTtsStream,
 )

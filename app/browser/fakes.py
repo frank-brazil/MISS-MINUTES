@@ -24,9 +24,9 @@ from app.browser.models import (
     BrowserDownload,
     BrowserNavigation,
     BrowserPageContent,
+    BrowserScreenshot,
     BrowserSession,
     BrowserSessionStatus,
-    BrowserScreenshot,
     BrowserTypeResult,
     TextEntryAction,
 )

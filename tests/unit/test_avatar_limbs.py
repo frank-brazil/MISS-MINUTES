@@ -1,6 +1,5 @@
 """Arms/legs: typed limb states, movement hooks and transform validation."""
 
-import math
 
 import pytest
 from pydantic import ValidationError

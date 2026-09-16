@@ -20,27 +20,28 @@ Step-level results are stored on the orchestrator instance (accessible via
 
 import asyncio
 import logging
-from collections.abc import Iterable
 from uuid import UUID
 
 from pydantic import BaseModel
 
 from app.agents.base import Agent, AgentResult
 from app.core.ai import AIError, AIMessage, AIModel, ToolCall
-from app.core.planner import Plan, PlanStep, Planner
-from app.core.routing import AgentRouter, AgentSelection, NoMatchingAgentError, UnknownCapabilityError
+from app.core.planner import Plan, Planner
+from app.core.routing import (
+    AgentRouter,
+    NoMatchingAgentError,
+    UnknownCapabilityError,
+)
 from app.core.task import Task, TaskStatus
 from app.memory.base import Memory
 from app.security.manager import SecurityManager, as_security_manager
 from app.security.models import (
-    PermissionRequest,
     SecurityContext,
     SecurityDecision,
 )
 from app.security.policy import SecurityPolicy
 from app.solver.engine import ProblemSolvingEngine
 from app.tools.base import Tool, ToolResult
-
 
 MAX_TOOL_CALLS = 10
 

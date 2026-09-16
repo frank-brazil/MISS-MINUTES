@@ -2,15 +2,15 @@
 
 import asyncio
 
+from app.evaluation.datasets import RELIABILITY_SCENARIOS
 from app.evaluation.fakes import EvaluationEnvironment
 from app.evaluation.models import ResultClassification
 from app.evaluation.reliability import (
     RELIABILITY_TEST_MAP,
-    run_all_reliability_tests,
     run_all_reliability_sync,
+    run_all_reliability_tests,
     run_reliability_test,
 )
-from app.evaluation.datasets import RELIABILITY_SCENARIOS
 
 
 def _run(coro):

@@ -7,14 +7,12 @@ Historical results are preserved with timestamps.
 from __future__ import annotations
 
 import json
-from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 from app.evaluation.models import (
     EvaluationResult,
     EvaluationRun,
-    EvaluationSummary,
     ReliabilityResult,
     ResultClassification,
 )
@@ -39,8 +37,8 @@ def generate_markdown_report(run: EvaluationRun) -> str:
     lines.append("")
     if run.summary:
         s = run.summary
-        lines.append(f"| Metric | Count |")
-        lines.append(f"|---|---|")
+        lines.append("| Metric | Count |")
+        lines.append("|---|---|")
         lines.append(f"| Total results | {s.total_metrics} |")
         lines.append(f"| PASS | {s.pass_count} |")
         lines.append(f"| FAIL | {s.fail_count} |")

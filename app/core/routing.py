@@ -14,10 +14,8 @@ Terminology:
 
 import logging
 from collections.abc import Iterable
-from typing import ClassVar
 
 from app.agents.base import Agent
-from app.core.task import Task
 
 logger = logging.getLogger(__name__)
 

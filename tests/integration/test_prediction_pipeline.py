@@ -2,10 +2,10 @@ import asyncio
 import logging
 
 from app.core.prediction import (
+    HEURISTIC_NOTICE,
     DecisionAnalysis,
     DecisionOption,
     FakePredictor,
-    HEURISTIC_NOTICE,
     Prediction,
     PredictionRequest,
     Predictor,

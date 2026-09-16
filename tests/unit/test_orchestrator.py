@@ -6,9 +6,9 @@ import pytest
 
 from app.agents.base import Agent, AgentResult
 from app.core.ai import AIMessage, AIModel, AIResponse, ToolDefinition
-from app.core.orchestrator import Orchestrator, OrchestrationResult
+from app.core.orchestrator import OrchestrationResult, Orchestrator
 from app.core.task import Task, TaskStatus
-from app.memory.base import Memory, MemoryRecord, MemoryQueryResult
+from app.memory.base import Memory, MemoryQueryResult, MemoryRecord
 from app.tools.base import Tool, ToolArguments, ToolResult
 
 

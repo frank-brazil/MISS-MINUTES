@@ -1,10 +1,8 @@
-import asyncio
-from collections.abc import Sequence
 
 import pytest
 from pydantic import ValidationError
 
-from app.core.ai import AIMessage, AIModel, AIResponse, ToolCall, ToolDefinition
+from app.core.ai import AIMessage, AIResponse, ToolCall, ToolDefinition
 from app.tools.base import ToolArguments
 from app.tools.calculator import CalculatorTool
 

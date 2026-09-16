@@ -1,8 +1,6 @@
 import asyncio
 import json
 
-import pytest
-
 from app.agents.base import Agent, AgentResult
 from app.agents.coding import CodingAgent
 from app.agents.critic import CriticAgent
@@ -11,18 +9,12 @@ from app.agents.research import ResearchAgent
 from app.agents.system import SystemAgent
 from app.agents.verification import VerificationAgent
 from app.agents.vision import VisionAgent
-from app.core.critic import Critic, Critique, CritiqueRequest, Severity
+from app.core.critic import Critic
 from app.core.prediction import (
-    DecisionAnalysis,
     Predictor,
-    PredictionRequest,
 )
 from app.core.task import Task
 from app.core.verification import (
-    ObservedResult,
-    VerificationExpectation,
-    VerificationResult,
-    VerificationStatus,
     Verifier,
 )
 from app.research.base import (

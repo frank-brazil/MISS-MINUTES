@@ -1,23 +1,20 @@
 import asyncio
 from pathlib import Path
 
-import pytest
-
 from app.tools.screenshot import (
     ScreenshotError,
     ScreenshotProvider,
     ScreenshotResult,
 )
 from app.vision.fakes import (
+    FailingVisionProvider,
     FakeOcrProvider,
     FakeVisionProvider,
-    FailingVisionProvider,
 )
 from app.vision.models import (
     DEFAULT_MAX_IMAGE_BYTES,
     ImageInput,
     VisionAnalysisMode,
-    VisionResult,
 )
 from app.vision.ocr import UnsupportedOcrProvider
 from app.vision.screen_understanding import ScreenUnderstandingService

@@ -10,9 +10,9 @@ composes the character from primitives for offline tests.
 import logging
 import math
 from abc import ABC, abstractmethod
-from typing import Callable, ClassVar, Literal, Any
+from typing import Callable, ClassVar, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 
 from app.avatar.clockface import ClockFace, ClockHandState
 from app.avatar.config import AvatarConfig
@@ -21,8 +21,8 @@ from app.avatar.eyes import EyeState
 from app.avatar.gestures import GestureFrame
 from app.avatar.limbs import ArmsAndLegs
 from app.avatar.lipsync import VisemeState
-from app.avatar.mouth import MouthShape, MouthState
 from app.avatar.models import AvatarPart, AvatarPose, AvatarState, AvatarTransform
+from app.avatar.mouth import MouthShape, MouthState
 from app.avatar.walking import WalkingFrame
 
 _PRIMITIVE_KINDS = ("circle", "line", "ellipse")

@@ -9,7 +9,6 @@ command chaining, redirection and shell metacharacters are rejected.
 from __future__ import annotations
 
 import asyncio
-import os
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import ClassVar

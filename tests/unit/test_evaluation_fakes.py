@@ -91,6 +91,7 @@ class TestEvaluationEnvironment:
     def test_research_deterministic(self):
         env = EvaluationEnvironment()
         import asyncio
+
         from app.research.base import SearchRequest
 
         request = SearchRequest(query="quantum computing", max_results=5)
@@ -108,7 +109,7 @@ class TestEvaluationEnvironment:
 
     def test_verifier_deterministic(self):
         env = EvaluationEnvironment()
-        from app.core.verification import VerificationExpectation, ObservedResult
+        from app.core.verification import ObservedResult, VerificationExpectation
 
         expectation = VerificationExpectation(
             description="Test", conditions=["file exists"]

@@ -17,16 +17,16 @@ from app.avatar.clockface import ClockFace
 from app.avatar.config import AvatarConfig
 from app.avatar.events import AvatarEventLog, AvatarEventType
 from app.avatar.expression import AvatarExpression, ExpressionController, ExpressionSet
-from app.avatar.eyes import EyeController, EyeConfig, EyeTarget, EyeTrackingInput
+from app.avatar.eyes import EyeConfig, EyeController, EyeTarget, EyeTrackingInput
 from app.avatar.gestures import GestureController, GestureKind
 from app.avatar.limbs import ArmsAndLegs
-from app.avatar.lipsync import LipSyncController, LipSyncTiming, TimingAccuracy
+from app.avatar.lipsync import LipSyncController, LipSyncTiming
 from app.avatar.mouth import MouthController, MouthShape
 from app.avatar.movement import AvatarMovementController
 from app.avatar.renderer import AvatarRenderer, RenderFrame
 from app.avatar.state_machine import AvatarStateMachine
 from app.avatar.tts_adapter import TTSLipSyncAdapter
-from app.avatar.walking import WalkState, WalkingController
+from app.avatar.walking import WalkingController, WalkState
 from app.avatar.window import AvatarWindow
 
 

@@ -10,7 +10,7 @@ from collections import deque
 from enum import StrEnum
 from typing import Callable
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from app.avatar.models import AvatarState
 from app.security.redaction import redact_string

@@ -3,7 +3,7 @@
 import pytest
 
 from app.avatar.config import AvatarConfig
-from app.avatar.controller import AvatarController, AvatarSignal, SIGNAL_MAP
+from app.avatar.controller import SIGNAL_MAP, AvatarController, AvatarSignal
 from app.avatar.events import AvatarEventType
 from app.avatar.models import AvatarPart, AvatarState
 from app.avatar.renderer import FakeAvatarRenderer

@@ -10,7 +10,6 @@ from app.core.ai import (
     AIResponse,
     ToolDefinition,
 )
-from app.core.task import Task
 
 
 class SampleAIModel(AIModel):

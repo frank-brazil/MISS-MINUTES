@@ -160,7 +160,6 @@ class SecurityManager:
         an allow.
         """
         decision = self._policy.evaluate(request, context=context)
-        confirmation_id = decision.confirmation_id
 
         if decision.requires_confirmation:
             if approved_confirmation_id is not None and (

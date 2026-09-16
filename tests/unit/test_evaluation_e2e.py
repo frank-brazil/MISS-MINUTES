@@ -1,22 +1,20 @@
 """Tests for end-to-end evaluation."""
 
 import asyncio
-from pathlib import Path
 import tempfile
+from pathlib import Path
 
-from app.evaluation.fakes import EvaluationEnvironment
 from app.evaluation.models import (
     EvaluationMode,
-    EvaluationRun,
     ResultClassification,
 )
-from app.evaluation.runners import run_all_evaluation_async, run_all_evaluation_sync
+from app.evaluation.reliability import run_all_reliability_sync
 from app.evaluation.reports import (
     generate_json_report,
     generate_markdown_report,
     save_evaluation_report,
 )
-from app.evaluation.reliability import run_all_reliability_sync
+from app.evaluation.runners import run_all_evaluation_sync
 
 
 def _run(coro):

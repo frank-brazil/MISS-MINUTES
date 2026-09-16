@@ -5,6 +5,7 @@ import httpx
 import pytest
 
 from app.distributed.config import DistributedConfig
+from app.distributed.coordinator import DistributedCoordinator
 from app.distributed.executor import FakeWorkerExecutor
 from app.distributed.fakes import FakeMasterTransport, FakeWorkerTransport
 from app.distributed.httpapi import create_master_app, create_worker_app
@@ -15,12 +16,10 @@ from app.distributed.httptransports import (
 )
 from app.distributed.models import (
     DistributedTask,
-    DistributedTaskResult,
     TaskAssignment,
     WorkerHeartbeat,
     WorkerInfo,
 )
-from app.distributed.coordinator import DistributedCoordinator
 from app.distributed.queue import DistributedTaskQueue
 from app.distributed.registry import WorkerRegistry
 from app.distributed.service import WorkerService

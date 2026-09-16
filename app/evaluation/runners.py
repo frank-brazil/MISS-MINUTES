@@ -11,21 +11,19 @@ timing values are explicitly labeled as ``ms_fixture``.
 from __future__ import annotations
 
 import asyncio
-import time
 import platform
 import sys
+import time
 from datetime import datetime, timezone
 from typing import Any
-from uuid import uuid5, UUID
 
-from app.core.task import Task, TaskStatus
 from app.core.planner import ManualPlanner
-from app.core.verification import FakeVerifier, VerificationExpectation, ObservedResult, VerificationStatus
-from app.memory.base import MemoryRecord
-from app.research.base import SearchResult
-from app.solver.actions import ActionRequest
-from app.solver.observation import ObservationRequest
-
+from app.core.task import Task
+from app.core.verification import (
+    ObservedResult,
+    VerificationExpectation,
+    VerificationStatus,
+)
 from app.evaluation.datasets import (
     AVATAR_EVENT_FIXTURES,
     BOUNDED_LOOP_FIXTURES,
@@ -46,21 +44,15 @@ from app.evaluation.metrics import (
     compute_wer,
 )
 from app.evaluation.models import (
-    EvaluationCase,
+    EnvironmentInfo,
     EvaluationMode,
     EvaluationResult,
     EvaluationRun,
-    EvaluationScenario,
-    EnvironmentInfo,
     ReliabilityResult,
     ResultClassification,
-    RoutingDecision,
 )
-from app.evaluation.scenarios import (
-    build_all_cases,
-    build_all_scenarios,
-    build_reliability_scenarios,
-)
+from app.memory.base import MemoryRecord
+from app.solver.actions import ActionRequest
 
 
 def _make_env_info() -> EnvironmentInfo:
@@ -127,8 +119,8 @@ def _run_routing(env: EvaluationEnvironment) -> list[EvaluationResult]:
     results: list[EvaluationResult] = []
     from app.agents.coding import CodingAgent
     from app.agents.research import ResearchAgent
-    from app.agents.vision import VisionAgent
     from app.agents.system import SystemAgent
+    from app.agents.vision import VisionAgent
     from app.core.routing import AgentRouter
 
     router = AgentRouter()
@@ -375,7 +367,7 @@ async def _async_browser(env: EvaluationEnvironment) -> list[EvaluationResult]:
     provider = FakeBrowserProvider()
     await provider.start()
     session = await provider.create_session()
-    navigation = await provider.open_url(session.session_id, "https://example.com")
+    await provider.open_url(session.session_id, "https://example.com")
     results.append(
         EvaluationResult(
             metric="browser_safe_action_rate",
@@ -411,7 +403,7 @@ async def _async_browser(env: EvaluationEnvironment) -> list[EvaluationResult]:
 
 async def _async_vision(env: EvaluationEnvironment) -> list[EvaluationResult]:
     results: list[EvaluationResult] = []
-    from app.vision.models import VisionRequest, ImageInput
+    from app.vision.models import ImageInput, VisionRequest
 
     for key, fixture in VISION_FIXTURES.items():
         image_ref = str(fixture["image_ref"])
@@ -456,7 +448,7 @@ async def _async_distributed(env: EvaluationEnvironment) -> list[EvaluationResul
         worker_id=task.distributed_task_id,
     )
     try:
-        result = await env.worker_transport.dispatch_task(assignment, task)
+        await env.worker_transport.dispatch_task(assignment, task)
         results.append(
             EvaluationResult(
                 metric="distributed_dispatch_success",
@@ -493,9 +485,7 @@ async def _async_distributed(env: EvaluationEnvironment) -> list[EvaluationResul
 
 def _run_security(env: EvaluationEnvironment) -> list[EvaluationResult]:
     results: list[EvaluationResult] = []
-    from app.security.policy import ConservativePolicy
 
-    policy = ConservativePolicy()
     for fixture in SECURITY_FIXTURES:
         action = str(fixture["action"])
         expected = str(fixture["expected_decision"])
@@ -551,11 +541,9 @@ def _run_voice_timing(env: EvaluationEnvironment) -> list[EvaluationResult]:
 
 async def _async_avatar(env: EvaluationEnvironment) -> list[EvaluationResult]:
     results: list[EvaluationResult] = []
-    from app.avatar.renderer import FakeAvatarRenderer
-    from app.avatar.state_machine import AvatarStateMachine
     from app.avatar.models import AvatarState
+    from app.avatar.state_machine import AvatarStateMachine
 
-    renderer = FakeAvatarRenderer()
     sm = AvatarStateMachine()
 
     for fixture in AVATAR_EVENT_FIXTURES:
@@ -631,11 +619,10 @@ async def _async_memory(env: EvaluationEnvironment) -> list[EvaluationResult]:
 
 async def _async_e2e(env: EvaluationEnvironment) -> list[EvaluationResult]:
     results: list[EvaluationResult] = []
-    from app.core.task import Task
-    from app.core.planner import ManualPlanner
-    from app.core.routing import AgentRouter
     from app.agents.coding import CodingAgent
     from app.agents.research import ResearchAgent
+    from app.core.routing import AgentRouter
+    from app.core.task import Task
 
     router = AgentRouter()
     router.register(CodingAgent())
@@ -727,7 +714,7 @@ async def _async_prediction(env: EvaluationEnvironment) -> list[EvaluationResult
 
 async def _async_verification(env: EvaluationEnvironment) -> list[EvaluationResult]:
     results: list[EvaluationResult] = []
-    from app.core.verification import VerificationExpectation, ObservedResult, Evidence
+    from app.core.verification import Evidence
 
     test_cases = [
         {

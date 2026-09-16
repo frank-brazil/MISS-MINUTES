@@ -6,7 +6,6 @@ treated as untrusted data and never auto-executed.
 """
 
 from app.browser.errors import (
-    BrowserActionError,
     BrowserContentError,
     BrowserDownloadError,
     BrowserError,
@@ -22,9 +21,9 @@ from app.browser.models import (
     BrowserDownload,
     BrowserNavigation,
     BrowserPageContent,
+    BrowserScreenshot,
     BrowserSession,
     BrowserSessionStatus,
-    BrowserScreenshot,
     BrowserTypeResult,
     TextEntryAction,
 )

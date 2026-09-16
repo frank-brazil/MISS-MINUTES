@@ -6,11 +6,12 @@ import pytest
 from app.agents.base import Agent, AgentResult
 from app.core.ai import AIMessage, AIModel, AIResponse, ToolCall, ToolDefinition
 from app.core.orchestrator import Orchestrator
+from app.core.permissions import ToolPermission
 from app.core.planner import ManualPlanner
 from app.core.problem_solver import FakeProblemSolver
-from app.core.permissions import ToolPermission
 from app.core.routing import AgentRouter
 from app.core.task import Task
+from app.core.verification import FakeVerifier
 from app.distributed.coordinator import DistributedCoordinator
 from app.distributed.events import DistributedEventType
 from app.distributed.executor import FakeWorkerExecutor
@@ -23,8 +24,6 @@ from app.distributed.models import (
 from app.distributed.queue import DistributedTaskQueue
 from app.distributed.registry import WorkerRegistry
 from app.distributed.service import WorkerService
-from app.solver.engine import ProblemSolvingEngine
-from app.solver.fakes import FakeActionExecutor, FakeObservationProvider
 from app.security.models import (
     Permission,
     PermissionCategory,
@@ -36,9 +35,9 @@ from app.security.policy import (
     DefaultPolicy,
     DenyAllPolicy,
 )
+from app.solver.engine import ProblemSolvingEngine
+from app.solver.fakes import FakeActionExecutor, FakeObservationProvider
 from app.tools.base import Tool, ToolArguments, ToolResult
-
-from app.core.verification import FakeVerifier
 
 
 def _run(coro):

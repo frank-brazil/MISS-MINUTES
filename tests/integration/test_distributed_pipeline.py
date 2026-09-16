@@ -19,9 +19,7 @@ from app.distributed.httptransports import (
 )
 from app.distributed.models import (
     DistributedTask,
-    DistributedTaskResult,
     DistributedTaskStatus,
-    WorkerHeartbeat,
     WorkerInfo,
 )
 from app.distributed.queue import DistributedTaskQueue

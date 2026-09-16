@@ -8,7 +8,6 @@ from app.voice.language import (
     ResponseStyle,
 )
 from app.voice.turns import (
-    ConversationTurn,
     ConversationTurnKind,
     ConversationTurnManager,
 )

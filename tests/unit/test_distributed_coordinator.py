@@ -106,9 +106,9 @@ def test_dispatch_with_wrong_capability_requeues():
 
 def test_accept_success_completes_task():
     registry, _, coordinator = _build()
-    worker = _register(registry)
+    _register(registry)
     task = coordinator.submit(_task())
-    assignment = coordinator.dispatch_next()
+    coordinator.dispatch_next()
 
     result = DistributedTaskResult.ok(task.distributed_task_id, output="done")
     accepted = coordinator.accept_result(result)
@@ -316,7 +316,7 @@ def test_dispatch_assigns_one_and_preserves_others_in_fifo():
     second = coordinator.submit(_task())
     third = coordinator.submit(_task())
 
-    assignment = coordinator.dispatch_next()
+    coordinator.dispatch_next()
     assert first.status is DistributedTaskStatus.ASSIGNED
     # The remaining two tasks stay queued (not stranded/lost).
     assert coordinator.queue_depth == 2

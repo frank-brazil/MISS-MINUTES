@@ -1,5 +1,4 @@
 import asyncio
-from collections.abc import Sequence
 
 import pytest
 
