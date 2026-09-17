@@ -23,7 +23,59 @@ def test_repository_asset_files_exist():
 
 
 def test_repository_character_asset_matches_defaults():
-    assert load_character_config() == AvatarConfig()
+    config = load_character_config()
+    # Base appearance fields should match defaults
+    default = AvatarConfig()
+    assert config.body_width == default.body_width
+    assert config.body_height == default.body_height
+    assert config.body_color == default.body_color
+    assert config.outline_color == default.outline_color
+    assert config.outline_width == default.outline_width
+    assert config.eye_size == default.eye_size
+    assert config.eye_spacing == default.eye_spacing
+    assert config.eye_color == default.eye_color
+    assert config.pupil_size == default.pupil_size
+    assert config.pupil_color == default.pupil_color
+    assert config.eye_y_offset == default.eye_y_offset
+    assert config.mouth_size == default.mouth_size
+    assert config.mouth_color == default.mouth_color
+    assert config.mouth_y_offset == default.mouth_y_offset
+    assert config.arm_length == default.arm_length
+    assert config.arm_thickness == default.arm_thickness
+    assert config.arm_color == default.arm_color
+    assert config.hand_size == default.hand_size
+    assert config.leg_length == default.leg_length
+    assert config.leg_thickness == default.leg_thickness
+    assert config.leg_color == default.leg_color
+    assert config.shoe_width == default.shoe_width
+    assert config.shoe_height == default.shoe_height
+    assert config.shoe_color == default.shoe_color
+    assert config.hour_hand_length == default.hour_hand_length
+    assert config.minute_hand_length == default.minute_hand_length
+    assert config.hand_thickness == default.hand_thickness
+    assert config.hand_color == default.hand_color
+    assert config.markings_count == default.markings_count
+    assert config.markings_length == default.markings_length
+    assert config.markings_thickness == default.markings_thickness
+    assert config.markings_color == default.markings_color
+    assert config.center_pivot_size == default.center_pivot_size
+    assert config.center_pivot_color == default.center_pivot_color
+    assert config.default_scale == default.default_scale
+    # New sprite sheet fields should be configured
+    assert config.sprite_sheet is not None
+    assert config.sprite_sheet.image_path == "avatar.png"
+    assert config.sprite_sheet.frame_width == 50
+    assert config.sprite_sheet.frame_height == 303
+    assert config.sprite_sheet.columns == 6
+    assert config.sprite_sheet.rows == 1
+    assert config.sprite_sheet.fps == 8
+    assert "idle" in config.sprite_sheet.animations
+    assert "talk" in config.sprite_sheet.animations
+    assert "walk" in config.sprite_sheet.animations
+    assert config.expression_overlays is not None
+    assert "neutral" in config.expression_overlays.expressions
+    assert "happy" in config.expression_overlays.expressions
+    assert "thinking" in config.expression_overlays.expressions
 
 
 def test_repository_expression_asset_matches_defaults():

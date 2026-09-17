@@ -16,6 +16,8 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, field_validator, model_validator
 
+from app.avatar.sprite_config import ExpressionOverlayConfig, SpriteSheetConfig
+
 _HEX_COLOR = re.compile(r"^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$")
 
 
@@ -80,6 +82,9 @@ class AvatarConfig(BaseModel):
     center_pivot_color: str = "#2A1A0F"
 
     default_scale: float = 1.0
+
+    sprite_sheet: SpriteSheetConfig | None = None
+    expression_overlays: ExpressionOverlayConfig | None = None
 
     @field_validator(
         "body_width",

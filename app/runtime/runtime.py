@@ -19,6 +19,8 @@ from app.agents.research import ResearchAgent
 from app.agents.system import SystemAgent
 from app.agents.verification import VerificationAgent
 from app.agents.vision import VisionAgent
+from app.avatar.assets import load_character_config
+from app.avatar.config import AvatarConfig as AvatarAppearanceConfig
 from app.avatar.controller import AvatarController
 from app.avatar.voice_adapter import VoiceAvatarAdapter
 from app.config.schema import MissMinutesConfig
@@ -425,17 +427,35 @@ class MissMinutesRuntime:
             return
 
         try:
-            from app.avatar.config import AvatarConfig as AvatarCfg
+            # Load full character config (includes sprite_sheet and expression_overlays)
+            char_cfg = load_character_config()
 
-            avatar_cfg = AvatarCfg()
-            self._avatar_controller = AvatarController(config=avatar_cfg)
+            # Determine renderer based on config and available backends
+            renderer = self._create_avatar_renderer(char_cfg)
+
+            self._avatar_controller = AvatarController(renderer=renderer, config=char_cfg)
 
             if self._voice_service is not None:
                 self._voice_avatar_adapter = VoiceAvatarAdapter(controller=self._avatar_controller)
             self._capabilities.register("avatar", True, self._config.avatar.theme)
         except Exception:
-            self._logger.warning("Avatar initialization failed")
+            self._logger.warning("Avatar initialization failed", exc_info=True)
             self._capabilities.register("avatar", False)
+
+    def _create_avatar_renderer(self, char_cfg: AvatarAppearanceConfig):
+        """Create the appropriate avatar renderer based on configuration."""
+        # Check if sprite sheet is configured
+        if char_cfg.sprite_sheet is not None:
+            # Try to use Tkinter sprite sheet renderer for desktop
+            try:
+                from app.avatar.tkinter_sprite_renderer import TkinterSpriteSheetRenderer
+                return TkinterSpriteSheetRenderer(config=char_cfg)
+            except ImportError:
+                self._logger.warning("Tkinter not available, falling back to procedural renderer")
+
+        # Fallback to procedural FakeAvatarRenderer (headless/testing)
+        from app.avatar.renderer import FakeAvatarRenderer
+        return FakeAvatarRenderer(config=char_cfg)
 
     async def _initialize_capabilities(self) -> None:
         """Register remaining capability statuses."""
