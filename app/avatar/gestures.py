@@ -307,14 +307,17 @@ class GestureController:
             return None
         return self._finished.popleft()
 
-    def _frame_for(self, spec: GestureSpec, progress: float, repeat: int, now: float) -> GestureFrame:
+    def _frame_for(
+        self, spec: GestureSpec, progress: float, repeat: int, now: float
+    ) -> GestureFrame:
         eased = ease(progress, Easing.EASE_IN_OUT)
         return GestureFrame(
             kind=spec.kind,
             name=spec.kind.value,
             progress=progress,
             left_arm_swing=spec.left_arm_start + (spec.left_arm_end - spec.left_arm_start) * eased,
-            right_arm_swing=spec.right_arm_start + (spec.right_arm_end - spec.right_arm_start) * eased,
+            right_arm_swing=spec.right_arm_start
+            + (spec.right_arm_end - spec.right_arm_start) * eased,
             body_tilt_deg=spec.body_tilt_deg * eased,
             lean=spec.lean * eased,
             loop=spec.loop,

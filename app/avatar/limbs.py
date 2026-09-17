@@ -120,7 +120,12 @@ class ArmsAndLegs:
     def limbs(self) -> tuple[LimbState, ...]:
         return tuple(
             self._limbs[p]
-            for p in (AvatarPart.LEFT_ARM, AvatarPart.RIGHT_ARM, AvatarPart.LEFT_LEG, AvatarPart.RIGHT_LEG)
+            for p in (
+                AvatarPart.LEFT_ARM,
+                AvatarPart.RIGHT_ARM,
+                AvatarPart.LEFT_LEG,
+                AvatarPart.RIGHT_LEG,
+            )
         )
 
     def swing(self, part: AvatarPart, degrees: float) -> LimbState:

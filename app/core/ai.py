@@ -44,9 +44,7 @@ class AIResponse(BaseModel):
         model_name: str | None = None,
         tool_calls: list[ToolCall] | None = None,
     ) -> "AIResponse":
-        return cls(
-            success=True, content=content, model_name=model_name, tool_calls=tool_calls
-        )
+        return cls(success=True, content=content, model_name=model_name, tool_calls=tool_calls)
 
     @classmethod
     def fail(cls, error: str) -> "AIResponse":
@@ -64,9 +62,7 @@ class AIModel(ABC):
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
         missing = [
-            attribute
-            for attribute in ("name", "description")
-            if not hasattr(cls, attribute)
+            attribute for attribute in ("name", "description") if not hasattr(cls, attribute)
         ]
         if missing:
             raise TypeError(

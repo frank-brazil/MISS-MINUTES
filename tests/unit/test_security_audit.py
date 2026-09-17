@@ -99,9 +99,7 @@ def test_age_based_cleanup() -> None:
         action="old operation",
         decision="allow",
     )
-    new = AuditEvent(
-        timestamp=base, action="new operation", decision="allow"
-    )
+    new = AuditEvent(timestamp=base, action="new operation", decision="allow")
     store.record(old)
     store.record(new)
     store.cleanup()
@@ -123,13 +121,9 @@ def test_cleanup_enforces_max_events_eagerly() -> None:
 
 def test_never_store_secret_files() -> None:
     logger = AuditLogger()
-    request = _request(
-        action="file_read: /private/ssh/id_rsa with password=topsecret"
-    )
+    request = _request(action="file_read: /private/ssh/id_rsa with password=topsecret")
     logger.log(request=request, decision=SecurityDecision.allow())
-    events_text = " ".join(
-        event.action for event in logger.store.snapshot()
-    )
+    events_text = " ".join(event.action for event in logger.store.snapshot())
     assert "/private/ssh/id_rsa" in events_text  # path itself is fine
     assert "topsecret" not in events_text  # credential-like value is not
 

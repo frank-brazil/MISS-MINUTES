@@ -9,11 +9,7 @@ if TYPE_CHECKING:
 
 def _strip_schema_titles(value: Any) -> Any:
     if isinstance(value, dict):
-        return {
-            key: _strip_schema_titles(item)
-            for key, item in value.items()
-            if key != "title"
-        }
+        return {key: _strip_schema_titles(item) for key, item in value.items() if key != "title"}
     if isinstance(value, list):
         return [_strip_schema_titles(item) for item in value]
     return value

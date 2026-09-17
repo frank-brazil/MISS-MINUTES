@@ -34,9 +34,7 @@ MX_TEXT = "Mera laptop slow ho gaya, kya hua?"
 
 
 def detection_for(label: LanguageLabel, confidence: float = 0.9) -> LanguageDetectionResult:
-    return LanguageDetectionResult.detected(
-        label, confidence=confidence, languages=(label,)
-    )
+    return LanguageDetectionResult.detected(label, confidence=confidence, languages=(label,))
 
 
 STT_FIXTURES = {
@@ -98,7 +96,9 @@ def build_service(
     ai: FakeAIModel | None = None,
     tts: FakeTextToSpeech | None = None,
     conversation_language: ConversationLanguage | None = None,
-) -> tuple[VoiceConversationService, FakeSpeechToText, FakeLanguageDetector, FakeAIModel, FakeTextToSpeech]:
+) -> tuple[
+    VoiceConversationService, FakeSpeechToText, FakeLanguageDetector, FakeAIModel, FakeTextToSpeech
+]:
     stt = stt or FakeSpeechToText(fixtures=STT_FIXTURES)
     detector = detector or FakeLanguageDetector(fixtures=DETECTIONS)
     ai = ai or FakeAIModel()
@@ -290,9 +290,7 @@ def test_request_id_propagated_when_provided() -> None:
 
 def test_audio_and_language_hint_forwarded_to_stt() -> None:
     service, _, _, _, _ = build_service()
-    asyncio.run(
-        service.handle(request(audio=EN_AUDIO, format="webm", language_hint="en"))
-    )
+    asyncio.run(service.handle(request(audio=EN_AUDIO, format="webm", language_hint="en")))
 
 
 def test_stt_result_failure_is_controlled() -> None:
@@ -306,9 +304,7 @@ def test_stt_result_failure_is_controlled() -> None:
 
 def test_stt_exception_is_controlled() -> None:
     service, *_ = build_service(
-        stt=FakeSpeechToText(
-            fixtures=STT_FIXTURES, raise_error=ValueError("boom")
-        )
+        stt=FakeSpeechToText(fixtures=STT_FIXTURES, raise_error=ValueError("boom"))
     )
     result = asyncio.run(service.handle(request()))
     assert result.success is False
@@ -329,9 +325,7 @@ def test_language_detection_unknown_is_non_fatal() -> None:
 
 def test_language_detection_exception_is_controlled() -> None:
     service, *_ = build_service(
-        detector=FakeLanguageDetector(
-            fixtures=DETECTIONS, raise_error=RuntimeError("boom")
-        )
+        detector=FakeLanguageDetector(fixtures=DETECTIONS, raise_error=RuntimeError("boom"))
     )
     result = asyncio.run(service.handle(request()))
     assert result.success is False
@@ -353,9 +347,7 @@ def test_ai_failure_result_is_controlled() -> None:
 
 
 def test_ai_exception_is_controlled() -> None:
-    service, *_ = build_service(
-        ai=FakeAIModel(raise_error=RuntimeError("boom"))
-    )
+    service, *_ = build_service(ai=FakeAIModel(raise_error=RuntimeError("boom")))
     result = asyncio.run(service.handle(request()))
     assert result.success is False
     assert result.stage is VoicePipelineStage.AI
@@ -383,9 +375,7 @@ def test_tts_failure_result_is_controlled() -> None:
 
 
 def test_tts_exception_is_controlled() -> None:
-    service, *_ = build_service(
-        tts=FakeTextToSpeech(raise_error=RuntimeError("boom"))
-    )
+    service, *_ = build_service(tts=FakeTextToSpeech(raise_error=RuntimeError("boom")))
     result = asyncio.run(service.handle(request()))
     assert result.success is False
     assert result.stage is VoicePipelineStage.TTS

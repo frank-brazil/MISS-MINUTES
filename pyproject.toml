@@ -5,24 +5,36 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "missminutes"
 version = "0.1.0"
-description = "MISSMINUTES"
+description = "MISSMINUTES — personal intelligent AI computer agent"
 requires-python = ">=3.11"
 dependencies = [
-    "fastapi",
-    "uvicorn",
-    "pydantic",
-    "python-dotenv",
-    "openai",
+    "fastapi>=0.100",
+    "uvicorn>=0.23",
+    "pydantic>=2.0",
+    "python-dotenv>=1.0",
+    "openai>=1.0",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "pytest",
-    "httpx",
+    "pytest>=7.0",
+    "httpx>=0.24",
+    "ruff>=0.1",
 ]
+voice = []
+browser = ["playwright"]
+all = [
+    "playwright",
+]
+
+[project.scripts]
+missminutes = "main:main"
 
 [tool.setuptools.packages.find]
 include = ["app*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

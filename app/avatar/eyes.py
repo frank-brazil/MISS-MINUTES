@@ -27,7 +27,13 @@ class EyeConfig(BaseModel):
     interpolation_speed: float = 8.0
     blink_jitter_seconds: float = 0.0
 
-    @field_validator("auto_blink_period_seconds", "blink_duration", "idle_pupil_radius", "interpolation_speed", "blink_jitter_seconds")
+    @field_validator(
+        "auto_blink_period_seconds",
+        "blink_duration",
+        "idle_pupil_radius",
+        "interpolation_speed",
+        "blink_jitter_seconds",
+    )
     @classmethod
     def _nonnegative(cls, value: float) -> float:
         if not math.isfinite(value) or value < 0:
@@ -60,9 +66,7 @@ class EyeTrackingInput(ABC):
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
         missing = [
-            attribute
-            for attribute in ("name", "description")
-            if not hasattr(cls, attribute)
+            attribute for attribute in ("name", "description") if not hasattr(cls, attribute)
         ]
         if missing:
             raise TypeError(
@@ -317,12 +321,18 @@ class EyeController:
             else:
                 factor = min(
                     factor,
-                    self._blink_factor(self._manual_blink_started_at, self._manual_blink_duration, now),
+                    self._blink_factor(
+                        self._manual_blink_started_at, self._manual_blink_duration, now
+                    ),
                 )
         period = self._eye_config.auto_blink_period_seconds
         if period > 0:
             self._schedule_auto_blink(now)
-            if self._auto_blink_started_at is None and self._next_auto_blink_at is not None and now >= self._next_auto_blink_at:
+            if (
+                self._auto_blink_started_at is None
+                and self._next_auto_blink_at is not None
+                and now >= self._next_auto_blink_at
+            ):
                 self._auto_blink_started_at = self._next_auto_blink_at
                 self._next_auto_blink_at = self._next_auto_blink_at + period + self._jitter_offset()
             if self._auto_blink_started_at is not None:
@@ -331,7 +341,9 @@ class EyeController:
                 else:
                     factor = min(
                         factor,
-                        self._blink_factor(self._auto_blink_started_at, self._eye_config.blink_duration, now),
+                        self._blink_factor(
+                            self._auto_blink_started_at, self._eye_config.blink_duration, now
+                        ),
                     )
         return max(0.0, min(1.0, factor))
 

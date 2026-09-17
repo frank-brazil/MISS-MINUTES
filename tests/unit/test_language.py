@@ -28,14 +28,10 @@ class SampleLanguageDetector(LanguageDetector):
         )
 
 
-def detection(
-    label: LanguageLabel, *, confidence: float = 0.9
-) -> LanguageDetectionResult:
+def detection(label: LanguageLabel, *, confidence: float = 0.9) -> LanguageDetectionResult:
     if label is LanguageLabel.UNKNOWN:
         return LanguageDetectionResult.unknown()
-    return LanguageDetectionResult.detected(
-        label, confidence=confidence, languages=(label,)
-    )
+    return LanguageDetectionResult.detected(label, confidence=confidence, languages=(label,))
 
 
 def test_language_label_values() -> None:
@@ -100,29 +96,21 @@ def test_detected_result_fields() -> None:
 
 def test_unknown_rejects_confidence() -> None:
     with pytest.raises(ValidationError, match="confidence"):
-        LanguageDetectionResult.detected(
-            LanguageLabel.UNKNOWN, confidence=0.5
-        )
+        LanguageDetectionResult.detected(LanguageLabel.UNKNOWN, confidence=0.5)
 
 
 def test_unknown_rejects_languages() -> None:
     with pytest.raises(ValidationError, match="languages"):
-        LanguageDetectionResult.detected(
-            LanguageLabel.UNKNOWN, languages=(LanguageLabel.ENGLISH,)
-        )
+        LanguageDetectionResult.detected(LanguageLabel.UNKNOWN, languages=(LanguageLabel.ENGLISH,))
 
 
 def test_unknown_rejects_mixed() -> None:
     with pytest.raises(ValidationError, match="mixed"):
-        LanguageDetectionResult.detected(
-            LanguageLabel.UNKNOWN, is_mixed=True
-        )
+        LanguageDetectionResult.detected(LanguageLabel.UNKNOWN, is_mixed=True)
 
 
 def test_mixed_factory() -> None:
-    result = LanguageDetectionResult.mixed(
-        LanguageLabel.HINDI, LanguageLabel.ENGLISH
-    )
+    result = LanguageDetectionResult.mixed(LanguageLabel.HINDI, LanguageLabel.ENGLISH)
     assert result.label is LanguageLabel.MIXED
     assert result.confidence == 0.7
     assert result.languages == (LanguageLabel.HINDI, LanguageLabel.ENGLISH)
@@ -189,13 +177,9 @@ def test_rejects_duplicate_languages() -> None:
 
 def test_rejects_out_of_range_confidence() -> None:
     with pytest.raises(ValidationError, match="confidence"):
-        LanguageDetectionResult.detected(
-            LanguageLabel.ENGLISH, confidence=1.5
-        )
+        LanguageDetectionResult.detected(LanguageLabel.ENGLISH, confidence=1.5)
     with pytest.raises(ValidationError, match="confidence"):
-        LanguageDetectionResult.detected(
-            LanguageLabel.ENGLISH, confidence=-0.1
-        )
+        LanguageDetectionResult.detected(LanguageLabel.ENGLISH, confidence=-0.1)
 
 
 def test_language_mode_values() -> None:

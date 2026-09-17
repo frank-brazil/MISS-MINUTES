@@ -158,15 +158,11 @@ class AuditLogger:
                 actor
                 if actor is not None
                 else (
-                    request.actor
-                    if request is not None
-                    else (None if decision is None else None)
+                    request.actor if request is not None else (None if decision is None else None)
                 )
             ),
             origin=(
-                origin
-                if origin is not None
-                else (request.origin if request is not None else None)
+                origin if origin is not None else (request.origin if request is not None else None)
             ),
             action=redact_string(
                 action
@@ -176,20 +172,12 @@ class AuditLogger:
             permission=(
                 permission
                 if permission is not None
-                else (
-                    request.permission.category.value
-                    if request is not None
-                    else None
-                )
+                else (request.permission.category.value if request is not None else None)
             ),
             resource=redact_string(
                 resource
                 if resource is not None
-                else (
-                    request.permission.resource
-                    if request is not None
-                    else None
-                )
+                else (request.permission.resource if request is not None else None)
             ),
             risk=(
                 risk
@@ -199,11 +187,7 @@ class AuditLogger:
             decision=(
                 decision_value
                 if decision_value is not None
-                else (
-                    decision.decision.value
-                    if decision is not None
-                    else "unknown"
-                )
+                else (decision.decision.value if decision is not None else "unknown")
             ),
             reason_code=(
                 reason_code

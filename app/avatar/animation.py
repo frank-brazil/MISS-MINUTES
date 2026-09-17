@@ -65,7 +65,14 @@ class AnimationConfig(BaseModel):
             raise ValueError("animation values must be positive finite numbers")
         return value
 
-    @field_validator("listening_tilt_deg", "thinking_tilt_deg", "working_tilt_deg", "listening_lean", "thinking_lean", "working_lean")
+    @field_validator(
+        "listening_tilt_deg",
+        "thinking_tilt_deg",
+        "working_tilt_deg",
+        "listening_lean",
+        "thinking_lean",
+        "working_lean",
+    )
     @classmethod
     def _finite(cls, value: float) -> float:
         if not math.isfinite(value):
@@ -120,12 +127,18 @@ class AnimationController:
         return completed
 
     def _idle_pose(self, now: float) -> AvatarPose:
-        bob = self._config.idle_bob_amplitude * math.sin(2.0 * math.pi * now / self._config.idle_bob_period_seconds)
-        tilt = self._config.idle_tilt_amplitude * math.sin(2.0 * math.pi * now / self._config.idle_tilt_period_seconds)
+        bob = self._config.idle_bob_amplitude * math.sin(
+            2.0 * math.pi * now / self._config.idle_bob_period_seconds
+        )
+        tilt = self._config.idle_tilt_amplitude * math.sin(
+            2.0 * math.pi * now / self._config.idle_tilt_period_seconds
+        )
         return AvatarPose(body_bob=bob, body_tilt_deg=tilt)
 
     def _listening_pose(self, now: float) -> AvatarPose:
-        bob = self._config.listening_bob_amplitude * math.sin(2.0 * math.pi * now / self._config.idle_bob_period_seconds)
+        bob = self._config.listening_bob_amplitude * math.sin(
+            2.0 * math.pi * now / self._config.idle_bob_period_seconds
+        )
         return AvatarPose(
             body_bob=bob,
             body_tilt_deg=self._config.listening_tilt_deg,
@@ -142,7 +155,9 @@ class AnimationController:
         )
 
     def _working_pose(self, now: float) -> AvatarPose:
-        micro = self._config.working_bob_amplitude * math.sin(2.0 * math.pi * now * 2.0 / self._config.idle_bob_period_seconds)
+        micro = self._config.working_bob_amplitude * math.sin(
+            2.0 * math.pi * now * 2.0 / self._config.idle_bob_period_seconds
+        )
         return AvatarPose(
             body_bob=micro,
             body_tilt_deg=self._config.working_tilt_deg,

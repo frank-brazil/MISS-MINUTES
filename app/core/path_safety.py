@@ -38,9 +38,7 @@ def _normcase(value: str | os.PathLike[str]) -> str:
     return os.path.normcase(os.path.normpath(os.fspath(value)))
 
 
-def is_within_root(
-    path: str | os.PathLike[str], root: str | os.PathLike[str]
-) -> bool:
+def is_within_root(path: str | os.PathLike[str], root: str | os.PathLike[str]) -> bool:
     """Return True when ``path`` resolves inside ``root``.
 
     Resolution and case normalisation are applied to both sides before the
@@ -68,16 +66,12 @@ class PathSafety:
         is permitted only when it resolves under at least one allowed root.
     """
 
-    def __init__(
-        self, allowed_roots: Iterable[str | os.PathLike[str]] = ()
-    ) -> None:
+    def __init__(self, allowed_roots: Iterable[str | os.PathLike[str]] = ()) -> None:
         resolved: dict[str, Path] = {}
         for root in allowed_roots:
             absolute = resolve_path(root)
             resolved[_normcase(absolute)] = absolute
-        self._roots: tuple[Path, ...] = tuple(
-            resolved[k] for k in sorted(resolved)
-        )
+        self._roots: tuple[Path, ...] = tuple(resolved[k] for k in sorted(resolved))
 
     @property
     def roots(self) -> tuple[Path, ...]:
@@ -93,13 +87,9 @@ class PathSafety:
         resolved = self.resolve(path)
         return any(is_within_root(resolved, root) for root in self._roots)
 
-    def ensure_within(
-        self, path: str | os.PathLike[str]
-    ) -> Path:
+    def ensure_within(self, path: str | os.PathLike[str]) -> Path:
         """Resolve ``path`` and raise :class:`PathSafetyError` if unsafe."""
         resolved = self.resolve(path)
         if not self.within(resolved):
-            raise PathSafetyError(
-                f"path '{os.fspath(path)}' is outside the allowed roots"
-            )
+            raise PathSafetyError(f"path '{os.fspath(path)}' is outside the allowed roots")
         return resolved

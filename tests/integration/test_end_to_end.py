@@ -25,6 +25,7 @@ def _run(coro):
 # Scenario A — File search
 # ------------------------------------------------------------------
 
+
 class _FileSearchAI(AIModel):
     name = "file-search-ai"
     description = "AI that returns a file search plan."
@@ -43,6 +44,7 @@ class _FileSearchAI(AIModel):
 
 def test_scenario_a_file_search():
     """Text request for file search goes through orchestration and returns result."""
+
     async def flow():
         ai = _FileSearchAI()
         config = MissMinutesConfig()
@@ -53,12 +55,14 @@ def test_scenario_a_file_search():
         assert "DSA" in response.text_response or "notes" in response.text_response.lower()
         assert response.task_id is not None
         await runtime.shutdown()
+
     _run(flow())
 
 
 # ------------------------------------------------------------------
 # Scenario B — Failed action + replan
 # ------------------------------------------------------------------
+
 
 class _ReplanAI(AIModel):
     name = "replan-ai"
@@ -78,6 +82,7 @@ class _ReplanAI(AIModel):
 
 def test_scenario_b_failed_action_replan():
     """First attempt fails, second attempt succeeds."""
+
     async def flow():
         ai = _ReplanAI()
         config = MissMinutesConfig()
@@ -87,6 +92,7 @@ def test_scenario_b_failed_action_replan():
         # The runtime should handle the failure gracefully
         assert response.request_id is not None
         await runtime.shutdown()
+
     _run(flow())
 
 
@@ -94,8 +100,10 @@ def test_scenario_b_failed_action_replan():
 # Scenario C — Security denial
 # ------------------------------------------------------------------
 
+
 def test_scenario_c_security_denial():
     """Forbidden action is denied by security policy."""
+
     async def flow():
         config = MissMinutesConfig()
         config.security.policy_mode = "deny_all"
@@ -103,6 +111,7 @@ def test_scenario_c_security_denial():
         await runtime.startup()
         assert runtime.security is not None
         from app.security.models import Permission, PermissionRequest, SecurityContext
+
         permission = Permission(
             category=PermissionCategory.EXECUTE,
             action="test:denied",
@@ -119,6 +128,7 @@ def test_scenario_c_security_denial():
         decision = runtime.security.check(request, context=context)
         assert decision.allowed is False
         await runtime.shutdown()
+
     _run(flow())
 
 
@@ -126,8 +136,10 @@ def test_scenario_c_security_denial():
 # Scenario D — Distributed failure + reroute
 # ------------------------------------------------------------------
 
+
 def test_scenario_distributed_failure_reroute():
     """Worker failure is handled gracefully — coordinator produces a synthetic failure."""
+
     async def flow():
         from uuid import uuid4
 
@@ -150,17 +162,24 @@ def test_scenario_distributed_failure_reroute():
         queue = DistributedTaskQueue()
 
         worker_id = uuid4()
-        registry.register(WorkerInfo(
-            worker_id=worker_id, worker_name="worker-a",
-            capabilities=frozenset({"analysis"}), endpoint="http://a",
-        ))
+        registry.register(
+            WorkerInfo(
+                worker_id=worker_id,
+                worker_name="worker-a",
+                capabilities=frozenset({"analysis"}),
+                endpoint="http://a",
+            )
+        )
 
         coordinator = DistributedCoordinator(
-            registry=registry, queue=queue, transport=transport,
+            registry=registry,
+            queue=queue,
+            transport=transport,
         )
 
         task = DistributedTask(
-            task_id=uuid4(), task_type="analysis",
+            task_id=uuid4(),
+            task_type="analysis",
             description="analysis task",
             required_capabilities=frozenset({"analysis"}),
         )
@@ -175,12 +194,14 @@ def test_scenario_distributed_failure_reroute():
         # The result is a synthetic failure — the task is requeued for retry
         assert result.success is False
         assert "unreachable" in (result.error or "").lower()
+
     _run(flow())
 
 
 # ------------------------------------------------------------------
 # Scenario E — Voice interruption
 # ------------------------------------------------------------------
+
 
 class _InterruptibleTTS:
     name = "interruptible-tts"
@@ -192,11 +213,13 @@ class _InterruptibleTTS:
 
     async def synthesize(self, text, *, language=None):
         from app.voice.base import AudioData, TextToSpeechResult
+
         self.playing = True
         # Simulate interruption check
         if self.interrupted:
             self.playing = False
             from app.voice.base import SpeechError
+
             raise SpeechError("interrupted")
         self.playing = False
         return TextToSpeechResult(
@@ -207,6 +230,7 @@ class _InterruptibleTTS:
 
 def test_scenario_e_voice_interruption():
     """Voice interruption stops playback and resets avatar."""
+
     async def flow():
         config = MissMinutesConfig()
         config.voice.enabled = True
@@ -217,6 +241,7 @@ def test_scenario_e_voice_interruption():
         # Simulate interruption
         if runtime.avatar_controller is not None:
             from app.avatar.controller import AvatarSignal
+
             runtime.avatar_controller.handle(AvatarSignal.SPEAKING)
             # Interrupt
             runtime.avatar_controller.handle(AvatarSignal.INTERRUPTED)
@@ -225,4 +250,5 @@ def test_scenario_e_voice_interruption():
             assert state is not None
 
         await runtime.shutdown()
+
     _run(flow())

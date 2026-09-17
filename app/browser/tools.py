@@ -138,9 +138,7 @@ class BrowserOpenTool(Tool):
             _safe_domain(url),
             navigation.status,
         )
-        status = (
-            f" (status {navigation.status})" if navigation.status is not None else ""
-        )
+        status = f" (status {navigation.status})" if navigation.status is not None else ""
         return ToolResult.ok(output=f"Opened {url} in session {sid}{status}")
 
 
@@ -153,9 +151,7 @@ class BrowserReadArguments(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     session_id: str | None = None
-    selector: str | None = Field(
-        default=None, description="Optional CSS selector for an element"
-    )
+    selector: str | None = Field(default=None, description="Optional CSS selector for an element")
     mode: ReadMode = Field(default=ReadMode.TEXT, description="Extraction mode")
     max_chars: int = Field(
         default=8000,
@@ -211,17 +207,14 @@ class BrowserReadTool(Tool):
 class BrowserClickArguments(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    selector: str = Field(
-        min_length=1, description="CSS selector of the target element"
-    )
+    selector: str = Field(min_length=1, description="CSS selector of the target element")
     session_id: str | None = None
 
 
 class BrowserClickTool(Tool):
     name = "browser_click"
     description = (
-        "Clicks the element identified by an explicit CSS selector in the "
-        "browser session."
+        "Clicks the element identified by an explicit CSS selector in the browser session."
     )
     input_schema = BrowserClickArguments
     permission: ClassVar[ToolPermission] = ToolPermission.SYSTEM
@@ -246,9 +239,7 @@ class BrowserClickTool(Tool):
             args.selector,
             result.ok,
         )
-        return ToolResult.ok(
-            output=f"Clicked '{args.selector}' in session {sid}"
-        )
+        return ToolResult.ok(output=f"Clicked '{args.selector}' in session {sid}")
 
 
 # ----------------------------------------------------------------------
@@ -259,9 +250,7 @@ class BrowserClickTool(Tool):
 class BrowserTypeArguments(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    selector: str = Field(
-        min_length=1, description="CSS selector of the input field"
-    )
+    selector: str = Field(min_length=1, description="CSS selector of the input field")
     text: str | None = Field(
         default=None, description="Text to type (ignored when action is clear)"
     )
@@ -307,9 +296,7 @@ class BrowserTypeTool(Tool):
         )
 
         if args.action == TextEntryAction.CLEAR:
-            return ToolResult.ok(
-                output=f"Cleared field '{args.selector}' in session {sid}"
-            )
+            return ToolResult.ok(output=f"Cleared field '{args.selector}' in session {sid}")
         if args.action == TextEntryAction.REPLACE:
             return ToolResult.ok(
                 output=(
@@ -319,8 +306,7 @@ class BrowserTypeTool(Tool):
             )
         return ToolResult.ok(
             output=(
-                f"Typed {result.chars_typed} characters into "
-                f"'{args.selector}' in session {sid}"
+                f"Typed {result.chars_typed} characters into '{args.selector}' in session {sid}"
             )
         )
 
@@ -335,9 +321,7 @@ class BrowserDownloadArguments(BaseModel):
 
     url: str = Field(description="HTTP(S) URL of the file to download")
     destination: str = Field(
-        description=(
-            "Explicit destination path inside an allowed download directory"
-        )
+        description=("Explicit destination path inside an allowed download directory")
     )
     session_id: str | None = None
 
@@ -363,16 +347,11 @@ class BrowserDownloadTool(Tool):
             return ToolResult.fail(error=f"URL rejected: {exc}")
 
         roots = (
-            self._ctx.download_config.allowed_roots
-            if self._ctx.download_config is not None
-            else ()
+            self._ctx.download_config.allowed_roots if self._ctx.download_config is not None else ()
         )
         if not roots:
             return ToolResult.fail(
-                error=(
-                    "Downloads are not allowed (no allowed download directory "
-                    "is configured)"
-                )
+                error=("Downloads are not allowed (no allowed download directory is configured)")
             )
 
         safety = PathSafety(roots)
@@ -386,29 +365,19 @@ class BrowserDownloadTool(Tool):
             try:
                 target = safety.ensure_within(target)
             except PathSafetyError as exc:
-                return ToolResult.fail(
-                    error=f"Download path not allowed: {exc}"
-                )
+                return ToolResult.fail(error=f"Download path not allowed: {exc}")
 
         parent = target.parent
         if not parent.exists():
-            return ToolResult.fail(
-                error=f"Download directory does not exist: {parent}"
-            )
+            return ToolResult.fail(error=f"Download directory does not exist: {parent}")
         if not parent.is_dir():
-            return ToolResult.fail(
-                error=f"Download parent is not a directory: {parent}"
-            )
+            return ToolResult.fail(error=f"Download parent is not a directory: {parent}")
         if target.exists():
-            return ToolResult.fail(
-                error=f"Download target already exists: {target}"
-            )
+            return ToolResult.fail(error=f"Download target already exists: {target}")
 
         try:
             sid = await self._ctx.ensure_session(args.session_id)
-            download = await self._ctx.provider.download(
-                sid, url, destination=target
-            )
+            download = await self._ctx.provider.download(sid, url, destination=target)
         except BrowserError as exc:
             return ToolResult.fail(error=f"Download failed: {exc}")
         except Exception as exc:
@@ -432,10 +401,7 @@ class BrowserDownloadTool(Tool):
             download.size_bytes,
         )
         return ToolResult.ok(
-            output=(
-                f"Downloaded {url} to {download.saved_to} "
-                f"({download.size_bytes} bytes)"
-            )
+            output=(f"Downloaded {url} to {download.saved_to} ({download.size_bytes} bytes)")
         )
 
 

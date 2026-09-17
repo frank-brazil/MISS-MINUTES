@@ -14,7 +14,9 @@ class Clock:
     value = 0.5
 
 
-def _make_controller(window: bool = False) -> tuple[AvatarController, Clock, FakeAvatarRenderer, FakeAvatarWindow | None]:
+def _make_controller(
+    window: bool = False,
+) -> tuple[AvatarController, Clock, FakeAvatarRenderer, FakeAvatarWindow | None]:
     clock = Clock()
     renderer = FakeAvatarRenderer()
     win = FakeAvatarWindow(AvatarWindowConfig()) if window else None
@@ -142,7 +144,10 @@ def test_animation_completed_after_success_hop():
     controller.start()
     controller.handle(AvatarSignal.WORKING)
     controller.handle(AvatarSignal.SUCCESS)
-    assert controller.events.events_of_type(AvatarEventType.ANIMATION_STARTED)[-1].animation == "success"
+    assert (
+        controller.events.events_of_type(AvatarEventType.ANIMATION_STARTED)[-1].animation
+        == "success"
+    )
     clock.value += AvatarConfig().hour_hand_length  # irrelevant, just past 1.8s
     controller.update()
     completed = controller.events.events_of_type(AvatarEventType.ANIMATION_COMPLETED)
@@ -202,6 +207,7 @@ def test_no_global_state_between_controllers():
 
 
 # -- CHUNK 33 integration tests -------------------------------------------
+
 
 def test_walking_signal_emits_events_and_frames():
     controller, clock, renderer, _ = _make_controller()
@@ -299,6 +305,7 @@ def test_blink_started_and_finished_events():
 
 def test_look_at_records_eye_target_event():
     from app.avatar.eyes import EyeTarget
+
     controller, _, _, _ = _make_controller()
     controller.start()
     assert controller.look_at(EyeTarget(x=0.5, y=-0.5)) is True

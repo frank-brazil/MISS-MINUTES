@@ -262,9 +262,7 @@ class LocalLanguageDetector(LanguageDetector):
     """
 
     name = "local-language-detector"
-    description = (
-        "Deterministic offline detector for English, Hindi, Hinglish, and Urdu."
-    )
+    description = "Deterministic offline detector for English, Hindi, Hinglish, and Urdu."
 
     def __init__(self) -> None:
         self._logger = logging.getLogger(__name__)
@@ -279,17 +277,13 @@ class LocalLanguageDetector(LanguageDetector):
         if total_script == 0:
             result = LanguageDetectionResult.unknown()
         elif devanagari and arabic:
-            result = self._script_pair(
-                devanagari, arabic, total_script
-            )
+            result = self._script_pair(devanagari, arabic, total_script)
         elif devanagari and latin:
             result = self._dev_latin_pair(
                 devanagari, latin, english_hits, hinglish_hits, total_script
             )
         elif arabic and latin:
-            result = self._ara_latin_pair(
-                arabic, latin, english_hits, hinglish_hits, total_script
-            )
+            result = self._ara_latin_pair(arabic, latin, english_hits, hinglish_hits, total_script)
         elif devanagari:
             result = LanguageDetectionResult.detected(
                 LanguageLabel.HINDI, confidence=0.95, languages=(LanguageLabel.HINDI,)
@@ -336,9 +330,7 @@ class LocalLanguageDetector(LanguageDetector):
         devanagari_ratio = devanagari / total_script
         arabic_ratio = arabic / total_script
         if devanagari_ratio >= 0.25 and arabic_ratio >= 0.25:
-            return LanguageDetectionResult.mixed(
-                LanguageLabel.HINDI, LanguageLabel.URDU
-            )
+            return LanguageDetectionResult.mixed(LanguageLabel.HINDI, LanguageLabel.URDU)
         if devanagari_ratio >= arabic_ratio:
             return LanguageDetectionResult.detected(
                 LanguageLabel.HINDI, confidence=0.95, languages=(LanguageLabel.HINDI,)
@@ -358,9 +350,7 @@ class LocalLanguageDetector(LanguageDetector):
         devanagari_ratio = devanagari / total_script
         latin_ratio = latin / total_script
         if devanagari_ratio >= 0.30 and latin_ratio >= 0.30:
-            return LanguageDetectionResult.mixed(
-                LanguageLabel.HINDI, LanguageLabel.ENGLISH
-            )
+            return LanguageDetectionResult.mixed(LanguageLabel.HINDI, LanguageLabel.ENGLISH)
         if devanagari_ratio >= 0.30 and devanagari >= latin:
             return LanguageDetectionResult.detected(
                 LanguageLabel.HINDI, confidence=0.95, languages=(LanguageLabel.HINDI,)
@@ -378,9 +368,7 @@ class LocalLanguageDetector(LanguageDetector):
         arabic_ratio = arabic / total_script
         latin_ratio = latin / total_script
         if arabic_ratio >= 0.30 and latin_ratio >= 0.30:
-            return LanguageDetectionResult.mixed(
-                LanguageLabel.URDU, LanguageLabel.ENGLISH
-            )
+            return LanguageDetectionResult.mixed(LanguageLabel.URDU, LanguageLabel.ENGLISH)
         if arabic_ratio >= 0.30 and arabic >= latin:
             return LanguageDetectionResult.detected(
                 LanguageLabel.URDU, confidence=0.9, languages=(LanguageLabel.URDU,)
@@ -401,9 +389,5 @@ class LocalLanguageDetector(LanguageDetector):
         else:
             label = LanguageLabel.ENGLISH
             dominant = english_hits
-        confidence = round(
-            min(0.85, 0.5 + 0.35 * dominant / (english_hits + hinglish_hits)), 2
-        )
-        return LanguageDetectionResult.detected(
-            label, confidence=confidence, languages=(label,)
-        )
+        confidence = round(min(0.85, 0.5 + 0.35 * dominant / (english_hits + hinglish_hits)), 2)
+        return LanguageDetectionResult.detected(label, confidence=confidence, languages=(label,))

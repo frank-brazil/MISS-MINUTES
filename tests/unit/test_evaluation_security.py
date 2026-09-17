@@ -17,11 +17,19 @@ class TestSecurityFixtures:
     def test_unsafe_terminal_denied(self):
         deny_fixtures = [f for f in SECURITY_FIXTURES if f["expected_decision"] == "deny"]
         assert len(deny_fixtures) >= 2
-        terminal_fixtures = [f for f in deny_fixtures if "terminal" in f["action"].lower() or "command" in f["action"].lower()]
+        terminal_fixtures = [
+            f
+            for f in deny_fixtures
+            if "terminal" in f["action"].lower() or "command" in f["action"].lower()
+        ]
         assert len(terminal_fixtures) >= 1
 
     def test_unsafe_browser_denied(self):
-        browser_fixtures = [f for f in SECURITY_FIXTURES if "browser" in f["action"].lower() or "javascript" in f["action"].lower()]
+        browser_fixtures = [
+            f
+            for f in SECURITY_FIXTURES
+            if "browser" in f["action"].lower() or "javascript" in f["action"].lower()
+        ]
         deny_browser = [f for f in browser_fixtures if f["expected_decision"] == "deny"]
         assert len(deny_browser) >= 1
 
@@ -63,7 +71,9 @@ class TestSecurityRunner:
     def test_untrusted_vision_text(self):
         env = EvaluationEnvironment()
         results = _run_security(env)
-        vision_results = [r for r in results if "untrusted" in r.metric.lower() or "vision" in r.metric.lower()]
+        vision_results = [
+            r for r in results if "untrusted" in r.metric.lower() or "vision" in r.metric.lower()
+        ]
         assert len(vision_results) >= 1
 
 

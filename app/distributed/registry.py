@@ -47,9 +47,7 @@ class WorkerRegistry:
         freshly registered worker is not immediately stale.
         """
         if info.worker_id in self._workers:
-            raise DuplicateWorkerError(
-                f"worker {info.worker_id} is already registered"
-            )
+            raise DuplicateWorkerError(f"worker {info.worker_id} is already registered")
         self._workers[info.worker_id] = info
         self._logger.info(
             "Worker registered: worker_id=%s name=%s capabilities=%s",
@@ -77,9 +75,7 @@ class WorkerRegistry:
         """
         worker = self._workers.get(heartbeat.worker_id)
         if worker is None:
-            raise UnknownWorkerError(
-                f"heartbeat for unknown worker {heartbeat.worker_id}"
-            )
+            raise UnknownWorkerError(f"heartbeat for unknown worker {heartbeat.worker_id}")
         timestamp = now if now is not None else _utc_now()
         worker.status = heartbeat.status
         worker.last_heartbeat = timestamp
@@ -138,18 +134,12 @@ class WorkerRegistry:
         self, required: frozenset[WorkerCapability]
     ) -> tuple[WorkerInfo, ...]:
         """Workers whose declared capabilities cover ``required``."""
-        return tuple(
-            worker
-            for worker in self._workers.values()
-            if required <= worker.capabilities
-        )
+        return tuple(worker for worker in self._workers.values() if required <= worker.capabilities)
 
     def available_workers(self) -> tuple[WorkerInfo, ...]:
         """Workers currently marked available (status check only)."""
         return tuple(
-            worker
-            for worker in self._workers.values()
-            if worker.status is WorkerStatus.AVAILABLE
+            worker for worker in self._workers.values() if worker.status is WorkerStatus.AVAILABLE
         )
 
     # ------------------------------------------------------------------

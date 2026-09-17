@@ -38,8 +38,7 @@ class CommandEntry:
             for ch in _SHELL_METACHARACTERS:
                 if ch in token:
                     raise ValueError(
-                        f"command '{self.name}' contains forbidden shell "
-                        f"character {ch!r}"
+                        f"command '{self.name}' contains forbidden shell character {ch!r}"
                     )
 
 
@@ -104,9 +103,7 @@ class CommandExecutor(ABC):
     """Runs an allowlisted argument vector with a timeout."""
 
     @abstractmethod
-    async def run(
-        self, argv: tuple[str, ...], *, timeout: float
-    ) -> CommandOutput:
+    async def run(self, argv: tuple[str, ...], *, timeout: float) -> CommandOutput:
         raise NotImplementedError
 
 
@@ -122,9 +119,7 @@ class SubprocessCommandExecutor(CommandExecutor):
             text = text[: self._max_output_bytes] + "\n[output truncated]"
         return text.strip()
 
-    async def run(
-        self, argv: tuple[str, ...], *, timeout: float
-    ) -> CommandOutput:
+    async def run(self, argv: tuple[str, ...], *, timeout: float) -> CommandOutput:
         try:
             process = await asyncio.create_subprocess_exec(
                 *argv,
@@ -137,9 +132,7 @@ class SubprocessCommandExecutor(CommandExecutor):
             return CommandOutput("", "failed to start command", 126)
 
         try:
-            stdout, stderr = await asyncio.wait_for(
-                process.communicate(), timeout=timeout
-            )
+            stdout, stderr = await asyncio.wait_for(process.communicate(), timeout=timeout)
         except asyncio.TimeoutError:
             if process.returncode is None:
                 try:
@@ -172,9 +165,7 @@ class TerminalConfig:
 class ApprovedTerminalArguments(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    command: str = Field(
-        description="Name of an approved command from the allowlist"
-    )
+    command: str = Field(description="Name of an approved command from the allowlist")
 
 
 class ApprovedTerminalTool(Tool):
@@ -209,9 +200,7 @@ class ApprovedTerminalTool(Tool):
         for entry in self._commands:
             entry.validate()
             if entry.name in by_name:
-                raise ValueError(
-                    f"duplicate command name '{entry.name}' in allowlist"
-                )
+                raise ValueError(f"duplicate command name '{entry.name}' in allowlist")
             by_name[entry.name] = entry
         self._by_name = by_name
 
@@ -229,25 +218,16 @@ class ApprovedTerminalTool(Tool):
         if entry is None:
             known = ", ".join(self.approved_command_names)
             return ToolResult.fail(
-                error=(
-                    f"Unknown command '{args.command}'. Approved commands: "
-                    f"{known}"
-                )
+                error=(f"Unknown command '{args.command}'. Approved commands: {known}")
             )
 
         try:
-            output = await self._executor.run(
-                entry.argv, timeout=self._config.timeout
-            )
+            output = await self._executor.run(entry.argv, timeout=self._config.timeout)
         except Exception as exc:
-            return ToolResult.fail(
-                error=f"Command execution failed: {type(exc).__name__}"
-            )
+            return ToolResult.fail(error=f"Command execution failed: {type(exc).__name__}")
 
         if output.timed_out:
-            return ToolResult.fail(
-                error=f"Command '{args.command}' timed out"
-            )
+            return ToolResult.fail(error=f"Command '{args.command}' timed out")
 
         parts: list[str] = []
         if output.stdout:

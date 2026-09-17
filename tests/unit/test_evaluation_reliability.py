@@ -143,4 +143,6 @@ class TestRunAllReliability:
     def test_no_infinite_loops(self):
         results = run_all_reliability_sync()
         for r in results:
-            assert r.status != ResultClassification.FAIL, f"Reliability test failed: {r.scenario_name}"
+            assert r.status != ResultClassification.FAIL, (
+                f"Reliability test failed: {r.scenario_name}"
+            )

@@ -16,9 +16,7 @@ class FileEditArguments(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     path: str = Field(description="Absolute path of the file to edit")
-    old_text: str = Field(
-        min_length=1, description="Exact text fragment to replace"
-    )
+    old_text: str = Field(min_length=1, description="Exact text fragment to replace")
     new_text: str = Field(default="", description="Replacement text")
     replace_all: bool = Field(
         default=False,
@@ -60,18 +58,14 @@ class FileEditTool(Tool):
             return ToolResult.fail(error=f"Path not allowed: {exc}")
 
         if not resolved.exists():
-            return ToolResult.fail(
-                error=f"File does not exist: {resolved}"
-            )
+            return ToolResult.fail(error=f"File does not exist: {resolved}")
         if not resolved.is_file():
             return ToolResult.fail(error=f"Not a regular file: {resolved}")
 
         try:
             data = resolved.read_bytes()
         except OSError as exc:
-            return ToolResult.fail(
-                error=f"Failed to read file: {type(exc).__name__}"
-            )
+            return ToolResult.fail(error=f"Failed to read file: {type(exc).__name__}")
 
         if len(data) > self._config.write_max_bytes:
             return ToolResult.fail(
@@ -85,15 +79,11 @@ class FileEditTool(Tool):
         try:
             text = data.decode("utf-8")
         except UnicodeDecodeError:
-            return ToolResult.fail(
-                error="File is not valid UTF-8 text"
-            )
+            return ToolResult.fail(error="File is not valid UTF-8 text")
 
         occurrences = text.count(args.old_text)
         if occurrences == 0:
-            return ToolResult.fail(
-                error=f"Target text not found in {resolved}"
-            )
+            return ToolResult.fail(error=f"Target text not found in {resolved}")
         if occurrences > 1 and not args.replace_all:
             return ToolResult.fail(
                 error=(
@@ -122,12 +112,6 @@ class FileEditTool(Tool):
         try:
             resolved.write_bytes(new_payload)
         except OSError as exc:
-            return ToolResult.fail(
-                error=f"Failed to write file: {type(exc).__name__}"
-            )
+            return ToolResult.fail(error=f"Failed to write file: {type(exc).__name__}")
 
-        return ToolResult.ok(
-            output=(
-                f"Edited {resolved} ({occurrences} replacement(s))"
-            )
-        )
+        return ToolResult.ok(output=(f"Edited {resolved} ({occurrences} replacement(s))"))

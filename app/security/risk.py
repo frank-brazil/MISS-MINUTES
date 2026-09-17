@@ -67,14 +67,10 @@ _ELEVATE_TO_HIGH = (
 )
 
 _DESTRUCTIVE_RE = re.compile(
-    r"(?i)\b("
-    + "|".join(re.escape(word.strip()) for word in _DESTRUCTIVE_WORDS)
-    + r")\b"
+    r"(?i)\b(" + "|".join(re.escape(word.strip()) for word in _DESTRUCTIVE_WORDS) + r")\b"
 )
 _ELEVATE_RE = re.compile(
-    r"(?i)\b("
-    + "|".join(re.escape(word.strip()) for word in _ELEVATE_TO_HIGH)
-    + r")\b"
+    r"(?i)\b(" + "|".join(re.escape(word.strip()) for word in _ELEVATE_TO_HIGH) + r")\b"
 )
 
 _ESCAPE = re.compile(r"[|&;><`$\\]")
@@ -115,12 +111,8 @@ class RiskAssessor:
         resource: str | None = None,
     ) -> RiskLevel:
         """Compute the risk class for a category and free-text context."""
-        base = self._overrides.get(category) or _CATEGORY_RISK.get(
-            category, RiskLevel.UNKNOWN
-        )
-        text = " ".join(
-            part for part in (action, resource) if part is not None
-        )
+        base = self._overrides.get(category) or _CATEGORY_RISK.get(category, RiskLevel.UNKNOWN)
+        text = " ".join(part for part in (action, resource) if part is not None)
         if not text:
             return base
 

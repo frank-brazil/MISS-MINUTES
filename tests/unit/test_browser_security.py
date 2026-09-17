@@ -20,9 +20,7 @@ def _bundle(tmp_path: Path) -> BrowserToolBundle:
     bundle = BrowserToolBundle(
         provider=FakeBrowserProvider(),
         url_policy=UrlPolicy(allow_domains=("localhost",)),
-        download_config=FileToolConfig(
-            allowed_roots=(downloads,), write_max_bytes=65_536
-        ),
+        download_config=FileToolConfig(allowed_roots=(downloads,), write_max_bytes=65_536),
     )
     return bundle
 
@@ -58,9 +56,7 @@ def test_prompt_injection_is_never_executed(tmp_path: Path) -> None:
         if e.startswith(("open:", "click:", "type:", "download:", "screenshot:"))
     ]
     assert executed == []
-    assert all(
-        s.status.value == "active" for s in bundle.provider.sessions()
-    )
+    assert all(s.status.value == "active" for s in bundle.provider.sessions())
 
 
 def test_prompt_injection_in_title_is_never_executed(tmp_path: Path) -> None:
@@ -192,13 +188,9 @@ def test_downloads_never_auto_executed(tmp_path: Path) -> None:
     _run(bundle.start())
     root = tmp_path / "downloads"
     script = root / "runme.py"
-    bundle.provider.register_download(
-        "http://localhost/runme.py", b"print('executed')", "runme.py"
-    )
+    bundle.provider.register_download("http://localhost/runme.py", b"print('executed')", "runme.py")
     result = _run(
-        bundle.download_tool.execute(
-            url="http://localhost/runme.py", destination=str(root)
-        )
+        bundle.download_tool.execute(url="http://localhost/runme.py", destination=str(root))
     )
     assert result.success is True
     assert script.read_bytes() == b"print('executed')"

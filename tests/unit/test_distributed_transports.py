@@ -147,9 +147,7 @@ def test_http_worker_transport_round_trip():
             transport=httpx.ASGITransport(app=app),
             base_url="http://worker",
         ) as client:
-            transport = HttpWorkerTransport(
-                base_url="http://worker", config=config, client=client
-            )
+            transport = HttpWorkerTransport(base_url="http://worker", config=config, client=client)
             return await transport.dispatch_task(assignment, task)
 
     result = _run(run())
@@ -193,9 +191,7 @@ def test_http_worker_transport_unreachable_endpoint():
             transport=httpx.ASGITransport(app=_worker_app_and_config()[0]),
             base_url="http://worker",
         ) as client:
-            transport = HttpWorkerTransport(
-                base_url="http://worker", config=config, client=client
-            )
+            transport = HttpWorkerTransport(base_url="http://worker", config=config, client=client)
             # The worker app has no /unknown/execute path; force 404 behaviour
             # by pointing at a non-existent base path.
             transport._base_url = "http://worker/missing"  # noqa: SLF001
@@ -228,13 +224,9 @@ def test_http_master_transport_registers_and_heartbeats():
             transport=httpx.ASGITransport(app=app),
             base_url="http://master",
         ) as client:
-            transport = HttpMasterTransport(
-                base_url="http://master", config=config, client=client
-            )
+            transport = HttpMasterTransport(base_url="http://master", config=config, client=client)
             registered = await transport.register_worker(info)
-            heartbeat = await transport.send_heartbeat(
-                WorkerHeartbeat(worker_id=info.worker_id)
-            )
+            heartbeat = await transport.send_heartbeat(WorkerHeartbeat(worker_id=info.worker_id))
             return registered, heartbeat
 
     registered, heartbeat = _run(run())
@@ -275,13 +267,17 @@ def test_endpoint_aware_transport_unknown_worker():
     transport = EndpointAwareWorkerTransport(
         registry=registry,
         config=DistributedConfig(),
-        client=httpx.AsyncClient(transport=httpx.ASGITransport(app=create_master_app(
-            coordinator=DistributedCoordinator(
-                registry=registry,
-                queue=DistributedTaskQueue(),
-                transport=FakeWorkerTransport(),
+        client=httpx.AsyncClient(
+            transport=httpx.ASGITransport(
+                app=create_master_app(
+                    coordinator=DistributedCoordinator(
+                        registry=registry,
+                        queue=DistributedTaskQueue(),
+                        transport=FakeWorkerTransport(),
+                    )
+                )
             )
-        ))),
+        ),
     )
 
     async def run():

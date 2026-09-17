@@ -42,7 +42,9 @@ DETECTIONS = {
 
 def build_pipeline(
     replies: list[str] | None = None,
-) -> tuple[VoiceConversationService, FakeSpeechToText, FakeLanguageDetector, FakeAIModel, FakeTextToSpeech]:
+) -> tuple[
+    VoiceConversationService, FakeSpeechToText, FakeLanguageDetector, FakeAIModel, FakeTextToSpeech
+]:
     stt = FakeSpeechToText(fixtures=FIXTURES)
     detector = FakeLanguageDetector(fixtures=DETECTIONS)
     ai = FakeAIModel(replies=replies)
@@ -53,9 +55,7 @@ def build_pipeline(
 
 def test_complete_fake_voice_pipeline() -> None:
     service, stt, detector, ai, tts = build_pipeline(replies=["Here is my reply."])
-    result = asyncio.run(
-        service.handle(VoiceConversationRequest(audio=b"good morning"))
-    )
+    result = asyncio.run(service.handle(VoiceConversationRequest(audio=b"good morning")))
     assert result.success is True
     assert result.stage is VoicePipelineStage.COMPLETE
     assert result.transcription == "Good morning, what can I do for you?"
@@ -87,9 +87,7 @@ def test_full_pipeline_english_turn() -> None:
 
 def test_full_pipeline_hindi_turn() -> None:
     service, *_ = build_pipeline(replies=["नमस्ते।"])
-    result = asyncio.run(
-        service.handle(VoiceConversationRequest(audio=b"hindi namaste"))
-    )
+    result = asyncio.run(service.handle(VoiceConversationRequest(audio=b"hindi namaste")))
     assert result.success is True
     assert result.language == "hindi"
     assert result.response_style is not None
@@ -100,9 +98,7 @@ def test_full_pipeline_hindi_turn() -> None:
 
 def test_full_pipeline_hinglish_turn() -> None:
     service, *_ = build_pipeline(replies=["Thik hai, check karta hoon."])
-    result = asyncio.run(
-        service.handle(VoiceConversationRequest(audio=b"mera laptop slow"))
-    )
+    result = asyncio.run(service.handle(VoiceConversationRequest(audio=b"mera laptop slow")))
     assert result.success is True
     assert result.language == "hinglish"
     assert result.response_style is not None
@@ -124,9 +120,7 @@ def test_full_pipeline_urdu_turn() -> None:
 
 def test_full_pipeline_mixed_turn() -> None:
     service, *_ = build_pipeline(replies=["Check karta hoon."])
-    result = asyncio.run(
-        service.handle(VoiceConversationRequest(audio=b"mixed speak"))
-    )
+    result = asyncio.run(service.handle(VoiceConversationRequest(audio=b"mixed speak")))
     assert result.success is True
     assert result.language == "mixed"
     assert result.detection is not None
@@ -137,12 +131,8 @@ def test_full_pipeline_mixed_turn() -> None:
 
 def test_full_pipeline_language_switching_across_turns() -> None:
     service, *_ = build_pipeline(replies=["Sure.", "Kya karna hai?"])
-    first = asyncio.run(
-        service.handle(VoiceConversationRequest(audio=b"good morning"))
-    )
-    second = asyncio.run(
-        service.handle(VoiceConversationRequest(audio=b"mera laptop slow"))
-    )
+    first = asyncio.run(service.handle(VoiceConversationRequest(audio=b"good morning")))
+    second = asyncio.run(service.handle(VoiceConversationRequest(audio=b"mera laptop slow")))
     assert first.success is True
     assert first.language == "english"
     assert second.success is True
@@ -153,9 +143,7 @@ def test_full_pipeline_language_switching_across_turns() -> None:
 
 def test_full_pipeline_stt_failure_is_controlled() -> None:
     service, *_ = build_pipeline()
-    result = asyncio.run(
-        service.handle(VoiceConversationRequest(audio=b"unrecognized audio"))
-    )
+    result = asyncio.run(service.handle(VoiceConversationRequest(audio=b"unrecognized audio")))
     assert result.success is False
     assert result.stage is VoicePipelineStage.STT
     assert result.error is not None

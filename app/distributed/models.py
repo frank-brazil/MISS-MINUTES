@@ -106,9 +106,7 @@ class WorkerInfo(BaseModel):
 
     @field_validator("worker_name", "host", "platform", "endpoint", "transport_name")
     @classmethod
-    def _optional_blank(
-        cls, value: str | None
-    ) -> str | None:
+    def _optional_blank(cls, value: str | None) -> str | None:
         if value is not None and not value.strip():
             raise ValueError("must not be blank")
         return value
@@ -187,9 +185,7 @@ class DistributedTask(BaseModel):
 
     distributed_task_id: UUID = Field(default_factory=uuid4)
     task_type: str
-    required_capabilities: frozenset[WorkerCapability] = Field(
-        default_factory=frozenset
-    )
+    required_capabilities: frozenset[WorkerCapability] = Field(default_factory=frozenset)
     description: str | None = None
     context: dict[str, Any] = Field(default_factory=dict)
     max_retries: int | None = None
@@ -268,9 +264,7 @@ class DistributedTask(BaseModel):
         """Mark the task completed with the worker's structured result."""
         self.last_error = result.error
         self.change_status(
-            DistributedTaskStatus.COMPLETED
-            if result.success
-            else DistributedTaskStatus.FAILED
+            DistributedTaskStatus.COMPLETED if result.success else DistributedTaskStatus.FAILED
         )
 
     def mark_failed(self, reason: str) -> None:
@@ -317,11 +311,7 @@ class TaskAssignment(BaseModel):
     def mark_result_into(self, result: "DistributedTaskResult") -> None:
         """Finalize this assignment from the worker's structured result."""
         self.completed_at = _utc_now()
-        self.status = (
-            AssignmentStatus.COMPLETED
-            if result.success
-            else AssignmentStatus.FAILED
-        )
+        self.status = AssignmentStatus.COMPLETED if result.success else AssignmentStatus.FAILED
 
     def mark_timed_out(self) -> None:
         self.completed_at = _utc_now()

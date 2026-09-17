@@ -84,9 +84,7 @@ class StreamingSTTProvider(ABC):
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
         missing = [
-            attribute
-            for attribute in ("name", "description")
-            if not hasattr(cls, attribute)
+            attribute for attribute in ("name", "description") if not hasattr(cls, attribute)
         ]
         if missing:
             raise TypeError(
@@ -112,9 +110,7 @@ class StreamingSTTProvider(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def finalize(
-        self, transcription_id: UUID
-    ) -> StreamingSttResult | None:
+    async def finalize(self, transcription_id: UUID) -> StreamingSttResult | None:
         """Finish a session and return the final transcription."""
         raise NotImplementedError
 
@@ -169,9 +165,7 @@ class FakeStreamingSTTProvider(StreamingSTTProvider):
             raise ValueError(f"transcription session {session_id} already active")
         self._sessions[session_id] = []
         self._sessions_started[session_id] = language
-        self._logger.info(
-            "Fake streaming STT started session=%s", session_id
-        )
+        self._logger.info("Fake streaming STT started session=%s", session_id)
         return session_id
 
     async def push_audio(
@@ -187,9 +181,7 @@ class FakeStreamingSTTProvider(StreamingSTTProvider):
         if frames is None:
             raise ValueError(f"unknown transcription session {transcription_id}")
         frames.append(frame)
-        partial = b"".join(f.content for f in frames).decode(
-            "utf-8", errors="replace"
-        )
+        partial = b"".join(f.content for f in frames).decode("utf-8", errors="replace")
         self._logger.info(
             "Fake streaming STT interim session=%s text_chars=%d",
             transcription_id,
@@ -201,9 +193,7 @@ class FakeStreamingSTTProvider(StreamingSTTProvider):
             text=partial,
         )
 
-    async def finalize(
-        self, transcription_id: UUID
-    ) -> StreamingSttResult | None:
+    async def finalize(self, transcription_id: UUID) -> StreamingSttResult | None:
         if self._raise_error is not None:
             self._logger.error(
                 "Fake streaming STT finalize raising: %s",
@@ -217,17 +207,11 @@ class FakeStreamingSTTProvider(StreamingSTTProvider):
         if self._fail:
             self._logger.warning("Fake streaming STT configured to fail")
             return StreamingSttResult.fail(self._fail_message)
-        key = b"".join(f.content for f in frames).decode(
-            "utf-8", errors="replace"
-        )
+        key = b"".join(f.content for f in frames).decode("utf-8", errors="replace")
         text = self._fixtures.get(key)
         if text is None:
-            self._logger.warning(
-                "Fake streaming STT has no fixture for %r", key
-            )
-            return StreamingSttResult.fail(
-                "no transcription fixture for the provided audio"
-            )
+            self._logger.warning("Fake streaming STT has no fixture for %r", key)
+            return StreamingSttResult.fail("no transcription fixture for the provided audio")
         self._logger.info(
             "Fake streaming STT finalized session=%s text_chars=%d",
             transcription_id,
@@ -268,9 +252,7 @@ class StreamingTTSProvider(ABC):
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
         missing = [
-            attribute
-            for attribute in ("name", "description")
-            if not hasattr(cls, attribute)
+            attribute for attribute in ("name", "description") if not hasattr(cls, attribute)
         ]
         if missing:
             raise TypeError(
@@ -313,9 +295,7 @@ class FakeStreamingTTSProvider(StreamingTTSProvider):
     async def synthesize_stream(self, request: TextToSpeechRequest) -> StreamingTtsStream:
         self.requests.append(request)
         if self._raise_error is not None:
-            self._logger.error(
-                "Fake streaming TTS raising: %s", type(self._raise_error).__name__
-            )
+            self._logger.error("Fake streaming TTS raising: %s", type(self._raise_error).__name__)
             raise self._raise_error
         return FakeStreamingTtsStream(
             text=request.text,

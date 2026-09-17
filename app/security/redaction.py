@@ -35,15 +35,9 @@ _SECRET_KEY_RE = re.compile(
     flags=re.IGNORECASE,
 )
 
-_AUTH_VALUE_RE = re.compile(
-    r"(?i)\b(bearer|basic)\s+[A-Za-z0-9._~+/= -]{8,}\b"
-)
+_AUTH_VALUE_RE = re.compile(r"(?i)\b(bearer|basic)\s+[A-Za-z0-9._~+/= -]{8,}\b")
 
-_KEY_VALUE_RE = re.compile(
-    r"(?i)\b("
-    + "|".join(_SECRET_KEY_WORDS)
-    + r")\s*([=:])\s*\S+"
-)
+_KEY_VALUE_RE = re.compile(r"(?i)\b(" + "|".join(_SECRET_KEY_WORDS) + r")\s*([=:])\s*\S+")
 
 
 def _redact_auth(match: re.Match[str]) -> str:
@@ -101,9 +95,7 @@ def redact(value: Any) -> Any:
 def is_redacted(value: Any) -> bool:
     """Return True when ``value`` (or any part of it) was redacted."""
     if isinstance(value, dict):
-        return any(
-            item == _REDACTED or is_redacted(item) for item in value.values()
-        )
+        return any(item == _REDACTED or is_redacted(item) for item in value.values())
     if isinstance(value, (list, tuple)):
         return any(is_redacted(item) for item in value)
     return value == _REDACTED or (isinstance(value, str) and _REDACTED in value)

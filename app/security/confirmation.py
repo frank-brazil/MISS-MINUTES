@@ -144,10 +144,7 @@ class ConfirmationManager:
         now = self._now_fn()
         expired = 0
         for confirmation in self._confirmations.values():
-            if (
-                confirmation.status is ConfirmationStatus.PENDING
-                and confirmation.expires_at <= now
-            ):
+            if confirmation.status is ConfirmationStatus.PENDING and confirmation.expires_at <= now:
                 confirmation.status = ConfirmationStatus.EXPIRED
                 confirmation.resolved_at = now
                 expired += 1
@@ -182,20 +179,14 @@ class ConfirmationManager:
     def _get_resolvable(self, confirmation_id: UUID) -> Confirmation:
         confirmation = self._confirmations.get(confirmation_id)
         if confirmation is None:
-            raise PermissionDenied(
-                f"confirmation {confirmation_id} does not exist"
-            )
+            raise PermissionDenied(f"confirmation {confirmation_id} does not exist")
         if confirmation.status is ConfirmationStatus.PENDING and (
             confirmation.expires_at <= self._now_fn()
         ):
             confirmation.status = ConfirmationStatus.EXPIRED
             confirmation.resolved_at = self._now_fn()
         if confirmation.status is ConfirmationStatus.EXPIRED:
-            raise ConfirmationRequired(
-                f"confirmation {confirmation_id} has expired"
-            )
+            raise ConfirmationRequired(f"confirmation {confirmation_id} has expired")
         if confirmation.status is not ConfirmationStatus.PENDING:
-            raise SecurityError(
-                f"confirmation {confirmation_id} is already resolved"
-            )
+            raise SecurityError(f"confirmation {confirmation_id} is already resolved")
         return confirmation

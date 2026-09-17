@@ -17,9 +17,7 @@ def _run(coro):
 
 
 def test_observation_request_defaults() -> None:
-    request = ObservationRequest(
-        description="Observe the outcome of the action."
-    )
+    request = ObservationRequest(description="Observe the outcome of the action.")
     assert isinstance(request.observation_id, UUID)
     assert request.action_ref is None
     assert request.expected_outcome is None
@@ -61,9 +59,7 @@ def test_fake_observation_provider_interface() -> None:
 
 
 def test_fake_observation_provider_returns_configured_observations() -> None:
-    provider = FakeObservationProvider(
-        observations=["first", "second"], action_succeeded=False
-    )
+    provider = FakeObservationProvider(observations=["first", "second"], action_succeeded=False)
     request = ObservationRequest(description="observe")
     result = _run(provider.observe(request))
     assert result.success is True
@@ -102,9 +98,5 @@ def test_fake_observation_provider_raise_error() -> None:
 
 def test_fake_observation_provider_does_not_touch_screens() -> None:
     provider = FakeObservationProvider()
-    _run(
-        provider.observe(
-            ObservationRequest(description="never reads the real screen")
-        )
-    )
+    _run(provider.observe(ObservationRequest(description="never reads the real screen")))
     assert len(provider.requests) == 1

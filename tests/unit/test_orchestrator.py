@@ -46,9 +46,7 @@ class SampleMemory(Memory):
     async def store(self, record: MemoryRecord) -> MemoryRecord:
         return record
 
-    async def retrieve(
-        self, query: str, *, limit: int = 10
-    ) -> MemoryQueryResult:
+    async def retrieve(self, query: str, *, limit: int = 10) -> MemoryQueryResult:
         return MemoryQueryResult.ok([])
 
     async def delete(self, memory_id: UUID) -> bool:

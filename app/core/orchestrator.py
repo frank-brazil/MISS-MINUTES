@@ -59,9 +59,7 @@ class AgentExecutionResult(BaseModel):
     error: str | None = None
 
     @classmethod
-    def ok(
-        cls, agent_name: str, output: str | None = None
-    ) -> "AgentExecutionResult":
+    def ok(cls, agent_name: str, output: str | None = None) -> "AgentExecutionResult":
         return cls(agent_name=agent_name, success=True, output=output)
 
     @classmethod
@@ -71,9 +69,7 @@ class AgentExecutionResult(BaseModel):
         error: str,
         output: str | None = None,
     ) -> "AgentExecutionResult":
-        return cls(
-            agent_name=agent_name, success=False, error=error, output=output
-        )
+        return cls(agent_name=agent_name, success=False, error=error, output=output)
 
 
 class PlanStepResult(BaseModel):
@@ -141,9 +137,7 @@ class OrchestrationResult(BaseModel):
         return cls(task_id=task_id, success=True, status=status, output=output)
 
     @classmethod
-    def fail(
-        cls, task_id: UUID, status: TaskStatus, error: str
-    ) -> "OrchestrationResult":
+    def fail(cls, task_id: UUID, status: TaskStatus, error: str) -> "OrchestrationResult":
         return cls(task_id=task_id, success=False, status=status, error=error)
 
 
@@ -287,12 +281,8 @@ class Orchestrator:
                 task.task_id,
                 result.session_id,
             )
-            return result.final_output or (
-                "Problem-solving completed successfully."
-            )
-        raise PlanExecutionError(
-            result.failure_reason or f"Problem-solving {result.status.value}"
-        )
+            return result.final_output or ("Problem-solving completed successfully.")
+        raise PlanExecutionError(result.failure_reason or f"Problem-solving {result.status.value}")
 
     async def _orchestrate_plan(self, task: Task) -> str:
         planner = self._planner  # guaranteed not None by caller
@@ -309,15 +299,11 @@ class Orchestrator:
         try:
             plan = await planner.plan(task)
         except Exception as exc:
-            raise PlanExecutionError(
-                f"Planner raised {type(exc).__name__}: {exc}"
-            ) from exc
+            raise PlanExecutionError(f"Planner raised {type(exc).__name__}: {exc}") from exc
 
         self._last_plan = plan
         self._last_step_results = []
-        self._logger.info(
-            "Plan %s created with %d step(s)", plan.plan_id, len(plan.steps)
-        )
+        self._logger.info("Plan %s created with %d step(s)", plan.plan_id, len(plan.steps))
 
         for step in plan.steps:
             agent_name: str | None = None
@@ -337,9 +323,7 @@ class Orchestrator:
                     )
                 )
                 self._last_step_results = list(step_results)
-                raise PlanExecutionError(
-                    f"Step '{step.description[:60]}' — {exc}"
-                ) from exc
+                raise PlanExecutionError(f"Step '{step.description[:60]}' — {exc}") from exc
 
             # --- Execute ---
             step_task = Task(description=step.description)
@@ -385,18 +369,11 @@ class Orchestrator:
 
         self._last_step_results = list(step_results)
         completed = len(step_results)
-        return (
-            f"Planned task executed successfully "
-            f"({completed} step(s), plan {plan.plan_id})"
-        )
+        return f"Planned task executed successfully ({completed} step(s), plan {plan.plan_id})"
 
     async def _orchestrate_ai(self, task: Task) -> str:
-        tool_definitions = [
-            tool.to_tool_definition() for tool in self._tools.values()
-        ]
-        messages: list[AIMessage] = [
-            AIMessage(role="user", content=task.description)
-        ]
+        tool_definitions = [tool.to_tool_definition() for tool in self._tools.values()]
+        messages: list[AIMessage] = [AIMessage(role="user", content=task.description)]
 
         for _ in range(MAX_TOOL_CALLS):
             response = await self._ai_model.chat(
@@ -429,9 +406,7 @@ class Orchestrator:
                         tool_call.name,
                         tool_call.id,
                     )
-                    tool_result = ToolResult.fail(
-                        error=f"Unknown tool: {tool_call.name}"
-                    )
+                    tool_result = ToolResult.fail(error=f"Unknown tool: {tool_call.name}")
                 else:
                     tool_result = await self._execute_tool(tool, tool_call)
                 messages.append(
@@ -444,15 +419,11 @@ class Orchestrator:
                     )
                 )
 
-        raise AIError(
-            f"Maximum tool-call limit of {MAX_TOOL_CALLS} exceeded"
-        )
+        raise AIError(f"Maximum tool-call limit of {MAX_TOOL_CALLS} exceeded")
 
     async def _orchestrate_placeholder(self, task: Task) -> str:
         await asyncio.sleep(0)
-        self._logger.info(
-            "Placeholder orchestration for task %s", task.task_id
-        )
+        self._logger.info("Placeholder orchestration for task %s", task.task_id)
         return f"Task '{task.description}' orchestrated successfully"
 
     async def _execute_tool(self, tool: Tool, tool_call: ToolCall) -> ToolResult:
@@ -469,9 +440,7 @@ class Orchestrator:
                 tool_call.id,
                 type(exc).__name__,
             )
-            return ToolResult.fail(
-                error=f"Tool execution failed: {type(exc).__name__}"
-            )
+            return ToolResult.fail(error=f"Tool execution failed: {type(exc).__name__}")
         self._logger.info(
             "Tool call %s finished: tool='%s' success=%s",
             tool_call.id,
@@ -480,9 +449,7 @@ class Orchestrator:
         )
         return tool_result
 
-    async def _check_tool_security(
-        self, tool: Tool, tool_call: ToolCall
-    ) -> ToolResult | None:
+    async def _check_tool_security(self, tool: Tool, tool_call: ToolCall) -> ToolResult | None:
         """Evaluate tool execution against the configured security policy.
 
         Returns a ``ToolResult`` failure when the call is blocked (policy
@@ -524,15 +491,12 @@ class Orchestrator:
             actor_id=None,
             origin="orchestrator",
         )
-        decision: SecurityDecision = self._security.check(
-            request, context=context
-        )
+        decision: SecurityDecision = self._security.check(request, context=context)
         if decision.allowed:
             return None
         if decision.requires_confirmation:
             self._logger.warning(
-                "Tool '%s' call %s requires confirmation (id=%s); "
-                "not auto-executed",
+                "Tool '%s' call %s requires confirmation (id=%s); not auto-executed",
                 tool.name,
                 tool_call.id,
                 decision.confirmation_id,

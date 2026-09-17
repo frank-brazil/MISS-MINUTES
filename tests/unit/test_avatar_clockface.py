@@ -1,6 +1,5 @@
 """Clock-face component: markings, hands, angles and validation."""
 
-
 import pytest
 from pydantic import ValidationError
 
@@ -46,7 +45,9 @@ def test_set_time_returns_valid_hands():
 
 
 def test_hand_endpoint_visible_math_coords():
-    hand = ClockHandState(part=AvatarPart.HOUR_HAND, length=40.0, thickness=4.0, color="#000000", angle_deg=0.0)
+    hand = ClockHandState(
+        part=AvatarPart.HOUR_HAND, length=40.0, thickness=4.0, color="#000000", angle_deg=0.0
+    )
     x, y = hand.endpoint()
     assert x == pytest.approx(0.0)
     assert y == pytest.approx(-40.0)  # 12 o'clock is up in math coordinates
@@ -62,14 +63,24 @@ def test_hands_fit_inside_radius():
 
 def test_validate_hand_rejects_invalid():
     with pytest.raises(ValueError):
-        ClockFace.validate_hand(ClockHandState(part=AvatarPart.MOUTH, length=10.0, thickness=2.0, color="#000000"))
+        ClockFace.validate_hand(
+            ClockHandState(part=AvatarPart.MOUTH, length=10.0, thickness=2.0, color="#000000")
+        )
     with pytest.raises(ValueError):
-        ClockFace.validate_hand(ClockHandState(part=AvatarPart.HOUR_HAND, length=0.0, thickness=2.0, color="#000000"))
+        ClockFace.validate_hand(
+            ClockHandState(part=AvatarPart.HOUR_HAND, length=0.0, thickness=2.0, color="#000000")
+        )
 
 
 def test_hand_state_validation():
     with pytest.raises(ValidationError):
-        ClockHandState(part=AvatarPart.HOUR_HAND, length=10.0, thickness=2.0, color="#000000", angle_deg=float("inf"))
+        ClockHandState(
+            part=AvatarPart.HOUR_HAND,
+            length=10.0,
+            thickness=2.0,
+            color="#000000",
+            angle_deg=float("inf"),
+        )
     with pytest.raises(ValidationError):
         ClockHandState(part=AvatarPart.HOUR_HAND, length=-1.0, thickness=2.0, color="#000000")
 

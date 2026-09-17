@@ -29,10 +29,10 @@ class FakePlanner(Planner):
         steps: list[PlanStep] = []
         for index, description in enumerate(self._descriptions):
             deps: set[UUID] = set()
-            for dep_description in self._dependencies[index] if index < len(self._dependencies) else ():
-                dep_steps = [
-                    step for step in steps if step.description == dep_description
-                ]
+            for dep_description in (
+                self._dependencies[index] if index < len(self._dependencies) else ()
+            ):
+                dep_steps = [step for step in steps if step.description == dep_description]
                 if not dep_steps:
                     raise ValueError(f"unknown dependency: {dep_description}")
                 deps.add(dep_steps[0].step_id)
@@ -166,12 +166,8 @@ def test_forward_dependency_rejected() -> None:
 
 def test_duplicate_step_ids_rejected() -> None:
     duplicate_id = UUID(int=42)
-    first = PlanStep(
-        step_id=duplicate_id, description="first"
-    )
-    second = PlanStep(
-        step_id=duplicate_id, description="second"
-    )
+    first = PlanStep(step_id=duplicate_id, description="first")
+    second = PlanStep(step_id=duplicate_id, description="second")
     with pytest.raises(ValidationError, match="duplicate step id"):
         Plan(task_id=UUID(int=1), goal="goal", steps=[first, second])
 
@@ -268,6 +264,4 @@ def test_fake_planner_builds_valid_dependencies() -> None:
     )
     plan = asyncio.run(planner.plan(task))
     assert plan.steps[1].dependencies == frozenset({plan.steps[0].step_id})
-    assert plan.steps[2].dependencies == frozenset(
-        {plan.steps[0].step_id, plan.steps[1].step_id}
-    )
+    assert plan.steps[2].dependencies == frozenset({plan.steps[0].step_id, plan.steps[1].step_id})

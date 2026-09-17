@@ -62,15 +62,12 @@ class OpenAISpeechToText(SpeechToText):
     async def transcribe(self, speech: SpeechInput) -> SpeechToTextResult:
         if speech.format not in SUPPORTED_AUDIO_FORMATS:
             self._logger.warning("Unsupported speech format '%s'", speech.format)
-            return SpeechToTextResult.fail(
-                f"Unsupported audio format: {speech.format}"
-            )
+            return SpeechToTextResult.fail(f"Unsupported audio format: {speech.format}")
 
         if self._client is None:
             if not self._api_key:
                 self._logger.error(
-                    "OpenAI speech-to-text is not configured: %s is "
-                    "missing or empty",
+                    "OpenAI speech-to-text is not configured: %s is missing or empty",
                     OPENAI_API_KEY_ENV,
                 )
                 return SpeechToTextResult.fail(
@@ -88,28 +85,18 @@ class OpenAISpeechToText(SpeechToText):
             kwargs["language"] = language
 
         try:
-            transcription = await self._client.audio.transcriptions.create(
-                **kwargs
-            )
+            transcription = await self._client.audio.transcriptions.create(**kwargs)
         except Exception as exc:
-            self._logger.error(
-                "OpenAI transcription failed: %s", type(exc).__name__
-            )
-            return SpeechToTextResult.fail(
-                "OpenAI speech-to-text provider call failed"
-            )
+            self._logger.error("OpenAI transcription failed: %s", type(exc).__name__)
+            return SpeechToTextResult.fail("OpenAI speech-to-text provider call failed")
 
         return self._parse_transcription(transcription)
 
     def _parse_transcription(self, transcription: object) -> SpeechToTextResult:
         text = (getattr(transcription, "text", None) or "").strip()
         if not text:
-            self._logger.warning(
-                "OpenAI transcription returned no transcription text"
-            )
-            return SpeechToTextResult.fail(
-                "OpenAI provider returned no transcription text"
-            )
+            self._logger.warning("OpenAI transcription returned no transcription text")
+            return SpeechToTextResult.fail("OpenAI provider returned no transcription text")
 
         language = getattr(transcription, "language", None)
         language = language if isinstance(language, str) and language.strip() else None

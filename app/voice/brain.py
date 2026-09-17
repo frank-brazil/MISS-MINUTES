@@ -91,9 +91,7 @@ class VoiceBrain(ABC):
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
         missing = [
-            attribute
-            for attribute in ("name", "description")
-            if not hasattr(cls, attribute)
+            attribute for attribute in ("name", "description") if not hasattr(cls, attribute)
         ]
         if missing:
             raise TypeError(
@@ -134,9 +132,7 @@ class ConversationalVoiceBrain(VoiceBrain):
         if max_history_messages < 2:
             raise ValueError("max_history_messages must be at least 2")
         self._ai_model = ai_model
-        self._system_prompt = (
-            system_prompt or _DEFAULT_BRAIN_SYSTEM_PROMPT
-        ).strip()
+        self._system_prompt = (system_prompt or _DEFAULT_BRAIN_SYSTEM_PROMPT).strip()
         self._max_history = max_history_messages
         self._history: list[AIMessage] = []
         self._logger = logging.getLogger(__name__)
@@ -156,12 +152,8 @@ class ConversationalVoiceBrain(VoiceBrain):
         try:
             response = await self._ai_model.chat(messages)
         except Exception as exc:
-            self._logger.warning(
-                "Conversational brain chat raised %s", type(exc).__name__
-            )
-            return VoiceBrainResult.fail(
-                "conversational brain provider raised an error"
-            )
+            self._logger.warning("Conversational brain chat raised %s", type(exc).__name__)
+            return VoiceBrainResult.fail("conversational brain provider raised an error")
         content = (response.content or "").strip()
         if not response.success or not content:
             self._logger.warning(
@@ -189,9 +181,7 @@ class ConversationalVoiceBrain(VoiceBrain):
             messages.append(AIMessage(role="system", content=self._system_prompt))
         guidance = request.style.guidance if request.style is not None else ""
         if guidance:
-            messages.append(
-                AIMessage(role="system", content=f"Response style: {guidance}")
-            )
+            messages.append(AIMessage(role="system", content=f"Response style: {guidance}"))
         messages.extend(self._history)
         messages.append(AIMessage(role="user", content=request.text))
         return messages
@@ -298,9 +288,7 @@ class FakeVoiceBrain(VoiceBrain):
     async def respond(self, request: VoiceBrainRequest) -> VoiceBrainResult:
         self._requests.append(request)
         if self._raise_error is not None:
-            self._logger.error(
-                "Fake brain raising: %s", type(self._raise_error).__name__
-            )
+            self._logger.error("Fake brain raising: %s", type(self._raise_error).__name__)
             raise self._raise_error
         if self._results:
             return self._results.pop(0)

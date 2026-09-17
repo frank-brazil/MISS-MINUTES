@@ -56,7 +56,7 @@ def test_is_within_root_outside_sibling(tmp_path: Path) -> None:
 
 def test_is_within_root_prefix_collision_rejected(tmp_path: Path) -> None:
     root = tmp_path / "data"
-    decoy = (tmp_path / "database" / "file.txt")
+    decoy = tmp_path / "database" / "file.txt"
     assert is_within_root(decoy, root) is False
 
 

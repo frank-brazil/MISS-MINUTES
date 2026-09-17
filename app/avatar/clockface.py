@@ -83,7 +83,9 @@ class ClockFace:
         minute_angle = minute * 6.0 + second * 0.1
         return (hour_angle % 360.0, minute_angle % 360.0)
 
-    def set_time(self, hour: int, minute: int, second: int = 0) -> tuple[ClockHandState, ClockHandState]:
+    def set_time(
+        self, hour: int, minute: int, second: int = 0
+    ) -> tuple[ClockHandState, ClockHandState]:
         """Return stable hand snapshots for the given wall-clock time."""
         hour_angle, minute_angle = self.hand_angles(hour, minute, second)
         cfg = self._config
@@ -117,8 +119,12 @@ class ClockFace:
         )
         return (
             pivot,
-            AvatarTransform(part=AvatarPart.HOUR_HAND, rotation_deg=hour_hand.angle_deg, scale=scale),
-            AvatarTransform(part=AvatarPart.MINUTE_HAND, rotation_deg=minute_hand.angle_deg, scale=scale),
+            AvatarTransform(
+                part=AvatarPart.HOUR_HAND, rotation_deg=hour_hand.angle_deg, scale=scale
+            ),
+            AvatarTransform(
+                part=AvatarPart.MINUTE_HAND, rotation_deg=minute_hand.angle_deg, scale=scale
+            ),
         )
 
     def center_pivot(self) -> AvatarTransform:

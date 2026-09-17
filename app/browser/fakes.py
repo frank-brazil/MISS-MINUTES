@@ -86,9 +86,7 @@ class FakeBrowserProvider(BrowserProvider):
 
     # ------------------------------------------------------------ sessions
 
-    async def create_session(
-        self, *, session_id: str | None = None
-    ) -> BrowserSession:
+    async def create_session(self, *, session_id: str | None = None) -> BrowserSession:
         if not self._started:
             raise BrowserSessionError("browser is not started")
         sid = session_id or f"session-{len(self._sessions) + 1}"
@@ -112,10 +110,7 @@ class FakeBrowserProvider(BrowserProvider):
         return session_id in self._sessions
 
     def sessions(self) -> tuple[BrowserSession, ...]:
-        return tuple(
-            self._sessions[key]
-            for key in sorted(self._sessions)
-        )
+        return tuple(self._sessions[key] for key in sorted(self._sessions))
 
     # --------------------------------------------------------------- setup
 
@@ -144,9 +139,7 @@ class FakeBrowserProvider(BrowserProvider):
         session.updated_at = datetime.now(timezone.utc)
         return session
 
-    def register_download(
-        self, url: str, data: bytes, filename: str = "download.bin"
-    ) -> None:
+    def register_download(self, url: str, data: bytes, filename: str = "download.bin") -> None:
         """Register fake downloadable content for ``url``."""
         self._download_registry[url] = (data, filename)
 
@@ -275,9 +268,7 @@ class FakeBrowserProvider(BrowserProvider):
 
     # ---------------------------------------------------------- media/files
 
-    async def screenshot(
-        self, session_id: str, *, path: str | Path
-    ) -> BrowserScreenshot:
+    async def screenshot(self, session_id: str, *, path: str | Path) -> BrowserScreenshot:
         self._require_page(session_id)
         destination = Path(path)
         destination.write_bytes(b"fake-png-bytes")

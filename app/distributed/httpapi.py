@@ -99,16 +99,12 @@ def create_worker_app(
     )
     async def execute(req: WorkerExecuteRequest) -> DistributedTaskResult:
         """Run one typed task; only approved worker operations execute."""
-        return await worker_service.handle_task(
-            req.task, assignment_id=req.assignment_id
-        )
+        return await worker_service.handle_task(req.task, assignment_id=req.assignment_id)
 
     app = FastAPI(
         title="MISSMINUTES distributed worker",
         version="1.0",
-        description=(
-            "Executes approved typed distributed tasks submitted by a master."
-        ),
+        description=("Executes approved typed distributed tasks submitted by a master."),
     )
     app.include_router(router)
     return app
@@ -181,9 +177,7 @@ def create_master_app(
 
     @router.get("/tasks", response_model=list[TaskSummary])
     async def list_tasks() -> list[TaskSummary]:
-        return [
-            TaskSummary.from_task(task) for task in coordinator.known_tasks
-        ]
+        return [TaskSummary.from_task(task) for task in coordinator.known_tasks]
 
     @router.delete("/tasks/{task_id}", status_code=204)
     async def cancel_task(task_id: UUID) -> None:
@@ -208,9 +202,7 @@ def create_master_app(
     app = FastAPI(
         title="MISSMINUTES distributed master",
         version="1.0",
-        description=(
-            "Coordinates typed distributed tasks across registered workers."
-        ),
+        description=("Coordinates typed distributed tasks across registered workers."),
     )
     app.include_router(router)
     return app

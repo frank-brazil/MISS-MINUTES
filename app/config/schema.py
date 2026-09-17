@@ -10,6 +10,15 @@ from __future__ import annotations
 from pydantic import BaseModel, Field
 
 
+class AppConfig(BaseModel):
+    """Application-level settings (host, port, logging, environment)."""
+
+    host: str = "127.0.0.1"
+    port: int = Field(default=8000, ge=1, le=65535)
+    log_level: str = "INFO"
+    environment: str = "development"
+
+
 class AIConfig(BaseModel):
     """AI model provider settings."""
 
@@ -85,6 +94,7 @@ class MissMinutesConfig(BaseModel):
     Loaded from TOML file with environment variable overrides.
     """
 
+    app: AppConfig = Field(default_factory=AppConfig)
     ai: AIConfig = Field(default_factory=AIConfig)
     voice: VoiceConfig = Field(default_factory=VoiceConfig)
     avatar: AvatarConfig = Field(default_factory=AvatarConfig)

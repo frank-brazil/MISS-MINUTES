@@ -33,9 +33,7 @@ INJECTION_TEXT = (
 class _StaticScreenshot(ScreenshotProvider):
     async def capture(self, output_path: Path) -> ScreenshotResult:
         output_path.write_bytes(b"png-data")
-        return ScreenshotResult(
-            path=output_path, width=10, height=10, format="png"
-        )
+        return ScreenshotResult(path=output_path, width=10, height=10, format="png")
 
 
 class _InjectionSensingVisionProvider(VisionProvider):
@@ -150,9 +148,7 @@ def test_detected_text_never_changes_tools_or_policy(tmp_path: Path) -> None:
     assert result.success is True
     assert agent.provider is before_provider
     assert agent.screen_understanding is before_service
-    assert agent.capabilities == frozenset(
-        {"vision", "image_analysis", "screen_understanding"}
-    )
+    assert agent.capabilities == frozenset({"vision", "image_analysis", "screen_understanding"})
     # The observed text remains exactly as reported: an observation.
     assert f"Observed text: {INJECTION_TEXT!r}" in (result.output or "")
 

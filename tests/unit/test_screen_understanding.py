@@ -127,9 +127,7 @@ def test_screenshot_failure_is_controlled(tmp_path: Path) -> None:
 
 
 def test_screenshot_unexpected_exception_is_controlled(tmp_path: Path) -> None:
-    service = _service(
-        screenshot=FakeScreenshotProvider(raise_error=True), workspace=tmp_path
-    )
+    service = _service(screenshot=FakeScreenshotProvider(raise_error=True), workspace=tmp_path)
     result = _run(service.understand())
     assert result.success is False
     assert "Screenshot failed: RuntimeError" in (result.error or "")
@@ -253,9 +251,7 @@ def test_extract_text_with_fake_ocr(tmp_path: Path) -> None:
 def test_understand_with_explicit_question_and_mode(tmp_path: Path) -> None:
     vision = FakeVisionProvider()
     service = _service(vision=vision, workspace=tmp_path)
-    result = _run(
-        service.understand(question="any question", mode=VisionAnalysisMode.OCR)
-    )
+    result = _run(service.understand(question="any question", mode=VisionAnalysisMode.OCR))
     assert result.success is True
     assert vision.calls[0].question == "any question"
     assert vision.calls[0].mode == VisionAnalysisMode.OCR

@@ -35,9 +35,7 @@ class ResearchAgent(Agent):
     description: ClassVar[str] = (
         "Gathers evidence and structured research results for a given task."
     )
-    capabilities: ClassVar[frozenset[str]] = frozenset(
-        {"research", "web_search", "evidence"}
-    )
+    capabilities: ClassVar[frozenset[str]] = frozenset({"research", "web_search", "evidence"})
 
     def __init__(self, provider: ResearchProvider | None = None) -> None:
         self._provider = provider
@@ -74,16 +72,13 @@ class ResearchAgent(Agent):
             return AgentResult.fail(error=error_msg)
 
         if not response.success:
-            return AgentResult.fail(
-                error=response.error or "Research returned no success"
-            )
+            return AgentResult.fail(error=response.error or "Research returned no success")
 
         source_count = response.result_count
         if source_count == 0:
             return AgentResult.ok(
                 output=(
-                    f"Research completed for task '{task.description[:120]}' "
-                    "with 0 sources found."
+                    f"Research completed for task '{task.description[:120]}' with 0 sources found."
                 )
             )
 

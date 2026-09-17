@@ -197,18 +197,14 @@ def test_provider_sends_tool_definitions_to_client() -> None:
 def test_provider_omits_tools_when_none_supplied() -> None:
     client = RecordingClient()
     provider = OpenAIProvider(api_key="sk-test", client=client)
-    result = asyncio.run(
-        provider.chat([AIMessage(role="user", content="hi")])
-    )
+    result = asyncio.run(provider.chat([AIMessage(role="user", content="hi")]))
     assert result.success is True
     assert "tools" not in client.chat.completions.last_kwargs
 
 
 def test_provider_parses_tool_calls() -> None:
     provider = OpenAIProvider(api_key="sk-test", client=ToolCallingClient())
-    result = asyncio.run(
-        provider.chat([AIMessage(role="user", content="calculate")])
-    )
+    result = asyncio.run(provider.chat([AIMessage(role="user", content="calculate")]))
     assert result.success is True
     assert result.content == ""
     assert result.tool_calls is not None

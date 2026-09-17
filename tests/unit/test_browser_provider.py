@@ -202,9 +202,7 @@ def test_type_text_records_actions() -> None:
     provider = FakeBrowserProvider()
     _run(provider.start())
     _run(provider.create_session(session_id="s"))
-    result = _run(
-        provider.type_text("s", "#search", "cats", action=TextEntryAction.REPLACE)
-    )
+    result = _run(provider.type_text("s", "#search", "cats", action=TextEntryAction.REPLACE))
     assert result.chars_typed == 4
     page = provider._pages["s"]
     assert page.typing[-1]["selector"] == "#search"
@@ -242,8 +240,4 @@ def test_download_unknown_url_fails() -> None:
     _run(provider.start())
     _run(provider.seed_page(session_id="s"))
     with pytest.raises(BrowserDownloadError):
-        _run(
-            provider.download(
-                "s", "http://localhost/missing", destination=Path("unused")
-            )
-        )
+        _run(provider.download("s", "http://localhost/missing", destination=Path("unused")))

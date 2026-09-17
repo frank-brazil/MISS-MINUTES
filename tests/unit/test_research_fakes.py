@@ -34,9 +34,7 @@ def test_fake_research_provider_satisfies_interface() -> None:
 
 def test_fake_research_provider_returns_fixture_results() -> None:
     provider = FakeResearchProvider(fixtures=FIXTURES)
-    response = asyncio.run(
-        provider.research(SearchRequest(query="latest AI news"))
-    )
+    response = asyncio.run(provider.research(SearchRequest(query="latest AI news")))
     assert response.success is True
     assert response.result_count == 2
     assert response.error is None
@@ -49,9 +47,7 @@ def test_fake_research_provider_returns_fixture_results() -> None:
 
 def test_fake_research_provider_unknown_query_returns_no_results() -> None:
     provider = FakeResearchProvider(fixtures=FIXTURES)
-    response = asyncio.run(
-        provider.research(SearchRequest(query="no such query"))
-    )
+    response = asyncio.run(provider.research(SearchRequest(query="no such query")))
     assert response.success is True
     assert response.results == []
     assert response.result_count == 0
@@ -63,9 +59,7 @@ def test_fake_research_provider_default_results_for_unmatched_query() -> None:
         fixtures=FIXTURES,
         default_results=[result("fallback result", 0.5)],
     )
-    response = asyncio.run(
-        provider.research(SearchRequest(query="unknown topic"))
-    )
+    response = asyncio.run(provider.research(SearchRequest(query="unknown topic")))
     assert response.success is True
     assert response.result_count == 1
     assert response.results[0].title == "fallback result"
@@ -73,11 +67,7 @@ def test_fake_research_provider_default_results_for_unmatched_query() -> None:
 
 def test_fake_research_provider_truncates_to_max_results() -> None:
     provider = FakeResearchProvider(fixtures=FIXTURES)
-    response = asyncio.run(
-        provider.research(
-            SearchRequest(query="latest AI news", max_results=1)
-        )
-    )
+    response = asyncio.run(provider.research(SearchRequest(query="latest AI news", max_results=1)))
     assert response.success is True
     assert response.result_count == 1
     assert response.results[0].title == "AI news A"
@@ -93,9 +83,7 @@ def test_fake_research_provider_orders_and_ranks_results() -> None:
             ]
         }
     )
-    response = asyncio.run(
-        provider.research(SearchRequest(query="mixed"))
-    )
+    response = asyncio.run(provider.research(SearchRequest(query="mixed")))
     assert [item.title for item in response.results] == ["top", "mid", "low"]
     assert [item.rank for item in response.results] == [1, 2, 3]
 
@@ -110,18 +98,14 @@ def test_fake_research_provider_preserves_order_when_sort_disabled() -> None:
         },
         sort_by_score=False,
     )
-    response = asyncio.run(
-        provider.research(SearchRequest(query="preordered"))
-    )
+    response = asyncio.run(provider.research(SearchRequest(query="preordered")))
     assert [item.title for item in response.results] == ["first", "second"]
     assert [item.rank for item in response.results] == [1, 2]
 
 
 def test_fake_research_provider_can_fail_on_demand() -> None:
     provider = FakeResearchProvider(fail=True)
-    response = asyncio.run(
-        provider.research(SearchRequest(query="latest AI news"))
-    )
+    response = asyncio.run(provider.research(SearchRequest(query="latest AI news")))
     assert isinstance(response, ResearchResponse)
     assert response.success is False
     assert response.error == "simulated research failure"

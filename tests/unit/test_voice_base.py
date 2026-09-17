@@ -57,9 +57,7 @@ def test_text_to_speech_requires_metadata() -> None:
         class MissingDescription(TextToSpeech):
             name = "missing-description"
 
-            async def synthesize(
-                self, request: TextToSpeechRequest
-            ) -> TextToSpeechResult:
+            async def synthesize(self, request: TextToSpeechRequest) -> TextToSpeechResult:
                 return TextToSpeechResult.ok()
 
 
@@ -78,13 +76,9 @@ def test_concrete_samples_satisfy_interfaces() -> None:
     tts = SampleTextToSpeech()
     assert isinstance(stt, SpeechToText)
     assert isinstance(tts, TextToSpeech)
-    transcription = asyncio.run(
-        stt.transcribe(SpeechInput(audio=b"hello"))
-    )
+    transcription = asyncio.run(stt.transcribe(SpeechInput(audio=b"hello")))
     assert transcription.text == "hello"
-    synthesis = asyncio.run(
-        tts.synthesize(TextToSpeechRequest(text="hello"))
-    )
+    synthesis = asyncio.run(tts.synthesize(TextToSpeechRequest(text="hello")))
     assert synthesis.audio is not None
     assert synthesis.audio.content == b"hello"
 
@@ -186,9 +180,7 @@ def test_speech_to_text_result_rejects_out_of_range_confidence() -> None:
 
 
 def test_text_to_speech_request_model_fields() -> None:
-    request = TextToSpeechRequest(
-        text="hello", language="hi", voice="sample-voice"
-    )
+    request = TextToSpeechRequest(text="hello", language="hi", voice="sample-voice")
     assert request.text == "hello"
     assert request.language == "hi"
     assert request.voice == "sample-voice"
@@ -261,8 +253,6 @@ def test_speech_to_text_result_fail_via_interface() -> None:
         async def transcribe(self, speech: SpeechInput) -> SpeechToTextResult:
             return SpeechToTextResult.fail(error="simulated failure")
 
-    result = asyncio.run(
-        AlwaysFailSTT().transcribe(SpeechInput(audio=b"anything"))
-    )
+    result = asyncio.run(AlwaysFailSTT().transcribe(SpeechInput(audio=b"anything")))
     assert result.success is False
     assert result.error == "simulated failure"

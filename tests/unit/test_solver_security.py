@@ -8,9 +8,7 @@ from app.solver.engine import ProblemSolvingEngine
 from app.solver.fakes import FakeActionExecutor, FakeObservationProvider
 from app.solver.session import ProblemSolvingStatus
 
-_SOLVER_DIR = (
-    Path(__file__).resolve().parents[2] / "app" / "solver"
-)
+_SOLVER_DIR = Path(__file__).resolve().parents[2] / "app" / "solver"
 
 _BANNED_NETWORK_IMPORTS = (
     "import httpx",
@@ -48,9 +46,7 @@ def test_solver_sources_do_not_reach_into_browser_or_vision() -> None:
     for path in source_files:
         content = path.read_text(encoding="utf-8")
         for module in ("app.browser", "app.screen", "app.vision", "app.tools"):
-            assert module not in content, (
-                f"{path.name} must not import {module}"
-            )
+            assert module not in content, f"{path.name} must not import {module}"
 
 
 def test_engine_defaults_are_deterministic_fakes() -> None:
@@ -128,9 +124,7 @@ class RecordingMemory(Memory):
         self.records.append(record)
         return record
 
-    async def retrieve(
-        self, query: str, *, limit: int = 10
-    ) -> MemoryQueryResult:
+    async def retrieve(self, query: str, *, limit: int = 10) -> MemoryQueryResult:
         return MemoryQueryResult.ok([])
 
     async def delete(self, memory_id: UUID) -> bool:
@@ -159,9 +153,7 @@ def test_memory_never_contains_raw_task_content() -> None:
         agent_router=AgentRouter([TrivialAgent()]),
         verifier=FakeVerifier(),
         observation_provider=FakeObservationProvider(
-            observations=[
-                "A clearer understanding of causes, constraints, and context. observed"
-            ],
+            observations=["A clearer understanding of causes, constraints, and context. observed"],
             action_succeeded=True,
         ),
         memory=memory,

@@ -52,9 +52,7 @@ class BrowserProvider(ABC):
     # --- Sessions ------------------------------------------------------
 
     @abstractmethod
-    async def create_session(
-        self, *, session_id: str | None = None
-    ) -> BrowserSession:
+    async def create_session(self, *, session_id: str | None = None) -> BrowserSession:
         raise NotImplementedError
 
     @abstractmethod
@@ -112,9 +110,7 @@ class BrowserProvider(ABC):
     # --- Media / files -------------------------------------------------
 
     @abstractmethod
-    async def screenshot(
-        self, session_id: str, *, path: str | Path
-    ) -> BrowserScreenshot:
+    async def screenshot(self, session_id: str, *, path: str | Path) -> BrowserScreenshot:
         raise NotImplementedError
 
     @abstractmethod

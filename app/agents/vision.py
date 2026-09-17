@@ -164,9 +164,7 @@ class VisionAgent(Agent):
     def _map_vision_result(self, task: Task, result: VisionResult) -> AgentResult:
         if not result.success:
             error_msg = result.error or "Vision analysis failed"
-            self._logger.info(
-                "VisionAgent task %s failed: %s", task.task_id, error_msg
-            )
+            self._logger.info("VisionAgent task %s failed: %s", task.task_id, error_msg)
             return AgentResult.fail(error=error_msg)
 
         return AgentResult.ok(output=_summarize(result))

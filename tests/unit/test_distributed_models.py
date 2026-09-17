@@ -182,9 +182,7 @@ def test_task_assignment_helpers():
     assert assignment.completed_at is not None
 
     failed = TaskAssignment(distributed_task_id=uuid4(), worker_id=uuid4())
-    failed.mark_result_into(
-        DistributedTaskResult.fail(failed.task_id, error="x")
-    )
+    failed.mark_result_into(DistributedTaskResult.fail(failed.task_id, error="x"))
     assert failed.status is AssignmentStatus.FAILED
 
     timed = TaskAssignment(distributed_task_id=uuid4(), worker_id=uuid4())

@@ -48,9 +48,7 @@ class UnsupportedScreenshotProvider(ScreenshotProvider):
     """Fails gracefully when the environment cannot capture a screen."""
 
     async def capture(self, output_path: Path) -> ScreenshotResult:
-        raise ScreenshotError(
-            "Screenshot capture is not supported in this environment"
-        )
+        raise ScreenshotError("Screenshot capture is not supported in this environment")
 
 
 class ScreenshotArguments(BaseModel):
@@ -84,9 +82,7 @@ class ScreenshotTool(Tool):
         provider: ScreenshotProvider | None = None,
         config: FileToolConfig | None = None,
     ) -> None:
-        self._provider = (
-            provider if provider is not None else UnsupportedScreenshotProvider()
-        )
+        self._provider = provider if provider is not None else UnsupportedScreenshotProvider()
         self._config = config or FileToolConfig()
         self._safety = PathSafety(self._config.allowed_roots)
 
@@ -100,28 +96,18 @@ class ScreenshotTool(Tool):
 
         parent = resolved.parent
         if not parent.exists():
-            return ToolResult.fail(
-                error=f"Output directory does not exist: {parent}"
-            )
+            return ToolResult.fail(error=f"Output directory does not exist: {parent}")
         if not parent.is_dir():
-            return ToolResult.fail(
-                error=f"Output parent is not a directory: {parent}"
-            )
+            return ToolResult.fail(error=f"Output parent is not a directory: {parent}")
 
         if resolved.exists() and not resolved.is_file():
-            return ToolResult.fail(
-                error=f"Output path is not a regular file: {resolved}"
-            )
+            return ToolResult.fail(error=f"Output path is not a regular file: {resolved}")
 
         try:
             shot = await self._provider.capture(resolved)
         except ScreenshotError as exc:
             return ToolResult.fail(error=str(exc))
         except Exception as exc:
-            return ToolResult.fail(
-                error=f"Screenshot failed: {type(exc).__name__}"
-            )
+            return ToolResult.fail(error=f"Screenshot failed: {type(exc).__name__}")
 
-        return ToolResult.ok(
-            output=f"Screenshot saved to {shot.path}"
-        )
+        return ToolResult.ok(output=f"Screenshot saved to {shot.path}")

@@ -109,7 +109,9 @@ def generate_markdown_report(run: EvaluationRun) -> str:
     not_measured = [r for r in run.results if r.status == ResultClassification.NOT_MEASURED]
     if not_measured:
         for r in not_measured:
-            lines.append(f"- **{r.metric}** ({r.scenario}): {r.limitations or 'No limitations specified.'}")
+            lines.append(
+                f"- **{r.metric}** ({r.scenario}): {r.limitations or 'No limitations specified.'}"
+            )
     else:
         lines.append("No NOT_MEASURED metrics in this run.")
     lines.append("")
@@ -125,9 +127,13 @@ def generate_markdown_report(run: EvaluationRun) -> str:
     lines.append("4. Vision results are from FakeVisionProvider, not real screenshot analysis.")
     lines.append("5. Memory results use InMemoryMemory, not semantic/vector search.")
     lines.append("6. Prediction calibration is NOT_MEASURED (no calibrated ground truth).")
-    lines.append("7. Avatar lip-sync timing accuracy is NOT_MEASURED (no ground-truth timing dataset).")
+    lines.append(
+        "7. Avatar lip-sync timing accuracy is NOT_MEASURED (no ground-truth timing dataset)."
+    )
     lines.append("8. Voice latency values are fixture placeholders, not real measurements.")
-    lines.append("9. Computer task success uses FakeActionExecutor, not real filesystem operations.")
+    lines.append(
+        "9. Computer task success uses FakeActionExecutor, not real filesystem operations."
+    )
     lines.append("10. Security policy uses ConservativePolicy in isolation, not full integration.")
     lines.append("")
     lines.append("---")
@@ -190,7 +196,9 @@ def generate_json_report(run: EvaluationRun) -> dict[str, Any]:
             "not_applicable_count": run.summary.not_applicable_count if run.summary else 0,
             "reliability_pass": run.summary.reliability_pass if run.summary else 0,
             "reliability_fail": run.summary.reliability_fail if run.summary else 0,
-            "reliability_not_applicable": run.summary.reliability_not_applicable if run.summary else 0,
+            "reliability_not_applicable": run.summary.reliability_not_applicable
+            if run.summary
+            else 0,
         }
         if run.summary
         else None,
@@ -212,7 +220,9 @@ def save_evaluation_report(run: EvaluationRun, output_dir: Path) -> dict[str, Pa
     json_path = output_dir / "latest.json"
     md_content = generate_markdown_report(run)
     md_path.write_text(md_content, encoding="utf-8")
-    json_content = _json.dumps(generate_json_report(run), indent=2, ensure_ascii=False, cls=_DTEncoder)
+    json_content = _json.dumps(
+        generate_json_report(run), indent=2, ensure_ascii=False, cls=_DTEncoder
+    )
     json_path.write_text(json_content, encoding="utf-8")
     return {"markdown": md_path, "json": json_path}
 
@@ -277,9 +287,7 @@ def load_previous_run(path: Path) -> EvaluationRun | None:
         return None
 
 
-def compare_runs(
-    previous: EvaluationRun, current: EvaluationRun
-) -> list[dict[str, Any]]:
+def compare_runs(previous: EvaluationRun, current: EvaluationRun) -> list[dict[str, Any]]:
     comparisons: list[dict[str, Any]] = []
     prev_map: dict[str, EvaluationResult] = {}
     for r in previous.results:
@@ -295,7 +303,9 @@ def compare_runs(
                 "scenario": r.scenario,
                 "previous_value": prev_value,
                 "current_value": r.value,
-                "change": (r.value - prev_value) if (r.value is not None and prev_value is not None) else None,
+                "change": (r.value - prev_value)
+                if (r.value is not None and prev_value is not None)
+                else None,
                 "previous_status": prev.status.value if prev else None,
                 "current_status": r.status.value,
             }

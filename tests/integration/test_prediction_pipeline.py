@@ -13,9 +13,7 @@ from app.core.prediction import (
 )
 
 
-async def _decide(
-    predictor: Predictor, request: PredictionRequest
-) -> DecisionAnalysis:
+async def _decide(predictor: Predictor, request: PredictionRequest) -> DecisionAnalysis:
     return await predictor.predict(request)
 
 
@@ -29,9 +27,7 @@ def test_prediction_pipeline_decision_support_flows_through() -> None:
     assert isinstance(result, DecisionAnalysis)
     assert result.recommended_option is not None
     assert result.request is request
-    assert all(
-        0.0 <= (item.probability or 0.0) <= 1.0 for item in result.predictions
-    )
+    assert all(0.0 <= (item.probability or 0.0) <= 1.0 for item in result.predictions)
     assert all(opt.risk in RiskLevel for opt in result.candidate_options)
     assert HEURISTIC_NOTICE in result.uncertainty
     assert any(item.calibrated is False for item in result.predictions)
@@ -44,9 +40,7 @@ def test_prediction_providers_are_interchangeable() -> None:
         name = "echo-predictor"
         description = "Returns a single fixed deterministic prediction."
 
-        async def predict(
-            self, request: PredictionRequest
-        ) -> DecisionAnalysis:
+        async def predict(self, request: PredictionRequest) -> DecisionAnalysis:
             prediction = Prediction(
                 outcome="the outcome follows the supplied question",
                 probability=0.8,
@@ -68,9 +62,7 @@ def test_prediction_providers_are_interchangeable() -> None:
         result = asyncio.run(
             _decide(
                 predictor,
-                PredictionRequest(
-                    question="Will the rollout proceed cleanly?"
-                ),
+                PredictionRequest(question="Will the rollout proceed cleanly?"),
             )
         )
         assert isinstance(result, DecisionAnalysis)
@@ -84,9 +76,7 @@ def test_prediction_logs_do_not_leak_question_text(caplog) -> None:
         asyncio.run(
             _decide(
                 predictor,
-                PredictionRequest(
-                    question="A private question about an internal plan?"
-                ),
+                PredictionRequest(question="A private question about an internal plan?"),
             )
         )
     messages = "\n".join(record.getMessage() for record in caplog.records)

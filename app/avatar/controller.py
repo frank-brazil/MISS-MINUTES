@@ -87,7 +87,9 @@ class AvatarController:
         self._events = events or AvatarEventLog(now_fn=self._now_fn)
 
         self._state_machine = AvatarStateMachine()
-        self._expressions = ExpressionController(ExpressionSet(expressions) if expressions else None)
+        self._expressions = ExpressionController(
+            ExpressionSet(expressions) if expressions else None
+        )
         self._animation = AnimationController(AnimationConfig(), now_fn=self._now_fn)
         self._eyes = EyeController(
             self._config, eye_config=EyeConfig(), now_fn=self._now_fn, tracking=eye_input
@@ -302,7 +304,9 @@ class AvatarController:
 
     def _stop_gesture(self, kind: GestureKind) -> None:
         if self._gestures.cancel(kind):
-            self._events.record(AvatarEventType.GESTURE_FINISHED, state=self.state, gesture=kind.value)
+            self._events.record(
+                AvatarEventType.GESTURE_FINISHED, state=self.state, gesture=kind.value
+            )
 
     def _consume_finished_gesture_events(self) -> None:
         while (finished := self._gestures.consume_finished()) is not None:

@@ -32,3 +32,12 @@ class PolicyViolationError(SecurityError):
 
 class WorkerNotAuthorizedError(SecurityError):
     """A distributed worker is not authorized for the requested operation."""
+
+
+# Short aliases used by confirmation.py, manager.py, and __init__.py
+ConfirmationRequired = ConfirmationRequiredError
+PermissionDenied = PermissionDeniedError
+AuthenticationFailed = AuthenticationFailedError
+InvalidSecurityContext = InvalidSecurityContextError
+PolicyViolation = PolicyViolationError
+WorkerNotAuthorized = WorkerNotAuthorizedError

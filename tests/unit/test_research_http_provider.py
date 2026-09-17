@@ -43,9 +43,7 @@ class FakeHttpClient:
         json: dict[str, Any] | None = None,
         timeout: float | None = None,
     ) -> FakeHttpResponse:
-        self.calls.append(
-            {"url": url, "headers": headers, "json": json, "timeout": timeout}
-        )
+        self.calls.append({"url": url, "headers": headers, "json": json, "timeout": timeout})
         return self.response
 
 
@@ -56,18 +54,14 @@ def build_provider(
     api_key: str | None = "test-key",
     **kwargs: Any,
 ) -> HttpSearchProvider:
-    return HttpSearchProvider(
-        base_url=base_url, api_key=api_key, http_client=client, **kwargs
-    )
+    return HttpSearchProvider(base_url=base_url, api_key=api_key, http_client=client, **kwargs)
 
 
 def test_http_provider_reads_configuration_from_environment(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setenv("MISSMINUTES_SEARCH_URL", "https://env.example.test")
-    monkeypatch.setenv(
-        "MISSMINUTES_SEARCH_API_KEY", "env-secret-key"
-    )
+    monkeypatch.setenv("MISSMINUTES_SEARCH_API_KEY", "env-secret-key")
     client = FakeHttpClient(
         response=FakeHttpResponse(
             payload={"results": [{"title": "T", "url": "https://example.com/a"}]}
@@ -91,9 +85,7 @@ def test_http_provider_constructor_overrides_environment(
 
 
 def test_http_provider_unconfigured_returns_controlled_failure() -> None:
-    provider = HttpSearchProvider(
-        base_url=None, http_client=FakeHttpClient()
-    )
+    provider = HttpSearchProvider(base_url=None, http_client=FakeHttpClient())
     response = asyncio.run(provider.research(SearchRequest(query="news")))
     assert response.success is False
     assert response.error is not None
@@ -161,18 +153,14 @@ def test_http_provider_parses_structured_sources() -> None:
 def test_http_provider_clamps_max_results() -> None:
     client = FakeHttpClient()
     provider = build_provider(client=client, max_results=3)
-    asyncio.run(
-        provider.research(SearchRequest(query="news", max_results=10))
-    )
+    asyncio.run(provider.research(SearchRequest(query="news", max_results=10)))
     assert client.calls[0]["json"]["max_results"] == 3
     assert provider.max_results == 3
 
 
 def test_http_provider_respects_hard_ceiling() -> None:
     client = FakeHttpClient()
-    provider = build_provider(
-        client=client, max_results=ABSOLUTE_MAX_RESULTS * 5
-    )
+    provider = build_provider(client=client, max_results=ABSOLUTE_MAX_RESULTS * 5)
     assert provider.max_results == ABSOLUTE_MAX_RESULTS
 
 
@@ -196,11 +184,7 @@ def test_http_provider_skips_malformed_results() -> None:
 
 
 def test_http_provider_network_failure_is_controlled() -> None:
-    client = FakeHttpClient(
-        response=FakeHttpResponse(
-            error=RuntimeError("connection refused")
-        )
-    )
+    client = FakeHttpClient(response=FakeHttpResponse(error=RuntimeError("connection refused")))
     provider = build_provider(client=client)
     response = asyncio.run(provider.research(SearchRequest(query="news")))
     assert response.success is False
@@ -209,9 +193,7 @@ def test_http_provider_network_failure_is_controlled() -> None:
 
 
 def test_http_provider_non_dict_payload_is_controlled() -> None:
-    client = FakeHttpClient(
-        response=FakeHttpResponse(payload={"odd": True})
-    )
+    client = FakeHttpClient(response=FakeHttpResponse(payload={"odd": True}))
     provider = build_provider(client=client)
     response = asyncio.run(provider.research(SearchRequest(query="news")))
     assert response.success is False
@@ -239,9 +221,7 @@ def test_http_provider_without_api_key_sends_no_auth_header() -> None:
 
 def test_http_provider_rejects_invalid_timeout() -> None:
     with pytest.raises(ValueError, match="timeout"):
-        HttpSearchProvider(
-            base_url="https://example.test", timeout=0, http_client=FakeHttpClient()
-        )
+        HttpSearchProvider(base_url="https://example.test", timeout=0, http_client=FakeHttpClient())
     with pytest.raises(ValueError, match="timeout"):
         HttpSearchProvider(
             base_url="https://example.test", timeout=-1, http_client=FakeHttpClient()

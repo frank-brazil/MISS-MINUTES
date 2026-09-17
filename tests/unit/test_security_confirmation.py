@@ -79,10 +79,7 @@ def test_expiry_blocks_late_approval() -> None:
     manager._now_fn = lambda: later  # simulate clock moving forward
 
     assert manager.expire() == 1
-    assert (
-        manager.get(confirmation.confirmation_id).status
-        is ConfirmationStatus.EXPIRED
-    )
+    assert manager.get(confirmation.confirmation_id).status is ConfirmationStatus.EXPIRED
     with pytest.raises(ConfirmationRequired):
         manager.approve(confirmation.confirmation_id, approved_by="late")
 
@@ -101,15 +98,11 @@ def test_is_active_approval_for_requires_exact_request() -> None:
     manager = ConfirmationManager()
     request = _request()
     confirmation = manager.create(request)
-    assert not manager.is_active_approval_for(
-        confirmation.confirmation_id, request
-    )
+    assert not manager.is_active_approval_for(confirmation.confirmation_id, request)
     manager.approve(confirmation.confirmation_id, approved_by="human")
     assert manager.is_active_approval_for(confirmation.confirmation_id, request)
     other = _request(category=PermissionCategory.READ, risk=RiskLevel.LOW)
-    assert not manager.is_active_approval_for(
-        confirmation.confirmation_id, other
-    )
+    assert not manager.is_active_approval_for(confirmation.confirmation_id, other)
 
 
 def test_expired_confirmation_is_not_an_active_approval() -> None:
@@ -120,9 +113,7 @@ def test_expired_confirmation_is_not_an_active_approval() -> None:
     manager.approve(confirmation.confirmation_id, approved_by="human")
     later = now + timedelta(seconds=10)
     manager._now_fn = lambda: later
-    assert not manager.is_active_approval_for(
-        confirmation.confirmation_id, request
-    )
+    assert not manager.is_active_approval_for(confirmation.confirmation_id, request)
 
 
 def test_ttl_seconds_validation() -> None:
@@ -143,6 +134,4 @@ def test_resolved_confirmation_keeps_history() -> None:
     manager.create(_request())
     manager.deny(first.confirmation_id, denied_by="human")
     resolved = manager.resolved()
-    assert any(
-        c.confirmation_id == first.confirmation_id for c in resolved
-    )
+    assert any(c.confirmation_id == first.confirmation_id for c in resolved)

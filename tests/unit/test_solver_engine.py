@@ -170,28 +170,18 @@ class ScriptedVerifier(Verifier):
         self._statuses = list(statuses)
         self.requests: list[tuple[object, object]] = []
 
-    async def verify(
-        self, expectation, observation
-    ) -> VerificationResult:
+    async def verify(self, expectation, observation) -> VerificationResult:
         self.requests.append((expectation, observation))
-        status = (
-            self._statuses.pop(0)
-            if self._statuses
-            else VerificationStatus.INCONCLUSIVE
-        )
+        status = self._statuses.pop(0) if self._statuses else VerificationStatus.INCONCLUSIVE
         return VerificationResult(
             status=status,
             expectation=expectation,
             observed_outcome=observation.description,
             discrepancy=(
-                None
-                if status is VerificationStatus.VERIFIED
-                else "simulated discrepancy."
+                None if status is VerificationStatus.VERIFIED else "simulated discrepancy."
             ),
             error=None,
-            confidence=None
-            if status is VerificationStatus.NOT_RUN
-            else 0.5,
+            confidence=None if status is VerificationStatus.NOT_RUN else 0.5,
         )
 
 
@@ -205,11 +195,7 @@ class ScriptedCritic(Critic):
 
     async def critique(self, request: CritiqueRequest) -> Critique:
         self.requests.append(request)
-        severity = (
-            self._severities.pop(0)
-            if self._severities
-            else Severity.LOW
-        )
+        severity = self._severities.pop(0) if self._severities else Severity.LOW
         point = CritiquePoint(
             aspect=CritiqueAspect.RISK,
             description="scripted severity point",
@@ -294,9 +280,7 @@ class RecordingMemory(Memory):
         self.records.append(record)
         return record
 
-    async def retrieve(
-        self, query: str, *, limit: int = 10
-    ) -> MemoryQueryResult:
+    async def retrieve(self, query: str, *, limit: int = 10) -> MemoryQueryResult:
         return MemoryQueryResult.ok([])
 
     async def delete(self, memory_id: UUID) -> bool:
@@ -329,9 +313,7 @@ def make_engine(
     return ProblemSolvingEngine(
         problem_solver=solver or SolverStub(expected_outcome="expected sign"),
         planner=planner or RecordingPlanner(["step one"]),
-        agent_router=AgentRouter(
-            agents if agents is not None else [AgentStub()]
-        ),
+        agent_router=AgentRouter(agents if agents is not None else [AgentStub()]),
         research_provider=research,
         predictor=predictor or (FakePredictor() if include_predictor else None),
         critic=critic or (FakeCritic() if include_critic else None),
@@ -453,9 +435,7 @@ def test_minimal_engine_completes_unverified() -> None:
     assert result.verification_status is VerificationStatus.NOT_RUN
     assert result.iterations_used == 1
     assert result.completed_steps == ["step one"]
-    assert any(
-        event.event_type is ExecutionEventType.NOTICE for event in result.events
-    )
+    assert any(event.event_type is ExecutionEventType.NOTICE for event in result.events)
 
 
 def test_happy_path_verified() -> None:
@@ -506,10 +486,7 @@ def test_research_runs_only_when_provider_configured() -> None:
     assert result_with.success is True
     session_with = engine_with.get_session(result_with.session_id)
     assert session_with is not None
-    assert any(
-        event.event_type is ExecutionEventType.RESEARCH
-        for event in session_with.events
-    )
+    assert any(event.event_type is ExecutionEventType.RESEARCH for event in session_with.events)
     assert len(session_with.research_results) >= 1
 
     engine_without = make_engine(include_verifier=False, research=None)
@@ -517,8 +494,7 @@ def test_research_runs_only_when_provider_configured() -> None:
     session_without = engine_without.get_session(result_without.session_id)
     assert session_without is not None
     assert not any(
-        event.event_type is ExecutionEventType.RESEARCH
-        for event in session_without.events
+        event.event_type is ExecutionEventType.RESEARCH for event in session_without.events
     )
     assert session_without.research_results == []
 
@@ -542,9 +518,7 @@ def test_no_research_when_no_unresolved_questions() -> None:
 
 def test_research_failure_is_recoverable() -> None:
     engine = make_engine(
-        research=FakeResearchProvider(
-            fail=True, fail_message="research offline"
-        ),
+        research=FakeResearchProvider(fail=True, fail_message="research offline"),
     )
     task = Task(description="research down")
     result = _run(engine.solve(task))
@@ -553,8 +527,7 @@ def test_research_failure_is_recoverable() -> None:
     session = engine.get_session(result.session_id)
     assert session is not None
     assert any(
-        event.event_type is ExecutionEventType.RESEARCH
-        and event.success is False
+        event.event_type is ExecutionEventType.RESEARCH and event.success is False
         for event in session.events
     )
 
@@ -579,9 +552,7 @@ def test_critic_block_triggers_replan_then_passes() -> None:
     assert session is not None
     assert len(session.attempts) == 2
     assert len(critic.requests) == 2
-    assert any(
-        event.event_type is ExecutionEventType.REPLAN for event in result.events
-    )
+    assert any(event.event_type is ExecutionEventType.REPLAN for event in result.events)
 
 
 def test_action_failure_triggers_replan_then_passes() -> None:
@@ -622,9 +593,7 @@ def test_agent_step_failure_triggers_replan_then_passes() -> None:
 
 
 def test_verification_failure_triggers_replan_then_passes() -> None:
-    verifier = ScriptedVerifier(
-        [VerificationStatus.FAILED, VerificationStatus.VERIFIED]
-    )
+    verifier = ScriptedVerifier([VerificationStatus.FAILED, VerificationStatus.VERIFIED])
     engine = make_engine(
         verifier=verifier,
         include_predictor=False,
@@ -637,15 +606,11 @@ def test_verification_failure_triggers_replan_then_passes() -> None:
     assert session is not None
     assert len(session.attempts) == 2
     assert session.attempts[0].verification_status == "failed"
-    assert any(
-        event.event_type is ExecutionEventType.REPLAN for event in result.events
-    )
+    assert any(event.event_type is ExecutionEventType.REPLAN for event in result.events)
 
 
 def test_inconclusive_defaults_to_replan() -> None:
-    verifier = ScriptedVerifier(
-        [VerificationStatus.INCONCLUSIVE, VerificationStatus.VERIFIED]
-    )
+    verifier = ScriptedVerifier([VerificationStatus.INCONCLUSIVE, VerificationStatus.VERIFIED])
     engine = make_engine(
         verifier=verifier,
         include_predictor=False,
@@ -677,9 +642,7 @@ def test_inconclusive_fail_is_configured() -> None:
 
 
 def test_max_iterations_exhausted_fails() -> None:
-    verifier = ScriptedVerifier(
-        [VerificationStatus.FAILED, VerificationStatus.FAILED]
-    )
+    verifier = ScriptedVerifier([VerificationStatus.FAILED, VerificationStatus.FAILED])
     engine = make_engine(
         verifier=verifier,
         max_iterations=2,
@@ -698,9 +661,7 @@ def test_max_iterations_exhausted_fails() -> None:
 
 
 def test_loop_never_exceeds_max_iterations() -> None:
-    verifier = ScriptedVerifier(
-        [VerificationStatus.FAILED] * 10
-    )
+    verifier = ScriptedVerifier([VerificationStatus.FAILED] * 10)
     engine = make_engine(
         verifier=verifier,
         max_iterations=3,
@@ -731,8 +692,7 @@ def test_problem_solver_error_is_isolated() -> None:
     session = engine.get_session(result.session_id)
     assert session is not None
     assert any(
-        "RuntimeError" in event.message and event.success is False
-        for event in session.events
+        "RuntimeError" in event.message and event.success is False for event in session.events
     )
 
 
@@ -757,9 +717,7 @@ def test_action_executor_raise_replans_then_passes() -> None:
     assert result.success is True
     assert result.iterations_used == 2
     assert action.calls == 2
-    assert "Traceback" not in " ".join(
-        event.message for event in result.events
-    )
+    assert "Traceback" not in " ".join(event.message for event in result.events)
 
 
 def test_persistent_action_error_fails_cleanly() -> None:
@@ -774,9 +732,7 @@ def test_persistent_action_error_fails_cleanly() -> None:
     assert result.success is False
     assert result.status is ProblemSolvingStatus.FAILED
     assert "Traceback" not in (result.failure_reason or "")
-    assert "Traceback" not in " ".join(
-        event.message for event in result.events
-    )
+    assert "Traceback" not in " ".join(event.message for event in result.events)
     session = engine.get_session(result.session_id)
     assert session is not None
     assert session.attempts[0].action_success is False
@@ -796,8 +752,7 @@ def test_verifier_error_returns_controlled_result() -> None:
     session = engine.get_session(result.session_id)
     assert session is not None
     assert any(
-        event.event_type is ExecutionEventType.VERIFICATION
-        and event.success is False
+        event.event_type is ExecutionEventType.VERIFICATION and event.success is False
         for event in session.events
     )
 
@@ -809,9 +764,7 @@ def test_verifier_error_returns_controlled_result() -> None:
 
 def test_planner_receives_iteration_and_prior_attempt_context() -> None:
     planner = RecordingPlanner(["step one"])
-    verifier = ScriptedVerifier(
-        [VerificationStatus.FAILED, VerificationStatus.VERIFIED]
-    )
+    verifier = ScriptedVerifier([VerificationStatus.FAILED, VerificationStatus.VERIFIED])
     engine = make_engine(
         planner=planner,
         verifier=verifier,
@@ -937,9 +890,7 @@ def test_concurrent_sessions_tracked_independently() -> None:
     task_b = Task(description="task B")
 
     async def _solve_both():
-        first, second = await asyncio.gather(
-            engine.solve(task_a), engine.solve(task_b)
-        )
+        first, second = await asyncio.gather(engine.solve(task_a), engine.solve(task_b))
         return first, second
 
     first, second = asyncio.run(_solve_both())
@@ -983,13 +934,8 @@ def test_predictor_error_is_isolated_as_notice() -> None:
     result = _run(engine.solve(Task(description="predictor down")))
     assert result.success is True
     assert result.status is ProblemSolvingStatus.COMPLETED
-    assert "Traceback" not in " ".join(
-        event.message for event in result.events
-    )
-    prediction_events = [
-        e for e in result.events
-        if e.event_type is ExecutionEventType.PREDICTION
-    ]
+    assert "Traceback" not in " ".join(event.message for event in result.events)
+    prediction_events = [e for e in result.events if e.event_type is ExecutionEventType.PREDICTION]
     assert len(prediction_events) == 1
     assert prediction_events[0].success is False
     assert "skipped" in prediction_events[0].message.lower()
@@ -1006,13 +952,8 @@ def test_critic_error_is_skipped_not_blocking() -> None:
     result = _run(engine.solve(Task(description="critic down")))
     assert result.success is True
     assert result.status is ProblemSolvingStatus.COMPLETED
-    assert "Traceback" not in " ".join(
-        event.message for event in result.events
-    )
-    critique_events = [
-        e for e in result.events
-        if e.event_type is ExecutionEventType.CRITIQUE
-    ]
+    assert "Traceback" not in " ".join(event.message for event in result.events)
+    critique_events = [e for e in result.events if e.event_type is ExecutionEventType.CRITIQUE]
     assert len(critique_events) == 1
     assert critique_events[0].success is False
     assert "skipped" in critique_events[0].message.lower()
@@ -1056,9 +997,7 @@ def test_observation_failure_triggers_replan_then_passes() -> None:
     session = engine.get_session(result.session_id)
     assert session is not None
     assert session.attempts[0].action_success is True
-    assert any(
-        e.event_type is ExecutionEventType.REPLAN for e in result.events
-    )
+    assert any(e.event_type is ExecutionEventType.REPLAN for e in result.events)
 
 
 def test_routing_failure_triggers_replan_then_passes() -> None:
@@ -1073,11 +1012,7 @@ def test_routing_failure_triggers_replan_then_passes() -> None:
 
         async def plan(self, task: Task) -> Plan:
             self.calls.append(task)
-            cap = (
-                self._capability_sets.pop(0)
-                if self._capability_sets
-                else frozenset()
-            )
+            cap = self._capability_sets.pop(0) if self._capability_sets else frozenset()
             steps = [
                 PlanStep(
                     description="step",
@@ -1090,9 +1025,7 @@ def test_routing_failure_triggers_replan_then_passes() -> None:
                 steps=steps,
             )
 
-    planner = _CapabilityPlanPlanner(
-        [frozenset({"nonexistent-cap"}), frozenset()]
-    )
+    planner = _CapabilityPlanPlanner([frozenset({"nonexistent-cap"}), frozenset()])
     verifier = ScriptedVerifier([VerificationStatus.VERIFIED])
     engine = make_engine(
         planner=planner,
@@ -1103,19 +1036,10 @@ def test_routing_failure_triggers_replan_then_passes() -> None:
     result = _run(engine.solve(Task(description="routing replan")))
     assert result.success is True
     assert result.iterations_used == 2
-    delegation_events = [
-        e for e in result.events
-        if e.event_type is ExecutionEventType.DELEGATION
-    ]
-    assert any(
-        e.success is False for e in delegation_events
-    )
-    assert any(
-        e.success is True for e in delegation_events
-    )
-    assert "Traceback" not in " ".join(
-        event.message for event in result.events
-    )
+    delegation_events = [e for e in result.events if e.event_type is ExecutionEventType.DELEGATION]
+    assert any(e.success is False for e in delegation_events)
+    assert any(e.success is True for e in delegation_events)
+    assert "Traceback" not in " ".join(event.message for event in result.events)
 
 
 # ----------------------------------------------------------------------
@@ -1124,9 +1048,7 @@ def test_routing_failure_triggers_replan_then_passes() -> None:
 
 
 def test_inconclusive_verification_never_becomes_success() -> None:
-    verifier = ScriptedVerifier(
-        [VerificationStatus.INCONCLUSIVE, VerificationStatus.INCONCLUSIVE]
-    )
+    verifier = ScriptedVerifier([VerificationStatus.INCONCLUSIVE, VerificationStatus.INCONCLUSIVE])
     engine = make_engine(
         verifier=verifier,
         max_iterations=2,
@@ -1137,6 +1059,4 @@ def test_inconclusive_verification_never_becomes_success() -> None:
     assert result.success is False
     assert result.status is ProblemSolvingStatus.FAILED
     assert result.iterations_used == 2
-    assert "Traceback" not in " ".join(
-        event.message for event in result.events
-    )
+    assert "Traceback" not in " ".join(event.message for event in result.events)

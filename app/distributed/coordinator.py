@@ -255,8 +255,7 @@ class DistributedCoordinator:
                             f"{dispatch_decision.reason_code or 'denied'}"
                         )
                     self._logger.warning(
-                        "Dispatch refused by security policy: "
-                        "task_id=%s worker_id=%s reason=%s",
+                        "Dispatch refused by security policy: task_id=%s worker_id=%s reason=%s",
                         task.distributed_task_id,
                         worker.worker_id,
                         dispatch_decision.reason,
@@ -309,8 +308,7 @@ class DistributedCoordinator:
         self._registry.note_assignment(worker.worker_id)
         self._record(
             DistributedEventType.TASK_ASSIGNED,
-            f"Task assigned to '{worker.worker_name}' (attempt "
-            f"{task.attempt_count}).",
+            f"Task assigned to '{worker.worker_name}' (attempt {task.attempt_count}).",
             success=True,
             task_id=task.distributed_task_id,
             worker_id=worker.worker_id,
@@ -318,9 +316,7 @@ class DistributedCoordinator:
         )
         return assignment
 
-    def _authorize_dispatch(
-        self, task: DistributedTask, worker: WorkerInfo
-    ) -> SecurityDecision:
+    def _authorize_dispatch(self, task: DistributedTask, worker: WorkerInfo) -> SecurityDecision:
         """Evaluate a dispatch against the configured security policy.
 
         The check is fail-closed: unregistered/unknown actor identities and
@@ -446,10 +442,7 @@ class DistributedCoordinator:
             # released by an unreachable/retry path; treat as stale duplicate.
             return result
 
-        if (
-            result.assignment_id is not None
-            and assignment.assignment_id != result.assignment_id
-        ):
+        if result.assignment_id is not None and assignment.assignment_id != result.assignment_id:
             return result  # stale duplicate from a previous attempt
 
         assignment.mark_result_into(result)
@@ -497,7 +490,9 @@ class DistributedCoordinator:
             attempt=assignment.attempt,
         )
 
-    def _fail_task(self, task, reason: str, *, assignment: TaskAssignment | None = None, worker_id=None) -> None:
+    def _fail_task(
+        self, task, reason: str, *, assignment: TaskAssignment | None = None, worker_id=None
+    ) -> None:
         task.mark_failed(reason)
         task.release_worker()
         if assignment is not None:

@@ -16,9 +16,7 @@ class FileCreateArguments(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     path: str = Field(description="Absolute path of the file to create")
-    content: str = Field(
-        default="", description="Text content to write to the file"
-    )
+    content: str = Field(default="", description="Text content to write to the file")
     overwrite: bool = Field(
         default=False,
         description=(
@@ -58,23 +56,15 @@ class FileCreateTool(Tool):
 
         if resolved.exists():
             if not args.overwrite:
-                return ToolResult.fail(
-                    error=f"File already exists: {resolved}"
-                )
+                return ToolResult.fail(error=f"File already exists: {resolved}")
             if not resolved.is_file():
-                return ToolResult.fail(
-                    error=f"Not a regular file: {resolved}"
-                )
+                return ToolResult.fail(error=f"Not a regular file: {resolved}")
 
         parent = resolved.parent
         if not parent.exists():
-            return ToolResult.fail(
-                error=f"Parent directory does not exist: {parent}"
-            )
+            return ToolResult.fail(error=f"Parent directory does not exist: {parent}")
         if not parent.is_dir():
-            return ToolResult.fail(
-                error=f"Parent is not a directory: {parent}"
-            )
+            return ToolResult.fail(error=f"Parent is not a directory: {parent}")
 
         payload = args.content.encode("utf-8")
         if len(payload) > self._config.write_max_bytes:
@@ -89,11 +79,7 @@ class FileCreateTool(Tool):
         try:
             resolved.write_bytes(payload)
         except OSError as exc:
-            return ToolResult.fail(
-                error=f"Failed to create file: {type(exc).__name__}"
-            )
+            return ToolResult.fail(error=f"Failed to create file: {type(exc).__name__}")
 
         size = resolved.stat().st_size
-        return ToolResult.ok(
-            output=f"Created {resolved} ({size} bytes)"
-        )
+        return ToolResult.ok(output=f"Created {resolved} ({size} bytes)")

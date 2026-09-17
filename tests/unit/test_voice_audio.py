@@ -99,9 +99,7 @@ def test_fake_capture_start_failure_raises_capture_error() -> None:
 
 
 def test_fake_capture_raise_on_start_propagates() -> None:
-    provider = FakeAudioCaptureProvider(
-        raise_on_start=RuntimeError("boom")
-    )
+    provider = FakeAudioCaptureProvider(raise_on_start=RuntimeError("boom"))
 
     async def scenario() -> None:
         await provider.start()

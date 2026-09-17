@@ -64,9 +64,7 @@ class OpenAIProvider(AIModel):
             payload.append(item)
         return payload
 
-    def _build_tools_payload(
-        self, tools: Sequence[ToolDefinition]
-    ) -> list[dict]:
+    def _build_tools_payload(self, tools: Sequence[ToolDefinition]) -> list[dict]:
         return [
             {
                 "type": "function",
@@ -84,9 +82,7 @@ class OpenAIProvider(AIModel):
         for raw in raw_tool_calls or []:
             arguments = getattr(getattr(raw, "function", None), "arguments", None)
             try:
-                parsed_arguments = (
-                    json.loads(arguments) if isinstance(arguments, str) else {}
-                )
+                parsed_arguments = json.loads(arguments) if isinstance(arguments, str) else {}
             except json.JSONDecodeError:
                 parsed_arguments = {}
             tool_calls.append(
@@ -110,9 +106,7 @@ class OpenAIProvider(AIModel):
                     "OpenAI provider is not configured: %s is missing or empty",
                     OPENAI_API_KEY_ENV,
                 )
-                return AIResponse.fail(
-                    "OpenAI provider is not configured: API key is missing"
-                )
+                return AIResponse.fail("OpenAI provider is not configured: API key is missing")
             self._client = AsyncOpenAI(api_key=self._api_key)
 
         payload = self._build_messages_payload(messages)
@@ -126,17 +120,13 @@ class OpenAIProvider(AIModel):
                 **kwargs,
             )
         except Exception as exc:
-            self._logger.error(
-                "OpenAI chat completion failed: %s", type(exc).__name__
-            )
+            self._logger.error("OpenAI chat completion failed: %s", type(exc).__name__)
             return AIResponse.fail("OpenAI provider call failed")
 
         message = completion.choices[0].message
         content = message.content or ""
         raw_tool_calls = getattr(message, "tool_calls", None)
-        tool_calls = (
-            self._parse_tool_calls(raw_tool_calls) if raw_tool_calls else None
-        )
+        tool_calls = self._parse_tool_calls(raw_tool_calls) if raw_tool_calls else None
         return AIResponse.ok(
             content=content,
             model_name=completion.model,

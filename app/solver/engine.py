@@ -115,13 +115,9 @@ class ProblemSolvingEngine:
         if max_iterations < 1:
             raise ValueError("max_iterations must be at least 1")
         if timeout_seconds is not None and timeout_seconds <= 0:
-            raise ValueError(
-                "timeout_seconds must be positive when provided"
-            )
+            raise ValueError("timeout_seconds must be positive when provided")
         if on_inconclusive not in _ON_INCONCLUSIVE:
-            raise ValueError(
-                f"on_inconclusive must be one of {', '.join(_ON_INCONCLUSIVE)}"
-            )
+            raise ValueError(f"on_inconclusive must be one of {', '.join(_ON_INCONCLUSIVE)}")
         if max_research_queries < 1:
             raise ValueError("max_research_queries must be at least 1")
 
@@ -137,9 +133,7 @@ class ProblemSolvingEngine:
             action_executor if action_executor is not None else FakeActionExecutor()
         )
         self._observation_provider: ObservationProvider = (
-            observation_provider
-            if observation_provider is not None
-            else FakeObservationProvider()
+            observation_provider if observation_provider is not None else FakeObservationProvider()
         )
         self._memory = memory
         self._security = as_security_manager(security)
@@ -225,8 +219,7 @@ class ProblemSolvingEngine:
         )
         self._sessions[session.session_id] = session
         self._logger.info(
-            "Created problem-solving session %s for task %s "
-            "(max iterations %d)",
+            "Created problem-solving session %s for task %s (max iterations %d)",
             session.session_id,
             task.task_id,
             self._max_iterations,
@@ -320,18 +313,14 @@ class ProblemSolvingEngine:
             session.change_status(ProblemSolvingStatus.PLANNING)
             plan = await self._phase_planning(session, task, iteration)
             if plan is None:
-                return await self._fail(
-                    session, f"Planning failed on attempt {iteration}."
-                )
+                return await self._fail(session, f"Planning failed on attempt {iteration}.")
             session.plan = plan
             if self._is_cancelled(session.session_id):
                 return self._finish_cancelled(session)
 
             # 4) Delegating plan steps to agents
             session.change_status(ProblemSolvingStatus.DELEGATING)
-            completed_steps, delegated = await self._phase_delegating(
-                session, plan, attempt
-            )
+            completed_steps, delegated = await self._phase_delegating(session, plan, attempt)
             if delegated:
                 session.attempts.append(attempt)
                 result = await self._replan_or_fail(
@@ -356,15 +345,11 @@ class ProblemSolvingEngine:
             session.change_status(ProblemSolvingStatus.CRITIQUING)
             block = False
             if self._critic is not None:
-                _, block = await self._phase_critiquing(
-                    session, plan, iteration
-                )
+                _, block = await self._phase_critiquing(session, plan, iteration)
                 if self._is_cancelled(session.session_id):
                     return self._finish_cancelled(session)
             if block:
-                attempt.outcome = (
-                    "Critique flagged issues above the acceptable threshold."
-                )
+                attempt.outcome = "Critique flagged issues above the acceptable threshold."
                 session.attempts.append(attempt)
                 result = await self._replan_or_fail(
                     session,
@@ -376,9 +361,7 @@ class ProblemSolvingEngine:
 
             # 7) Acting (via the injected executor)
             session.change_status(ProblemSolvingStatus.ACTING)
-            action = await self._phase_acting(
-                session, plan, analysis, iteration, attempt=attempt
-            )
+            action = await self._phase_acting(session, plan, analysis, iteration, attempt=attempt)
             if action is None or not action.success:
                 attempt.action_success = action is not None and action.success
                 if attempt.outcome is None:
@@ -394,9 +377,7 @@ class ProblemSolvingEngine:
 
             # 8) Observing
             session.change_status(ProblemSolvingStatus.OBSERVING)
-            observation = await self._phase_observing(
-                session, action, iteration
-            )
+            observation = await self._phase_observing(session, action, iteration)
             if observation is None or not observation.success:
                 attempt.outcome = f"Observation failed on attempt {iteration}."
                 session.attempts.append(attempt)
@@ -423,18 +404,11 @@ class ProblemSolvingEngine:
             )
             session.attempts.append(attempt)
 
-            if (
-                verification is None
-                or verification.status is VerificationStatus.NOT_RUN
-            ):
-                return await self._complete_unverified(
-                    session, completed_steps, iteration
-                )
+            if verification is None or verification.status is VerificationStatus.NOT_RUN:
+                return await self._complete_unverified(session, completed_steps, iteration)
 
             if verification.is_verified:
-                return await self._complete(
-                    session, verification, completed_steps, iteration
-                )
+                return await self._complete(session, verification, completed_steps, iteration)
 
             if (
                 verification.status is VerificationStatus.INCONCLUSIVE
@@ -442,14 +416,10 @@ class ProblemSolvingEngine:
             ):
                 return await self._fail(
                     session,
-                    f"Verification inconclusive on attempt {iteration}; "
-                    "configured to stop.",
+                    f"Verification inconclusive on attempt {iteration}; configured to stop.",
                 )
 
-            reason = (
-                f"Verification {verification.status.value} on attempt "
-                f"{iteration}."
-            )
+            reason = f"Verification {verification.status.value} on attempt {iteration}."
             result = await self._replan_or_fail(session, reason)
             if result is not None:
                 return result
@@ -457,8 +427,7 @@ class ProblemSolvingEngine:
 
         return await self._fail(
             session,
-            f"Maximum iterations ({session.max_iterations}) reached "
-            "without a verified result.",
+            f"Maximum iterations ({session.max_iterations}) reached without a verified result.",
         )
 
     # ------------------------------------------------------------------
@@ -471,9 +440,7 @@ class ProblemSolvingEngine:
         task: Task,
     ) -> ProblemAnalysis | None:
         session.change_status(ProblemSolvingStatus.UNDERSTANDING)
-        problem = Problem(
-            description=task.description, context=dict(task.context)
-        )
+        problem = Problem(description=task.description, context=dict(task.context))
         self._logger.info(
             "Understanding problem for session %s task %s",
             session.session_id,
@@ -500,10 +467,7 @@ class ProblemSolvingEngine:
                 ExecutionEvent(
                     event_type=ExecutionEventType.UNDERSTANDING,
                     status=session.status.value,
-                    message=(
-                        f"Problem understanding raised {type(exc).__name__} "
-                        "and was stopped."
-                    ),
+                    message=(f"Problem understanding raised {type(exc).__name__} and was stopped."),
                     success=False,
                     iteration=session.current_iteration,
                 )
@@ -532,11 +496,9 @@ class ProblemSolvingEngine:
     ) -> None:
         session.change_status(ProblemSolvingStatus.RESEARCHING)
         provider = self._research_provider  # guaranteed not None by caller
-        questions = [
-            q.strip()
-            for q in analysis.unresolved_questions
-            if q.strip()
-        ][: self._max_research_queries]
+        questions = [q.strip() for q in analysis.unresolved_questions if q.strip()][
+            : self._max_research_queries
+        ]
 
         if not questions:
             session.record_event(
@@ -559,9 +521,7 @@ class ProblemSolvingEngine:
             ExecutionEvent(
                 event_type=ExecutionEventType.RESEARCH,
                 status=session.status.value,
-                message=(
-                    f"Researching {len(questions)} unresolved question(s)."
-                ),
+                message=(f"Researching {len(questions)} unresolved question(s)."),
                 success=True,
                 iteration=session.current_iteration,
             )
@@ -581,8 +541,7 @@ class ProblemSolvingEngine:
                         event_type=ExecutionEventType.RESEARCH,
                         status=session.status.value,
                         message=(
-                            f"Research failed for '{_short(question, 40)}': "
-                            f"{type(exc).__name__}."
+                            f"Research failed for '{_short(question, 40)}': {type(exc).__name__}."
                         ),
                         success=False,
                         iteration=session.current_iteration,
@@ -595,10 +554,7 @@ class ProblemSolvingEngine:
                     ExecutionEvent(
                         event_type=ExecutionEventType.RESEARCH,
                         status=session.status.value,
-                        message=(
-                            f"Research completed with "
-                            f"{response.result_count} result(s)."
-                        ),
+                        message=(f"Research completed with {response.result_count} result(s)."),
                         success=True,
                         iteration=session.current_iteration,
                     )
@@ -652,10 +608,7 @@ class ProblemSolvingEngine:
                 ExecutionEvent(
                     event_type=ExecutionEventType.PLAN,
                     status=session.status.value,
-                    message=(
-                        f"Plan creation raised {type(exc).__name__} and was "
-                        "stopped."
-                    ),
+                    message=(f"Plan creation raised {type(exc).__name__} and was stopped."),
                     success=False,
                     iteration=iteration,
                 )
@@ -684,26 +637,19 @@ class ProblemSolvingEngine:
                 return completed, False
             step_number = index + 1
             try:
-                agent: Agent = self._router.select(
-                    step.required_capabilities
-                )
+                agent: Agent = self._router.select(step.required_capabilities)
             except (UnknownCapabilityError, NoMatchingAgentError) as exc:
                 session.record_event(
                     ExecutionEvent(
                         event_type=ExecutionEventType.DELEGATION,
                         status=session.status.value,
-                        message=(
-                            f"Routing step {step_number} failed: "
-                            f"{_short(str(exc))}."
-                        ),
+                        message=(f"Routing step {step_number} failed: {_short(str(exc))}."),
                         success=False,
                         iteration=session.current_iteration,
                     )
                 )
                 attempt.steps_failed += 1
-                attempt.outcome = (
-                    f"Routing failed for step {step_number}."
-                )
+                attempt.outcome = f"Routing failed for step {step_number}."
                 return completed, True
 
             step_task = Task(description=step.description)
@@ -770,17 +716,13 @@ class ProblemSolvingEngine:
     ) -> DecisionAnalysis | None:
         predictor = self._predictor  # guaranteed not None by caller
         request = PredictionRequest(
-            question=(
-                "Predicted outcome of executing the plan for the task."
-            ),
+            question=("Predicted outcome of executing the plan for the task."),
             situation={
                 "task_id": str(session.task_id),
                 "plan_id": str(plan.plan_id),
                 "iteration": iteration,
             },
-            candidate_options=[
-                s.description for s in analysis.candidate_solutions
-            ],
+            candidate_options=[s.description for s in analysis.candidate_solutions],
         )
         try:
             decision = await predictor.predict(request)
@@ -794,10 +736,7 @@ class ProblemSolvingEngine:
                 ExecutionEvent(
                     event_type=ExecutionEventType.PREDICTION,
                     status=session.status.value,
-                    message=(
-                        f"Prediction failed and was skipped: "
-                        f"{type(exc).__name__}."
-                    ),
+                    message=(f"Prediction failed and was skipped: {type(exc).__name__}."),
                     success=False,
                     iteration=iteration,
                 )
@@ -807,10 +746,7 @@ class ProblemSolvingEngine:
             ExecutionEvent(
                 event_type=ExecutionEventType.PREDICTION,
                 status=session.status.value,
-                message=(
-                    "Prediction recorded as a heuristic estimate; not a "
-                    "guaranteed fact."
-                ),
+                message=("Prediction recorded as a heuristic estimate; not a guaranteed fact."),
                 success=True,
                 iteration=iteration,
             )
@@ -844,27 +780,19 @@ class ProblemSolvingEngine:
                 ExecutionEvent(
                     event_type=ExecutionEventType.CRITIQUE,
                     status=session.status.value,
-                    message=(
-                        f"Critique failed and was skipped: "
-                        f"{type(exc).__name__}."
-                    ),
+                    message=(f"Critique failed and was skipped: {type(exc).__name__}."),
                     success=False,
                     iteration=iteration,
                 )
             )
             return None, False
         severity = critique.highest_severity
-        block = _severity_blocks(
-            severity, self._critic_severity_threshold
-        )
+        block = _severity_blocks(severity, self._critic_severity_threshold)
         session.record_event(
             ExecutionEvent(
                 event_type=ExecutionEventType.CRITIQUE,
                 status=session.status.value,
-                message=(
-                    f"Critique recorded "
-                    f"(highest severity={severity.value})."
-                ),
+                message=(f"Critique recorded (highest severity={severity.value})."),
                 success=True,
                 iteration=iteration,
             )
@@ -881,9 +809,7 @@ class ProblemSolvingEngine:
     ) -> ActionResult | None:
         solution = analysis.recommended_solution if analysis else None
         description = solution.description if solution else plan.goal
-        expected_outcome = (
-            solution.expected_outcome if solution else None
-        )
+        expected_outcome = solution.expected_outcome if solution else None
         request = ActionRequest(
             description=description,
             expected_outcome=expected_outcome,
@@ -914,10 +840,7 @@ class ProblemSolvingEngine:
                 ExecutionEvent(
                     event_type=ExecutionEventType.ACTION,
                     status=session.status.value,
-                    message=(
-                        f"Action raised {type(exc).__name__} and was "
-                        "stopped."
-                    ),
+                    message=(f"Action raised {type(exc).__name__} and was stopped."),
                     success=False,
                     tool_name=self._action_executor.name,
                     iteration=iteration,
@@ -963,17 +886,14 @@ class ProblemSolvingEngine:
             return False
         if decision.requires_confirmation:
             if attempt is not None:
-                attempt.outcome = (
-                    "Action requires confirmation and was not auto-executed."
-                )
+                attempt.outcome = "Action requires confirmation and was not auto-executed."
             session.record_event(
                 ExecutionEvent(
                     event_type=ExecutionEventType.ACTION,
                     status=session.status.value,
                     message=(
                         f"Action '{description}' requires confirmation "
-                        "(confirmation %s); not auto-executed."
-                        % decision.confirmation_id
+                        "(confirmation %s); not auto-executed." % decision.confirmation_id
                     ),
                     success=False,
                     tool_name=self._action_executor.name,
@@ -1015,9 +935,7 @@ class ProblemSolvingEngine:
         iteration: int,
     ) -> ObservationResult | None:
         request = ObservationRequest(
-            description=(
-                f"Observe outcome of: {_short(action.description)}"
-            ),
+            description=(f"Observe outcome of: {_short(action.description)}"),
             action_ref=action.action_id,
             expected_outcome=action.expected_outcome,
         )
@@ -1042,10 +960,7 @@ class ProblemSolvingEngine:
                 ExecutionEvent(
                     event_type=ExecutionEventType.OBSERVATION,
                     status=session.status.value,
-                    message=(
-                        f"Observation raised {type(exc).__name__} and was "
-                        "stopped."
-                    ),
+                    message=(f"Observation raised {type(exc).__name__} and was stopped."),
                     success=False,
                     iteration=iteration,
                 )
@@ -1074,18 +989,13 @@ class ProblemSolvingEngine:
 
         expectation = VerificationExpectation(
             description=(
-                f"Executed solution for '{_short(plan.goal)}' should "
-                "meet its expected outcome."
+                f"Executed solution for '{_short(plan.goal)}' should meet its expected outcome."
             ),
-            conditions=[]
-            if action.expected_outcome is None
-            else [action.expected_outcome],
+            conditions=[] if action.expected_outcome is None else [action.expected_outcome],
             action_ref=action.action_id,
         )
         observed = ObservedResult(
-            description=(
-                f"Observed outcome of: {_short(action.description)}"
-            ),
+            description=(f"Observed outcome of: {_short(action.description)}"),
             observations=list(observation.observations),
             action_succeeded=observation.action_succeeded,
         )
@@ -1093,9 +1003,7 @@ class ProblemSolvingEngine:
             ExecutionEvent(
                 event_type=ExecutionEventType.VERIFICATION,
                 status=session.status.value,
-                message=(
-                    "Verifying the executed solution against observations."
-                ),
+                message=("Verifying the executed solution against observations."),
                 success=True,
                 iteration=iteration,
             )
@@ -1112,10 +1020,7 @@ class ProblemSolvingEngine:
                 ExecutionEvent(
                     event_type=ExecutionEventType.VERIFICATION,
                     status=session.status.value,
-                    message=(
-                        f"Verification raised {type(exc).__name__} and "
-                        "was stopped."
-                    ),
+                    message=(f"Verification raised {type(exc).__name__} and was stopped."),
                     success=False,
                     iteration=iteration,
                 )
@@ -1123,12 +1028,8 @@ class ProblemSolvingEngine:
             return VerificationResult(
                 status=VerificationStatus.FAILED,
                 expectation=expectation,
-                observed_outcome=(
-                    "; ".join(observation.observations) or None
-                ),
-                discrepancy=(
-                    f"Verification raised {type(exc).__name__}."
-                ),
+                observed_outcome=("; ".join(observation.observations) or None),
+                discrepancy=(f"Verification raised {type(exc).__name__}."),
                 error=f"Verification raised {type(exc).__name__}.",
                 confidence=None,
             )
@@ -1182,10 +1083,7 @@ class ProblemSolvingEngine:
             ExecutionEvent(
                 event_type=ExecutionEventType.REPLAN,
                 status=session.status.value,
-                message=(
-                    f"Replanning attempt {next_attempt} of "
-                    f"{session.max_iterations}."
-                ),
+                message=(f"Replanning attempt {next_attempt} of {session.max_iterations}."),
                 success=True,
                 iteration=next_attempt,
             )
@@ -1244,17 +1142,13 @@ class ProblemSolvingEngine:
     ) -> ProblemSolvingResult:
         session.change_status(ProblemSolvingStatus.COMPLETED)
         session.final_result = (
-            f"Problem-solving completed after {iteration} iteration(s) "
-            "with a verified result."
+            f"Problem-solving completed after {iteration} iteration(s) with a verified result."
         )
         session.record_event(
             ExecutionEvent(
                 event_type=ExecutionEventType.COMPLETED,
                 status=session.status.value,
-                message=(
-                    f"Problem-solving completed successfully in "
-                    f"{iteration} iteration(s)."
-                ),
+                message=(f"Problem-solving completed successfully in {iteration} iteration(s)."),
                 success=True,
                 iteration=iteration,
             )
@@ -1293,9 +1187,7 @@ class ProblemSolvingEngine:
             ExecutionEvent(
                 event_type=ExecutionEventType.NOTICE,
                 status=session.status.value,
-                message=(
-                    "No verifier configured; result recorded as not_run."
-                ),
+                message=("No verifier configured; result recorded as not_run."),
                 success=True,
                 iteration=iteration,
             )
@@ -1304,10 +1196,7 @@ class ProblemSolvingEngine:
             ExecutionEvent(
                 event_type=ExecutionEventType.COMPLETED,
                 status=session.status.value,
-                message=(
-                    f"Problem-solving completed after {iteration} "
-                    "iteration(s)."
-                ),
+                message=(f"Problem-solving completed after {iteration} iteration(s)."),
                 success=True,
                 iteration=iteration,
             )
@@ -1367,9 +1256,7 @@ class ProblemSolvingEngine:
         session: ProblemSolvingSession,
     ) -> ProblemSolvingResult:
         session.change_status(ProblemSolvingStatus.TIMED_OUT)
-        session.failure_reason = (
-            "Problem-solving exceeded the configured timeout."
-        )
+        session.failure_reason = "Problem-solving exceeded the configured timeout."
         session.final_result = None
         session.record_event(
             ExecutionEvent(
@@ -1393,9 +1280,7 @@ class ProblemSolvingEngine:
             events=session.events,
         )
 
-    async def _store_memory_summary(
-        self, session: ProblemSolvingSession
-    ) -> None:
+    async def _store_memory_summary(self, session: ProblemSolvingSession) -> None:
         if self._memory is None:
             return
         content = (

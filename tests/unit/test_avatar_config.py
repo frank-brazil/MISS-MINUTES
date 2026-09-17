@@ -35,7 +35,12 @@ def test_radius_and_rect():
 
 
 def test_rejects_negative_dimensions():
-    for kwargs in ({"body_width": 0.0}, {"arm_length": -4.0}, {"eye_size": -1.0}, {"default_scale": 0.0}):
+    for kwargs in (
+        {"body_width": 0.0},
+        {"arm_length": -4.0},
+        {"eye_size": -1.0},
+        {"default_scale": 0.0},
+    ):
         with pytest.raises(ValidationError):
             AvatarConfig(**kwargs)
 
@@ -87,7 +92,11 @@ def test_customization_is_adjustable():
     assert config.body_width == 220.0
     assert config.eye_spacing == 56.0
     assert config.arm_thickness > 0
-    assert config.radius == 90.0 * (220.0 / 180.0) if False else config.radius == min(220.0, 180.0) / 2.0
+    assert (
+        config.radius == 90.0 * (220.0 / 180.0)
+        if False
+        else config.radius == min(220.0, 180.0) / 2.0
+    )
 
 
 def test_extra_fields_forbidden():
@@ -109,7 +118,10 @@ def test_proportions_from_config_default():
 def test_proportions_follow_configuration():
     base = AvatarConfig()
     tall = AvatarConfig(leg_length=90.0)
-    assert AvatarProportions.from_config(tall).leg_shortness > AvatarProportions.from_config(base).leg_shortness
+    assert (
+        AvatarProportions.from_config(tall).leg_shortness
+        > AvatarProportions.from_config(base).leg_shortness
+    )
 
 
 def test_proportions_reject_out_of_range():

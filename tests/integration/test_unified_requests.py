@@ -48,6 +48,7 @@ class _FailingAI(AIModel):
 # Text request
 # ------------------------------------------------------------------
 
+
 def test_text_request_basic():
     async def flow():
         ai = _TrackingAI(replies=["Found your notes!"])
@@ -61,6 +62,7 @@ def test_text_request_basic():
         assert response.task_id is not None
         assert len(ai.requests) == 1
         await runtime.shutdown()
+
     _run(flow())
 
 
@@ -72,6 +74,7 @@ def test_text_request_empty_text():
         response = await runtime.handle_text("")
         assert response.success is False
         await runtime.shutdown()
+
     _run(flow())
 
 
@@ -83,6 +86,7 @@ def test_text_request_not_ready():
         response = await runtime.handle_text("Hello")
         assert response.success is False
         assert "not ready" in response.error.lower()
+
     _run(flow())
 
 
@@ -96,6 +100,7 @@ def test_text_request_ai_failure():
         assert response.success is False
         assert response.error is not None
         await runtime.shutdown()
+
     _run(flow())
 
 
@@ -111,12 +116,14 @@ def test_text_request_increments_count():
         await runtime.handle_text("two")
         assert runtime.request_count == 2
         await runtime.shutdown()
+
     _run(flow())
 
 
 # ------------------------------------------------------------------
 # Voice request
 # ------------------------------------------------------------------
+
 
 def test_voice_request_basic():
     async def flow():
@@ -128,6 +135,7 @@ def test_voice_request_basic():
         response = await runtime.handle_voice(b"hello audio")
         assert response.source == "voice"
         await runtime.shutdown()
+
     _run(flow())
 
 
@@ -141,12 +149,14 @@ def test_voice_request_disabled():
         assert response.success is False
         assert "voice" in response.error.lower()
         await runtime.shutdown()
+
     _run(flow())
 
 
 # ------------------------------------------------------------------
 # Unified request model
 # ------------------------------------------------------------------
+
 
 def test_unified_request_validation():
     req = UnifiedRequest(source="text", text="hello")

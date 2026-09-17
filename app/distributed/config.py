@@ -94,13 +94,9 @@ class DistributedConfig(BaseModel):
         source = os.environ if env is None else env
         kwargs = {
             "master_bind_host": source.get(f"{_ENV_PREFIX}MASTER_HOST", BIND_HOST),
-            "master_bind_port": int(
-                source.get(f"{_ENV_PREFIX}MASTER_PORT", MASTER_BIND_PORT)
-            ),
+            "master_bind_port": int(source.get(f"{_ENV_PREFIX}MASTER_PORT", MASTER_BIND_PORT)),
             "worker_bind_host": source.get(f"{_ENV_PREFIX}WORKER_HOST", BIND_HOST),
-            "worker_bind_port": int(
-                source.get(f"{_ENV_PREFIX}WORKER_PORT", WORKER_BIND_PORT)
-            ),
+            "worker_bind_port": int(source.get(f"{_ENV_PREFIX}WORKER_PORT", WORKER_BIND_PORT)),
             "heartbeat_interval_seconds": float(
                 source.get(
                     f"{_ENV_PREFIX}HEARTBEAT_INTERVAL",
@@ -113,9 +109,7 @@ class DistributedConfig(BaseModel):
                     HEARTBEAT_TIMEOUT_SECONDS,
                 )
             ),
-            "max_retries": int(
-                source.get(f"{_ENV_PREFIX}MAX_RETRIES", MAX_RETRIES)
-            ),
+            "max_retries": int(source.get(f"{_ENV_PREFIX}MAX_RETRIES", MAX_RETRIES)),
             "max_concurrent_dispatch": int(
                 source.get(
                     f"{_ENV_PREFIX}MAX_CONCURRENT_DISPATCH",

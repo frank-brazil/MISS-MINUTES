@@ -53,9 +53,7 @@ class Memory(ABC):
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
         missing = [
-            attribute
-            for attribute in ("name", "description")
-            if not hasattr(cls, attribute)
+            attribute for attribute in ("name", "description") if not hasattr(cls, attribute)
         ]
         if missing:
             raise TypeError(
@@ -67,9 +65,7 @@ class Memory(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def retrieve(
-        self, query: str, *, limit: int = 10
-    ) -> MemoryQueryResult:
+    async def retrieve(self, query: str, *, limit: int = 10) -> MemoryQueryResult:
         raise NotImplementedError
 
     @abstractmethod

@@ -213,9 +213,7 @@ class VoiceAssistantService:
         if self._running:
             raise RuntimeError("voice assistant is already running")
         if self._session.state is not VoiceSessionState.IDLE:
-            raise RuntimeError(
-                f"voice assistant session is in state {self._session.state.value}"
-            )
+            raise RuntimeError(f"voice assistant session is in state {self._session.state.value}")
         self._running = True
         self._session.mark_state(VoiceSessionState.LISTENING)
         self._events.record(
@@ -273,9 +271,7 @@ class VoiceAssistantService:
                     return
                 self._last_turn_result = await self._process_utterance(utterance)
         except CaptureError as exc:
-            self._logger.warning(
-                "Voice session aborted by capture error: %s", exc
-            )
+            self._logger.warning("Voice session aborted by capture error: %s", exc)
             self._session.mark_error(f"capture unavailable: {exc}")
         finally:
             if self._session.state is not VoiceSessionState.ERROR:
@@ -318,15 +314,11 @@ class VoiceAssistantService:
             await self._capture.stop()
             await self._capture.close()
         except Exception as exc:
-            self._logger.warning(
-                "Capture cleanup raised %s", type(exc).__name__
-            )
+            self._logger.warning("Capture cleanup raised %s", type(exc).__name__)
         try:
             await self._output.close()
         except Exception as exc:
-            self._logger.warning(
-                "Output cleanup raised %s", type(exc).__name__
-            )
+            self._logger.warning("Output cleanup raised %s", type(exc).__name__)
 
     async def _read_frame(self) -> AudioData | None:
         try:
@@ -447,9 +439,7 @@ class VoiceAssistantService:
         stt_result = await self._transcribe(utterance)
         self._privacy.release_audio(buffer_id)
         if stt_result is None or not stt_result.success:
-            error = (
-                stt_result.error if stt_result is not None else "speech-to-text failed"
-            )
+            error = stt_result.error if stt_result is not None else "speech-to-text failed"
             self._events.record(
                 VoiceEventType.TRANSCRIPTION_COMPLETED,
                 session_id=self._session_id_str,
@@ -539,9 +529,7 @@ class VoiceAssistantService:
                 success=False,
                 message="response denied by security policy",
             )
-            self._turns.complete_turn(
-                turn.turn_id, error=error, success=False, now=self._now
-            )
+            self._turns.complete_turn(turn.turn_id, error=error, success=False, now=self._now)
             return VoiceTurnResult(
                 turn_id=turn.turn_id,
                 outcome=VoiceTurnOutcome.DENIED,
@@ -558,9 +546,7 @@ class VoiceAssistantService:
                 success=False,
                 message="response generation failed",
             )
-            self._turns.complete_turn(
-                turn.turn_id, error=error, success=False, now=self._now
-            )
+            self._turns.complete_turn(turn.turn_id, error=error, success=False, now=self._now)
             return VoiceTurnResult(
                 turn_id=turn.turn_id,
                 outcome=VoiceTurnOutcome.AI_FAILED,
@@ -595,11 +581,7 @@ class VoiceAssistantService:
         profile = self._policy.profile_for(text=text, style=style, response_text=response)
         tts_result = await self._synthesize(response, profile)
         if tts_result is None or not tts_result.success:
-            error = (
-                tts_result.error
-                if tts_result is not None
-                else "text-to-speech failed"
-            )
+            error = tts_result.error if tts_result is not None else "text-to-speech failed"
             self._events.record(
                 VoiceEventType.TURN_ERROR,
                 session_id=self._session_id_str,
@@ -607,9 +589,7 @@ class VoiceAssistantService:
                 success=False,
                 message="text-to-speech failed",
             )
-            self._turns.complete_turn(
-                turn.turn_id, error=error, success=False, now=self._now
-            )
+            self._turns.complete_turn(turn.turn_id, error=error, success=False, now=self._now)
             return VoiceTurnResult(
                 turn_id=turn.turn_id,
                 outcome=VoiceTurnOutcome.TTS_FAILED,
@@ -718,9 +698,7 @@ class VoiceAssistantService:
                 )
             )
         except Exception as exc:
-            self._logger.warning(
-                "Voice STT raised %s", type(exc).__name__
-            )
+            self._logger.warning("Voice STT raised %s", type(exc).__name__)
             self._events.record(
                 VoiceEventType.TURN_ERROR,
                 session_id=self._session_id_str,
@@ -733,9 +711,7 @@ class VoiceAssistantService:
         try:
             return await self._detector.detect(text)
         except Exception as exc:
-            self._logger.warning(
-                "Voice language detection raised %s", type(exc).__name__
-            )
+            self._logger.warning("Voice language detection raised %s", type(exc).__name__)
             self._events.record(
                 VoiceEventType.TURN_ERROR,
                 session_id=self._session_id_str,

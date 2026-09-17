@@ -29,9 +29,7 @@ class UnknownCapabilityError(AgentRoutingError):
 
     def __init__(self, capability: str) -> None:
         self.capability = capability
-        super().__init__(
-            f"No agent registered with capability '{capability}'"
-        )
+        super().__init__(f"No agent registered with capability '{capability}'")
 
 
 class NoMatchingAgentError(AgentRoutingError):
@@ -39,9 +37,7 @@ class NoMatchingAgentError(AgentRoutingError):
 
     def __init__(self, required: frozenset[str]) -> None:
         self.required = required
-        super().__init__(
-            f"No agent matches capabilities {sorted(required)}"
-        )
+        super().__init__(f"No agent matches capabilities {sorted(required)}")
 
 
 class AgentSelection:
@@ -91,9 +87,7 @@ class AgentRouter:
 
     def register(self, agent: Agent) -> None:
         if agent.name in self._agents:
-            raise ValueError(
-                f"Agent '{agent.name}' is already registered"
-            )
+            raise ValueError(f"Agent '{agent.name}' is already registered")
         self._agents[agent.name] = agent
         logger.info("AgentRouter registered agent '%s'", agent.name)
 
@@ -112,10 +106,7 @@ class AgentRouter:
 
     def has_capability(self, capability: str) -> bool:
         """Return True when at least one agent declares ``capability``."""
-        return any(
-            capability in agent.capabilities
-            for agent in self._agents.values()
-        )
+        return any(capability in agent.capabilities for agent in self._agents.values())
 
     def select(self, required_capabilities: frozenset[str]) -> Agent:
         """Select an agent whose capabilities cover the required set.

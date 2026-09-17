@@ -91,9 +91,7 @@ def test_streaming_tts_splits_words_into_chunks() -> None:
     provider = FakeStreamingTTSProvider()
 
     async def scenario() -> list:
-        stream = await provider.synthesize_stream(
-            TextToSpeechRequest(text="hello there world")
-        )
+        stream = await provider.synthesize_stream(TextToSpeechRequest(text="hello there world"))
         chunks = []
         while True:
             chunk = await stream.next_chunk()

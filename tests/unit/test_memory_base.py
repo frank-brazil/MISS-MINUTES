@@ -18,13 +18,9 @@ class InMemoryMemory(Memory):
         self._store[record.memory_id] = record
         return record
 
-    async def retrieve(
-        self, query: str, *, limit: int = 10
-    ) -> MemoryQueryResult:
+    async def retrieve(self, query: str, *, limit: int = 10) -> MemoryQueryResult:
         results = [
-            record
-            for record in self._store.values()
-            if query.lower() in record.content.lower()
+            record for record in self._store.values() if query.lower() in record.content.lower()
         ]
         return MemoryQueryResult.ok(results[:limit])
 
@@ -39,9 +35,7 @@ class FailingMemory(Memory):
     async def store(self, record: MemoryRecord) -> MemoryRecord:
         raise RuntimeError("store failed")
 
-    async def retrieve(
-        self, query: str, *, limit: int = 10
-    ) -> MemoryQueryResult:
+    async def retrieve(self, query: str, *, limit: int = 10) -> MemoryQueryResult:
         return MemoryQueryResult.fail(error="retrieve failed")
 
     async def delete(self, memory_id: UUID) -> bool:
@@ -67,9 +61,7 @@ def test_missing_metadata_rejected() -> None:
             async def store(self, record: MemoryRecord) -> MemoryRecord:
                 return record
 
-            async def retrieve(
-                self, query: str, *, limit: int = 10
-            ) -> MemoryQueryResult:
+            async def retrieve(self, query: str, *, limit: int = 10) -> MemoryQueryResult:
                 return MemoryQueryResult.ok([])
 
             async def delete(self, memory_id: UUID) -> bool:

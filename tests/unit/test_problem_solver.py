@@ -178,9 +178,7 @@ def test_hypothesis_rejects_invalid_confidence() -> None:
 def test_hypothesis_supports_supporting_and_contradicting_evidence() -> None:
     supporting = evidence("supports the cause")
     contradicting = evidence("contradicts the cause")
-    hypo = hypothesis(
-        evidence_for=[supporting], evidence_against=[contradicting]
-    )
+    hypo = hypothesis(evidence_for=[supporting], evidence_against=[contradicting])
     assert hypo.evidence_for == [supporting]
     assert hypo.evidence_against == [contradicting]
     assert hypo.evidence_for[0].description == "supports the cause"
@@ -297,9 +295,7 @@ def test_problem_analysis_recommendation_none_allowed() -> None:
 
 def test_problem_analysis_recommended_solution_property() -> None:
     sol = solution()
-    result = analysis(
-        candidate_solutions=[sol], recommended_solution_id=sol.solution_id
-    )
+    result = analysis(candidate_solutions=[sol], recommended_solution_id=sol.solution_id)
     assert result.recommended_solution is sol
 
 
@@ -381,9 +377,7 @@ def test_fake_solver_returns_deterministic_analysis() -> None:
     first = asyncio.run(solver.solve(prob))
     second = asyncio.run(solver.solve(prob))
     assert first.analysis_id == second.analysis_id
-    assert [h.description for h in first.hypotheses] == [
-        h.description for h in second.hypotheses
-    ]
+    assert [h.description for h in first.hypotheses] == [h.description for h in second.hypotheses]
     assert [s.description for s in first.candidate_solutions] == [
         s.description for s in second.candidate_solutions
     ]
@@ -428,9 +422,7 @@ def test_fake_solver_generates_candidate_solutions() -> None:
 def test_fake_solver_recommends_a_candidate() -> None:
     solver = FakeProblemSolver()
     result = asyncio.run(solver.solve(problem()))
-    candidate_ids = {
-        sol.solution_id for sol in result.candidate_solutions
-    }
+    candidate_ids = {sol.solution_id for sol in result.candidate_solutions}
     assert result.recommended_solution_id in candidate_ids
     assert result.recommended_solution in result.candidate_solutions
 
@@ -488,9 +480,7 @@ def test_fake_solver_evidence_uses_observation_without_context() -> None:
 
 def test_fake_solver_evidence_uses_context_when_provided() -> None:
     solver = FakeProblemSolver()
-    result = asyncio.run(
-        solver.solve(problem(context={"tried": "clean reinstall"}))
-    )
+    result = asyncio.run(solver.solve(problem(context={"tried": "clean reinstall"})))
     secondary = result.hypotheses[1]
     assert secondary.evidence_for[0].kind is EvidenceKind.OBSERVATION
 

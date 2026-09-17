@@ -66,9 +66,7 @@ from app.voice.service import (
 logger = logging.getLogger(__name__)
 
 # Allowed file system roots for the default tool configuration
-_DEFAULT_ALLOWED_ROOTS: tuple[Path, ...] = (
-    Path.home(),
-)
+_DEFAULT_ALLOWED_ROOTS: tuple[Path, ...] = (Path.home(),)
 
 
 def _build_security_policy(config: MissMinutesConfig) -> SecurityPolicy:
@@ -130,9 +128,7 @@ class MissMinutesRuntime:
         self._distributed_coordinator: Any = None
 
         self._capabilities = CapabilityRegistry()
-        self._audit = RequestAuditTrail(
-            max_entries=config.security.audit_max_events
-        )
+        self._audit = RequestAuditTrail(max_entries=config.security.audit_max_events)
         self._ready = False
         self._request_count = 0
         self._shutdown_called = False
@@ -270,8 +266,10 @@ class MissMinutesRuntime:
                 timeout=timeout_seconds or self._config.ai.timeout_seconds,
             )
             self._audit.record(
-                request_id, "response_generated",
-                detail=f"success={result.success}", success=result.success,
+                request_id,
+                "response_generated",
+                detail=f"success={result.success}",
+                success=result.success,
             )
             return UnifiedResponse.ok(
                 request_id,
@@ -283,7 +281,10 @@ class MissMinutesRuntime:
             return UnifiedResponse.fail(request_id, error="Request timed out")
         except Exception as exc:
             self._audit.record(
-                request_id, "error", detail=str(exc)[:200], success=False,
+                request_id,
+                "error",
+                detail=str(exc)[:200],
+                success=False,
             )
             return UnifiedResponse.fail(request_id, error=str(exc)[:500])
 
@@ -295,7 +296,9 @@ class MissMinutesRuntime:
         policy = _build_security_policy(self._config)
         self._security = SecurityManager(
             policy=policy,
-            confirmation=ConfirmationManager() if self._config.security.confirmation_required else None,
+            confirmation=ConfirmationManager()
+            if self._config.security.confirmation_required
+            else None,
         )
         self._capabilities.register("security", True, self._config.security.policy_mode)
 
@@ -333,16 +336,12 @@ class MissMinutesRuntime:
         # Always register these agents
         self._orchestrator.register_agent(SystemAgent())
         self._orchestrator.register_agent(CodingAgent())
-        self._orchestrator.register_agent(
-            PredictionAgent(FakePredictor())
-        )
+        self._orchestrator.register_agent(PredictionAgent(FakePredictor()))
         self._orchestrator.register_agent(CriticAgent(FakeCritic()))
         self._orchestrator.register_agent(VerificationAgent(FakeVerifier()))
 
         # Conditional agents
-        self._orchestrator.register_agent(
-            ResearchAgent(self._research_provider)
-        )
+        self._orchestrator.register_agent(ResearchAgent(self._research_provider))
         if self._config.vision.enabled:
             self._orchestrator.register_agent(VisionAgent())
             self._capabilities.register("vision", True, self._config.vision.provider)
@@ -405,9 +404,11 @@ class MissMinutesRuntime:
         if detector is None:
             try:
                 from app.voice.local_detector import LocalLanguageDetector
+
                 detector = LocalLanguageDetector()
             except Exception:
                 from app.voice.fakes import FakeLanguageDetector
+
                 detector = FakeLanguageDetector()
 
         self._voice_service = VoiceConversationService(
@@ -430,9 +431,7 @@ class MissMinutesRuntime:
             self._avatar_controller = AvatarController(config=avatar_cfg)
 
             if self._voice_service is not None:
-                self._voice_avatar_adapter = VoiceAvatarAdapter(
-                    controller=self._avatar_controller
-                )
+                self._voice_avatar_adapter = VoiceAvatarAdapter(controller=self._avatar_controller)
             self._capabilities.register("avatar", True, self._config.avatar.theme)
         except Exception:
             self._logger.warning("Avatar initialization failed")
@@ -440,9 +439,7 @@ class MissMinutesRuntime:
 
     async def _initialize_capabilities(self) -> None:
         """Register remaining capability statuses."""
-        self._capabilities.register(
-            "distributed", self._config.distributed.enabled
-        )
+        self._capabilities.register("distributed", self._config.distributed.enabled)
         # ProblemSolvingEngine is available as an opt-in execution mode.
         # By default the runtime uses the AI tool-calling path via the
         # orchestrator. The engine is NOT wired to the orchestrator unless
@@ -476,7 +473,9 @@ class MissMinutesRuntime:
             if request.source == "voice" and request.audio is not None:
                 if self._voice_service is None:
                     self._audit.record(
-                        request.request_id, "voice_disabled", success=False,
+                        request.request_id,
+                        "voice_disabled",
+                        success=False,
                     )
                     return UnifiedResponse.fail(
                         request.request_id,
@@ -494,7 +493,9 @@ class MissMinutesRuntime:
                 )
         except asyncio.TimeoutError:
             self._audit.record(
-                request.request_id, "timeout", success=False,
+                request.request_id,
+                "timeout",
+                success=False,
             )
             return UnifiedResponse.fail(
                 request.request_id,
@@ -503,8 +504,10 @@ class MissMinutesRuntime:
             )
         except Exception as exc:
             self._audit.record(
-                request.request_id, "error",
-                detail=str(exc)[:200], success=False,
+                request.request_id,
+                "error",
+                detail=str(exc)[:200],
+                success=False,
             )
             return UnifiedResponse.fail(
                 request.request_id,
@@ -513,11 +516,14 @@ class MissMinutesRuntime:
             )
 
     async def _handle_text_request(
-        self, request: UnifiedRequest, timeout: float,
+        self,
+        request: UnifiedRequest,
+        timeout: float,
     ) -> UnifiedResponse:
         assert request.text is not None
         self._audit.record(
-            request.request_id, "planning_started",
+            request.request_id,
+            "planning_started",
             detail=f"text_len={len(request.text)}",
         )
 
@@ -525,7 +531,8 @@ class MissMinutesRuntime:
 
         task = Task(description=request.text)
         self._audit.record(
-            request.request_id, "task_created",
+            request.request_id,
+            "task_created",
             detail=f"task_id={task.task_id}",
         )
 
@@ -535,11 +542,14 @@ class MissMinutesRuntime:
         )
 
         self._audit.record(
-            request.request_id, "verification_completed",
-            detail=f"success={result.success}", success=result.success,
+            request.request_id,
+            "verification_completed",
+            detail=f"success={result.success}",
+            success=result.success,
         )
         self._audit.record(
-            request.request_id, "response_generated",
+            request.request_id,
+            "response_generated",
             success=result.success,
         )
 
@@ -558,13 +568,16 @@ class MissMinutesRuntime:
             )
 
     async def _handle_voice_request(
-        self, request: UnifiedRequest, timeout: float,
+        self,
+        request: UnifiedRequest,
+        timeout: float,
     ) -> UnifiedResponse:
         assert request.audio is not None
         assert self._voice_service is not None
 
         self._audit.record(
-            request.request_id, "voice_received",
+            request.request_id,
+            "voice_received",
             detail=f"audio_len={len(request.audio)}",
         )
 
@@ -585,7 +598,8 @@ class MissMinutesRuntime:
                 self._voice_avatar_adapter.controller.handle(AvatarSignal.ERROR)
 
         self._audit.record(
-            request.request_id, "voice_completed",
+            request.request_id,
+            "voice_completed",
             detail=f"success={voice_result.success}",
             success=voice_result.success,
         )
@@ -660,6 +674,7 @@ class MissMinutesRuntime:
 
             async def chat(self, messages, *, tools=None):
                 from app.core.ai import AIResponse
+
                 return AIResponse.ok(content="Headless response.", model_name="fake")
 
         return cls(

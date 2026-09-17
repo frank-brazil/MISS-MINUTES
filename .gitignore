@@ -7,3 +7,39 @@
 # Python caches
 __pycache__/
 *.pyc
+*.pyo
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Testing / linting
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Logs
+logs/*.log
+
+# Local databases
+data/*.db
+
+# Docker
+docker-compose.override.yml
+
+# Generated documentation artifacts
+docs/_build/

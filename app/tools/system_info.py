@@ -44,8 +44,6 @@ class SystemInfoTool(Tool):
         try:
             info = self._collect()
         except Exception as exc:
-            return ToolResult.fail(
-                error=f"Failed to collect system info: {type(exc).__name__}"
-            )
+            return ToolResult.fail(error=f"Failed to collect system info: {type(exc).__name__}")
         lines = [f"{key}: {value}" for key, value in info.items()]
         return ToolResult.ok(output="\n".join(lines))

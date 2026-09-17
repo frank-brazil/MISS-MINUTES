@@ -19,6 +19,7 @@ def _task(task_type: str = "analysis", capabilities=frozenset({"analysis"})) -> 
 
 def test_worker_executor_requires_name_and_description():
     with pytest.raises(TypeError):
+
         class Missing(WorkerExecutor):
             async def execute(self, task):  # pragma: no cover - never run
                 raise NotImplementedError

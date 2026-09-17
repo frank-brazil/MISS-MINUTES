@@ -24,9 +24,7 @@ class EchoAgent(Agent):
         return AgentResult.ok(output="done")
 
 
-_VERIFY_OBSERVATIONS = [
-    "A clearer understanding of causes, constraints, and context. observed"
-]
+_VERIFY_OBSERVATIONS = ["A clearer understanding of causes, constraints, and context. observed"]
 
 
 def make_success_engine() -> ProblemSolvingEngine:
@@ -45,9 +43,7 @@ def make_success_engine() -> ProblemSolvingEngine:
 
 def make_failing_engine() -> ProblemSolvingEngine:
     return ProblemSolvingEngine(
-        problem_solver=FakeProblemSolver(
-            raise_error=RuntimeError("solver unavailable")
-        ),
+        problem_solver=FakeProblemSolver(raise_error=RuntimeError("solver unavailable")),
         planner=ManualPlanner(["step one"]),
         agent_router=AgentRouter([EchoAgent()]),
         verifier=FakeVerifier(),
@@ -112,6 +108,4 @@ def test_without_engine_previous_paths_are_preserved() -> None:
     task = Task(description="placeholder still works")
     result = _run(orch.execute(task))
     assert result.success is True
-    assert result.output == (
-        f"Task '{task.description}' orchestrated successfully"
-    )
+    assert result.output == (f"Task '{task.description}' orchestrated successfully")

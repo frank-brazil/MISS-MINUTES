@@ -32,9 +32,7 @@ def _master_client(*, token=None, max_retries=2):
 def _worker_client(*, token=None):
     config = DistributedConfig(auth_token=token)
     service = WorkerService(
-        worker_info=WorkerInfo(
-            worker_name="api-worker", capabilities=frozenset({"analysis"})
-        ),
+        worker_info=WorkerInfo(worker_name="api-worker", capabilities=frozenset({"analysis"})),
         executor=FakeWorkerExecutor(output="api-output"),
         config=config,
     )
@@ -50,9 +48,7 @@ def _worker_client(*, token=None):
 def test_register_worker_and_list():
     client, coordinator, _ = _master_client()
     info = WorkerInfo(worker_name="w1", capabilities=frozenset({"analysis"}))
-    response = client.post(
-        "/distributed/workers/register", json=info.model_dump(mode="json")
-    )
+    response = client.post("/distributed/workers/register", json=info.model_dump(mode="json"))
     assert response.status_code == 201
     assert coordinator.registry.worker_count() == 1
 
@@ -72,9 +68,7 @@ def test_register_duplicate_returns_conflict():
 def test_heartbeat_unknown_worker_returns_404():
     client, _, _ = _master_client()
     heartbeat = WorkerHeartbeat(worker_id=WorkerInfo(worker_name="x").worker_id)
-    response = client.post(
-        "/distributed/workers/heartbeat", json=heartbeat.model_dump(mode="json")
-    )
+    response = client.post("/distributed/workers/heartbeat", json=heartbeat.model_dump(mode="json"))
     assert response.status_code == 404
 
 
@@ -104,9 +98,7 @@ def test_submit_and_list_and_cancel_task():
     assert cancelled.status_code == 204
     assert coordinator.status_for(task.distributed_task_id).value == "cancelled"
 
-    missing = client.delete(
-        f"/distributed/tasks/{WorkerInfo(worker_name='x').worker_id}"
-    )
+    missing = client.delete(f"/distributed/tasks/{WorkerInfo(worker_name='x').worker_id}")
     assert missing.status_code == 404
 
 
@@ -168,8 +160,10 @@ def test_worker_rejects_unapproved_task_type():
 def test_worker_auth_enforced_when_token_set():
     client, _ = _worker_client(token="shared")
     task = DistributedTask(task_type="analysis")
-    payload = {"assignment_id": str(WorkerInfo(worker_name="x").worker_id),
-               "task": task.model_dump(mode="json")}
+    payload = {
+        "assignment_id": str(WorkerInfo(worker_name="x").worker_id),
+        "task": task.model_dump(mode="json"),
+    }
     assert client.post("/distributed/execute", json=payload).status_code == 401
     ok = client.post(
         "/distributed/execute",

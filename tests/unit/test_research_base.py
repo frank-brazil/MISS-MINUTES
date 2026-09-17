@@ -145,9 +145,7 @@ def test_search_result_rejects_non_positive_rank() -> None:
 
 
 def test_research_response_ok_factory() -> None:
-    response = ResearchResponse.ok(
-        query="weather", results=[SearchResult(source=source())]
-    )
+    response = ResearchResponse.ok(query="weather", results=[SearchResult(source=source())])
     assert response.success is True
     assert response.query == "weather"
     assert response.result_count == 1
@@ -224,17 +222,13 @@ def test_research_provider_requires_metadata() -> None:
     with pytest.raises(TypeError, match="name"):
 
         class MissingMetadata(ResearchProvider):
-            async def research(
-                self, request: SearchRequest
-            ) -> ResearchResponse:
+            async def research(self, request: SearchRequest) -> ResearchResponse:
                 return ResearchResponse.ok(query="q", results=[])
 
 
 def test_concrete_research_provider_satisfies_interface() -> None:
     provider = SampleResearchProvider(
-        response=ResearchResponse.ok(
-            query="weather", results=[SearchResult(source=source())]
-        )
+        response=ResearchResponse.ok(query="weather", results=[SearchResult(source=source())])
     )
     assert isinstance(provider, ResearchProvider)
     response = asyncio.run(provider.research(SearchRequest(query="weather")))

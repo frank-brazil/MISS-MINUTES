@@ -1,8 +1,8 @@
 # MISSMINUTES Evaluation Report
 
-**Run ID:** `b5ae5006-230a-41f5-b4d0-a78cc6e5e7ab`
-**Started:** 2026-09-16 23:22:38.082353+00:00
-**Completed:** 2026-09-16 23:22:38.176586+00:00
+**Run ID:** `9b95ecbb-4eda-415d-a0a6-2b61ce6d98f4`
+**Started:** 2026-09-17 05:04:39.664181+00:00
+**Completed:** 2026-09-17 05:04:39.770663+00:00
 **Mode:** deterministic
 **Python:** 3.13.7
 **Platform:** Windows-11-10.0.26200-SP0
@@ -144,7 +144,7 @@
 
 | Metric | Value | Status | Evidence | Limitations |
 |---|---|---|---|---|
-| distributed_dispatch_success | 1.0000 | pass | assignment_id=8215105c-5b09-41b3-9357-98f9dbe06ccd | FakeWorkerTransport; no real distributed workers. |
+| distributed_dispatch_success | 1.0000 | pass | assignment_id=884a57a9-71bf-4b33-8872-02cbd1e3e3d6 | FakeWorkerTransport; no real distributed workers. |
 | distributed_duplicate_prevention | 1.0000 | pass | Duplicate task IDs rejected by queue | Structural guarantee in DistributedTaskQueue. |
 
 ### Security Reliability

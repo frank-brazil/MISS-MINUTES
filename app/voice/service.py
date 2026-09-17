@@ -195,8 +195,7 @@ class VoiceConversationService:
     async def handle(self, request: VoiceConversationRequest) -> VoiceConversationResult:
         request_id = self._resolve_request_id(request.request_id)
         self._logger.info(
-            "Voice conversation starting: request_id=%s stage=%s "
-            "audio_format=%s audio_bytes=%d",
+            "Voice conversation starting: request_id=%s stage=%s audio_format=%s audio_bytes=%d",
             request_id,
             VoicePipelineStage.INPUT.value,
             request.format,
@@ -302,18 +301,14 @@ class VoiceConversationService:
             )
         except Exception as exc:
             self._logger.warning(
-                "Voice conversation stage exception: request_id=%s stage=%s "
-                "error=%s",
+                "Voice conversation stage exception: request_id=%s stage=%s error=%s",
                 request_id,
                 VoicePipelineStage.STT.value,
                 type(exc).__name__,
             )
-            return SpeechToTextResult.fail(
-                "speech-to-text provider raised an error"
-            )
+            return SpeechToTextResult.fail("speech-to-text provider raised an error")
         self._logger.info(
-            "Voice conversation stage: request_id=%s stage=%s success=%s "
-            "transcription_chars=%d",
+            "Voice conversation stage: request_id=%s stage=%s success=%s transcription_chars=%d",
             request_id,
             VoicePipelineStage.STT.value,
             result.success,
@@ -321,9 +316,7 @@ class VoiceConversationService:
         )
         return result
 
-    async def _detect(
-        self, text: str, request_id: str
-    ) -> LanguageDetectionResult | None:
+    async def _detect(self, text: str, request_id: str) -> LanguageDetectionResult | None:
         self._logger.info(
             "Voice conversation stage started: request_id=%s stage=%s",
             request_id,
@@ -333,16 +326,14 @@ class VoiceConversationService:
             detection = await self._detector.detect(text)
         except Exception as exc:
             self._logger.warning(
-                "Voice conversation stage exception: request_id=%s stage=%s "
-                "error=%s",
+                "Voice conversation stage exception: request_id=%s stage=%s error=%s",
                 request_id,
                 VoicePipelineStage.LANGUAGE.value,
                 type(exc).__name__,
             )
             return None
         self._logger.info(
-            "Voice conversation stage: request_id=%s stage=%s success=%s "
-            "label=%s",
+            "Voice conversation stage: request_id=%s stage=%s success=%s label=%s",
             request_id,
             VoicePipelineStage.LANGUAGE.value,
             True,
@@ -350,9 +341,7 @@ class VoiceConversationService:
         )
         return detection
 
-    async def _chat(
-        self, text: str, style: ResponseStyle, request_id: str
-    ) -> AIResponse:
+    async def _chat(self, text: str, style: ResponseStyle, request_id: str) -> AIResponse:
         self._logger.info(
             "Voice conversation stage started: request_id=%s stage=%s",
             request_id,
@@ -363,8 +352,7 @@ class VoiceConversationService:
             response = await self._ai_model.chat(messages)
         except Exception as exc:
             self._logger.warning(
-                "Voice conversation stage exception: request_id=%s stage=%s "
-                "error=%s",
+                "Voice conversation stage exception: request_id=%s stage=%s error=%s",
                 request_id,
                 VoicePipelineStage.AI.value,
                 type(exc).__name__,
@@ -373,12 +361,9 @@ class VoiceConversationService:
         content = (response.content or "").strip()
         if response.success and content:
             self._history.append(AIMessage(role="user", content=text))
-            self._history.append(
-                AIMessage(role="assistant", content=response.content)
-            )
+            self._history.append(AIMessage(role="assistant", content=response.content))
         self._logger.info(
-            "Voice conversation stage: request_id=%s stage=%s success=%s "
-            "label=%s",
+            "Voice conversation stage: request_id=%s stage=%s success=%s label=%s",
             request_id,
             VoicePipelineStage.AI.value,
             response.success,
@@ -402,16 +387,14 @@ class VoiceConversationService:
             result = await self._tts.synthesize(tts_request)
         except Exception as exc:
             self._logger.warning(
-                "Voice conversation stage exception: request_id=%s stage=%s "
-                "error=%s",
+                "Voice conversation stage exception: request_id=%s stage=%s error=%s",
                 request_id,
                 VoicePipelineStage.TTS.value,
                 type(exc).__name__,
             )
             return TextToSpeechResult.fail("text-to-speech provider raised an error")
         self._logger.info(
-            "Voice conversation stage: request_id=%s stage=%s success=%s "
-            "speech_chars=%d",
+            "Voice conversation stage: request_id=%s stage=%s success=%s speech_chars=%d",
             request_id,
             VoicePipelineStage.TTS.value,
             result.success,
@@ -422,9 +405,7 @@ class VoiceConversationService:
     def _build_ai_request(self, text: str, style: ResponseStyle) -> list[AIMessage]:
         messages: list[AIMessage] = []
         if self._system_prompt:
-            messages.append(
-                AIMessage(role="system", content=self._system_prompt)
-            )
+            messages.append(AIMessage(role="system", content=self._system_prompt))
         messages.append(
             AIMessage(
                 role="system",
@@ -447,8 +428,7 @@ class VoiceConversationService:
         ai_response: str | None = None,
     ) -> VoiceConversationResult:
         self._logger.warning(
-            "Voice conversation controlled failure: request_id=%s stage=%s "
-            "success=%s error=%s",
+            "Voice conversation controlled failure: request_id=%s stage=%s success=%s error=%s",
             request_id,
             stage.value,
             False,

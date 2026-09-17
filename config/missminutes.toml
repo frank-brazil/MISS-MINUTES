@@ -1,6 +1,12 @@
 # MISSMINUTES default configuration
 # Override with environment variables or provide a custom TOML file.
 
+[app]
+host = "127.0.0.1"
+port = 8000
+log_level = "INFO"
+environment = "development"
+
 [ai]
 provider = "openai"
 model = "gpt-4o-mini"

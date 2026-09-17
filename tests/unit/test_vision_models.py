@@ -156,9 +156,7 @@ def test_text_region_confidence_range() -> None:
 
 
 def test_vision_result_ok_factory() -> None:
-    result = VisionResult.ok(
-        summary="ok", confidence=0.8, provider="fake", reference="ref"
-    )
+    result = VisionResult.ok(summary="ok", confidence=0.8, provider="fake", reference="ref")
     assert result.success is True
     assert result.summary == "ok"
     assert result.detected_elements == []

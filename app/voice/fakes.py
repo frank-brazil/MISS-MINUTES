@@ -57,9 +57,7 @@ class FakeSpeechToText(SpeechToText):
     async def transcribe(self, speech: SpeechInput) -> SpeechToTextResult:
         self._requests.append(speech)
         if self._raise_error is not None:
-            self._logger.error(
-                "Fake speech-to-text raising: %s", type(self._raise_error).__name__
-            )
+            self._logger.error("Fake speech-to-text raising: %s", type(self._raise_error).__name__)
             raise self._raise_error
         if self._fail:
             self._logger.warning("Fake speech-to-text configured to fail")
@@ -69,14 +67,11 @@ class FakeSpeechToText(SpeechToText):
             key = speech.audio.decode("utf-8")
         except UnicodeDecodeError:
             self._logger.warning(
-                "Speech-to-text input of %d bytes is not a UTF-8 test fixture "
-                "(%s)",
+                "Speech-to-text input of %d bytes is not a UTF-8 test fixture (%s)",
                 len(speech.audio),
                 speech.format,
             )
-            return SpeechToTextResult.fail(
-                error="audio is not a supported test fixture"
-            )
+            return SpeechToTextResult.fail(error="audio is not a supported test fixture")
 
         text = self._fixtures.get(key)
         if text is None:
@@ -85,14 +80,11 @@ class FakeSpeechToText(SpeechToText):
                 len(speech.audio),
                 speech.format,
             )
-            return SpeechToTextResult.fail(
-                error="no transcription fixture for the provided audio"
-            )
+            return SpeechToTextResult.fail(error="no transcription fixture for the provided audio")
 
         language = speech.language or self._default_language
         self._logger.info(
-            "Transcribed %d bytes of speech (%s): success=%s language=%s "
-            "confidence=%s",
+            "Transcribed %d bytes of speech (%s): success=%s language=%s confidence=%s",
             len(speech.audio),
             speech.format,
             True,
@@ -153,9 +145,7 @@ class FakeTextToSpeech(TextToSpeech):
     async def synthesize(self, request: TextToSpeechRequest) -> TextToSpeechResult:
         self._requests.append(request)
         if self._raise_error is not None:
-            self._logger.error(
-                "Fake text-to-speech raising: %s", type(self._raise_error).__name__
-            )
+            self._logger.error("Fake text-to-speech raising: %s", type(self._raise_error).__name__)
             raise self._raise_error
         if self._fail:
             self._logger.warning("Fake text-to-speech configured to fail")
@@ -169,8 +159,7 @@ class FakeTextToSpeech(TextToSpeech):
         )
         language = request.language or self._language
         self._logger.info(
-            "Synthesized %d characters of speech: success=%s language=%s "
-            "voice=%s duration=%s",
+            "Synthesized %d characters of speech: success=%s language=%s voice=%s duration=%s",
             len(request.text),
             True,
             language,
@@ -263,9 +252,7 @@ class FakeAIModel(AIModel):
     ) -> AIResponse:
         self._requests.append(list(messages))
         if self._raise_error is not None:
-            self._logger.error(
-                "Fake AI model raising: %s", type(self._raise_error).__name__
-            )
+            self._logger.error("Fake AI model raising: %s", type(self._raise_error).__name__)
             raise self._raise_error
         if self._respond_fail:
             self._logger.warning("Fake AI model configured to fail")
@@ -276,7 +263,5 @@ class FakeAIModel(AIModel):
                 raise ValueError("fake AI replies must not be blank")
         else:
             content = self._default_reply
-        self._logger.info(
-            "Fake AI model replied: characters=%d model=%s", len(content), self.name
-        )
+        self._logger.info("Fake AI model replied: characters=%d model=%s", len(content), self.name)
         return AIResponse.ok(content=content, model_name=self.name)

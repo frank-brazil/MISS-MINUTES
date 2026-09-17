@@ -95,7 +95,11 @@ class ConversationTurnManager:
         if continuation_window_seconds <= 0:
             raise ValueError("continuation_window_seconds must be positive")
         self._window_seconds = continuation_window_seconds
-        prefixes = [p.strip().lower() for p in (continuation_prefixes or _DEFAULT_CONTINUATION_PREFIXES) if p.strip()]
+        prefixes = [
+            p.strip().lower()
+            for p in (continuation_prefixes or _DEFAULT_CONTINUATION_PREFIXES)
+            if p.strip()
+        ]
         self._prefixes = tuple(prefixes)
         self._now_fn = now_fn or time.time
         self._next_turn_id = 1

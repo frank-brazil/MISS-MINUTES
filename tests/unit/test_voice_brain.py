@@ -74,11 +74,7 @@ def test_conversational_brain_replies_and_keeps_history() -> None:
 def test_conversational_brain_includes_style_guidance() -> None:
     model = FakeAIModel(default_reply="आप कैसे हैं?")
     brain = ConversationalVoiceBrain(model)
-    _run(
-        brain.respond(
-            _request("hindi namaste", style=ResponseStyle(label=LanguageLabel.HINDI))
-        )
-    )
+    _run(brain.respond(_request("hindi namaste", style=ResponseStyle(label=LanguageLabel.HINDI))))
     messages = model.chat_requests[0]
     joint = " ".join(f"{message.role}:{message.content}" for message in messages)
     assert "Response style" in joint
