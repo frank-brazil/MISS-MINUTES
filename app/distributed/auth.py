@@ -11,6 +11,7 @@ import secrets
 from fastapi import HTTPException, Request
 
 AUTH_HEADER = "X-Auth-Token"
+# ADD API HERE: MISSMINUTES_AUTH_TOKEN (internal shared secret for master/worker auth)
 
 
 def build_auth_dependency(config) -> callable:

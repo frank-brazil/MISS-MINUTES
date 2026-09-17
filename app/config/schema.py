@@ -62,6 +62,7 @@ class DistributedConfigSchema(BaseModel):
     enabled: bool = False
     master_host: str = "127.0.0.1"
     master_port: int = 8100
+    # ADD API HERE: MISSMINUTES_AUTH_TOKEN (internal shared secret for master/worker auth)
     auth_token: str = ""
     max_retries: int = Field(default=2, ge=0)
     max_concurrent_dispatch: int = Field(default=4, gt=0)

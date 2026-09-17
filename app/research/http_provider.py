@@ -25,6 +25,7 @@ from app.research.base import (
 )
 
 SEARCH_URL_ENV = "MISSMINUTES_SEARCH_URL"
+# ADD API HERE: MISSMINUTES_SEARCH_API_KEY (optional Bearer token for search endpoint)
 SEARCH_API_KEY_ENV = "MISSMINUTES_SEARCH_API_KEY"
 DEFAULT_TIMEOUT_SECONDS = 10.0
 

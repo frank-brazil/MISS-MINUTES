@@ -36,7 +36,10 @@ class AudioData(BaseModel):
 
 
 class SpeechInput(BaseModel):
-    """Speech to transcribe."""
+    """Speech to transcribe.
+
+    # ADD HARDWARE HERE: MICROPHONE (audio input device)
+    """
 
     audio: bytes = Field(min_length=1)
     format: str = "wav"
@@ -97,7 +100,10 @@ class SpeechToTextResult(BaseModel):
 
 
 class TextToSpeechRequest(BaseModel):
-    """Text to synthesize into speech."""
+    """Text to synthesize into speech.
+
+    # ADD HARDWARE HERE: SPEAKER (audio output device)
+    """
 
     text: str
     language: str | None = None

@@ -27,6 +27,7 @@ class VisionProvider(ABC):
     name: ClassVar[str] = "vision"
     description: ClassVar[str] = "Analyses images and produces structured visual understanding."
 
+    # ADD API HERE: REAL VISION PROVIDER / MODEL CREDENTIAL (implement this ABC)
     @abstractmethod
     async def analyze(self, request: VisionRequest) -> VisionResult:
         raise NotImplementedError

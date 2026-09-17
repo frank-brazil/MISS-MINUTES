@@ -48,6 +48,7 @@ class PlaywrightBrowserProvider(BrowserProvider):
         "'pip install playwright' and run 'playwright install chromium'."
     )
 
+    # LOCAL SERVICE — NO API KEY (requires local Playwright + browser install)
     def __init__(
         self,
         *,
