@@ -33,5 +33,32 @@
   "markings_color": "#2a1a0f",
   "center_pivot_size": 7.0,
   "center_pivot_color": "#2a1a0f",
-  "default_scale": 1.0
+  "default_scale": 1.0,
+  "sprite_sheet": {
+    "image_path": "avatar.png",
+    "frame_width": 50,
+    "frame_height": 303,
+    "columns": 6,
+    "rows": 1,
+    "animations": {
+      "idle": [0],
+      "talk": [1, 2],
+      "walk": [3, 4, 5]
+    },
+    "fps": 8
+  },
+  "expression_overlays": {
+    "expressions": {
+      "neutral": "neutral.png",
+      "happy": "happy.png",
+      "sad": "sad.png",
+      "surprised": "surprise.png",
+      "thinking": "thinking&confuse.png",
+      "confused": "thinking&confuse.png",
+      "concerned": "sad.png",
+      "angry": "angry.png"
+    },
+    "overlay_scale": 0.35,
+    "overlay_y_offset": -20.0
+  }
 }

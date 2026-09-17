@@ -55,8 +55,11 @@ from app.avatar.renderer import (
     RenderFrame,
     RenderPrimitive,
 )
+from app.avatar.sprite_config import ExpressionOverlayConfig, SpriteSheetConfig
+from app.avatar.sprite_renderer import CachedFrame, CachedOverlay, SpriteSheetRenderer
 from app.avatar.state_machine import AvatarStateMachine, AvatarTransitionError
 from app.avatar.timeline import AnimationTimeline, Easing, TimelineKeyframe, ease
+from app.avatar.tkinter_sprite_renderer import TkinterSpriteSheetRenderer
 from app.avatar.tts_adapter import TTSLipSyncAdapter
 from app.avatar.voice_adapter import (
     SESSION_STATE_MAP,
@@ -64,6 +67,7 @@ from app.avatar.voice_adapter import (
     VoiceAvatarAdapter,
 )
 from app.avatar.walking import WalkConfig, WalkingController, WalkingFrame, WalkState
+from app.avatar.web_sprite_renderer import WebSpriteSheetRenderer
 from app.avatar.window import AvatarWindow, AvatarWindowConfig, FakeAvatarWindow
 
 __all__ = [
@@ -91,11 +95,14 @@ __all__ = [
     "AvatarTransitionError",
     "AvatarWindow",
     "AvatarWindowConfig",
+    "CachedFrame",
+    "CachedOverlay",
     "ClockFace",
     "ClockHandState",
     "Easing",
     "ExpressionController",
     "ExpressionSet",
+    "ExpressionOverlayConfig",
     "EyeConfig",
     "EyeController",
     "EyeState",
@@ -124,6 +131,9 @@ __all__ = [
     "SIGNAL_MAP",
     "SESSION_STATE_MAP",
     "SpeechUnit",
+    "SpriteSheetConfig",
+    "SpriteSheetRenderer",
+    "TkinterSpriteSheetRenderer",
     "TTSLipSyncAdapter",
     "TimingAccuracy",
     "TimelineKeyframe",
@@ -135,6 +145,7 @@ __all__ = [
     "WalkState",
     "WalkingController",
     "WalkingFrame",
+    "WebSpriteSheetRenderer",
     "ease",
     "load_character_config",
     "load_expression_set",
