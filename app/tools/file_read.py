@@ -57,9 +57,7 @@ class FileReadTool(Tool):
             return ToolResult.fail(error=f"Path not allowed: {exc}")
 
         if not resolved.exists():
-            return ToolResult.fail(
-                error=f"File does not exist: {resolved}"
-            )
+            return ToolResult.fail(error=f"File does not exist: {resolved}")
         if not resolved.is_file():
             return ToolResult.fail(error=f"Not a regular file: {resolved}")
 
@@ -68,23 +66,16 @@ class FileReadTool(Tool):
         try:
             data = resolved.read_bytes()
         except OSError as exc:
-            return ToolResult.fail(
-                error=f"Failed to read file: {type(exc).__name__}"
-            )
+            return ToolResult.fail(error=f"Failed to read file: {type(exc).__name__}")
 
         if len(data) > limit:
             return ToolResult.fail(
-                error=(
-                    f"File exceeds maximum readable size "
-                    f"({len(data)} bytes > {limit} bytes)"
-                )
+                error=(f"File exceeds maximum readable size ({len(data)} bytes > {limit} bytes)")
             )
 
         try:
             text = data.decode("utf-8")
         except UnicodeDecodeError:
-            return ToolResult.fail(
-                error="File is not valid UTF-8 text"
-            )
+            return ToolResult.fail(error="File is not valid UTF-8 text")
 
         return ToolResult.ok(output=text)

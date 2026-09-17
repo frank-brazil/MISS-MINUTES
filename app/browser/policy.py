@@ -52,15 +52,11 @@ class UrlPolicy:
         deny_domains: tuple[str, ...] = (),
         allow_localhost: bool = True,
     ) -> None:
-        self._schemes = frozenset(
-            scheme.lower() for scheme in allowed_schemes
-        ) or frozenset({"http", "https"})
-        self._allow = frozenset(
-            domain.rstrip(".").lower() for domain in allow_domains
+        self._schemes = frozenset(scheme.lower() for scheme in allowed_schemes) or frozenset(
+            {"http", "https"}
         )
-        self._deny = frozenset(
-            domain.rstrip(".").lower() for domain in deny_domains
-        )
+        self._allow = frozenset(domain.rstrip(".").lower() for domain in allow_domains)
+        self._deny = frozenset(domain.rstrip(".").lower() for domain in deny_domains)
         self._allow_localhost = allow_localhost
 
     @property
@@ -99,23 +95,17 @@ class UrlPolicy:
 
         scheme = parts.scheme.lower()
         if scheme not in self._schemes:
-            raise UrlValidationError(
-                f"URL scheme '{scheme}' is not allowed (http/https only)"
-            )
+            raise UrlValidationError(f"URL scheme '{scheme}' is not allowed (http/https only)")
 
         if parts.username or parts.password:
-            raise UrlValidationError(
-                "URLs with embedded credentials are not allowed"
-            )
+            raise UrlValidationError("URLs with embedded credentials are not allowed")
 
         host = (parts.hostname or "").rstrip(".").lower()
         if not host:
             raise UrlValidationError("URL must include a host")
 
         if not self._host_allowed(host):
-            raise UrlValidationError(
-                f"domain '{host}' is not allowed by policy"
-            )
+            raise UrlValidationError(f"domain '{host}' is not allowed by policy")
 
         netloc = parts.netloc.lower()
         return urlunsplit((scheme, netloc, parts.path or "/", parts.query, parts.fragment))

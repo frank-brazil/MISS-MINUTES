@@ -33,7 +33,9 @@ def test_viseme_state_validation():
     with pytest.raises(ValidationError):
         VisemeState(symbol="a", openness=1.5, accuracy=TimingAccuracy.APPROXIMATE, timestamp=0.0)
     with pytest.raises(ValidationError):
-        VisemeState(symbol="a", openness=0.5, accuracy=TimingAccuracy.APPROXIMATE, timestamp=float("nan"))
+        VisemeState(
+            symbol="a", openness=0.5, accuracy=TimingAccuracy.APPROXIMATE, timestamp=float("nan")
+        )
 
 
 def test_approximate_provider_empty():

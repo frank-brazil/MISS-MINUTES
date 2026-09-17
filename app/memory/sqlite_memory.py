@@ -60,8 +60,7 @@ class SQLiteMemory(Memory):
         raw = os.fspath(db_path)
         if raw == ":memory:":
             raise ValueError(
-                "SQLiteMemory requires a file-based database path; "
-                "':memory:' is not supported"
+                "SQLiteMemory requires a file-based database path; ':memory:' is not supported"
             )
         path = Path(raw).expanduser()
         parent = path.parent
@@ -95,23 +94,15 @@ class SQLiteMemory(Memory):
         except MemoryBackendError:
             raise
         except Exception as exc:
-            self._logger.warning(
-                "Memory store failed: %s", type(exc).__name__
-            )
+            self._logger.warning("Memory store failed: %s", type(exc).__name__)
             raise MemoryBackendError("memory store failed") from exc
 
-    async def retrieve(
-        self, query: str, *, limit: int = 10
-    ) -> MemoryQueryResult:
+    async def retrieve(self, query: str, *, limit: int = 10) -> MemoryQueryResult:
         effective_limit = max(0, limit)
         try:
-            return await asyncio.to_thread(
-                self._retrieve_sync, query, effective_limit
-            )
+            return await asyncio.to_thread(self._retrieve_sync, query, effective_limit)
         except Exception as exc:
-            self._logger.warning(
-                "Memory retrieval failed: %s", type(exc).__name__
-            )
+            self._logger.warning("Memory retrieval failed: %s", type(exc).__name__)
             return MemoryQueryResult.fail(error="memory retrieval failed")
 
     async def delete(self, memory_id: UUID) -> bool:
@@ -120,18 +111,14 @@ class SQLiteMemory(Memory):
         except MemoryBackendError:
             raise
         except Exception as exc:
-            self._logger.warning(
-                "Memory delete failed: %s", type(exc).__name__
-            )
+            self._logger.warning("Memory delete failed: %s", type(exc).__name__)
             raise MemoryBackendError("memory delete failed") from exc
 
     def _store_sync(self, record: MemoryRecord) -> MemoryRecord:
         try:
             metadata = json.dumps(record.metadata)
         except TypeError as exc:
-            raise MemoryBackendError(
-                "memory metadata is not JSON serializable"
-            ) from exc
+            raise MemoryBackendError("memory metadata is not JSON serializable") from exc
         created_at = _to_utc(record.created_at).isoformat()
         updated_at = _to_utc(record.updated_at).isoformat()
         try:
@@ -150,9 +137,7 @@ class SQLiteMemory(Memory):
                 )
                 connection.commit()
         except sqlite3.Error as exc:
-            self._logger.warning(
-                "Memory store failed: %s", type(exc).__name__
-            )
+            self._logger.warning("Memory store failed: %s", type(exc).__name__)
             raise MemoryBackendError("memory store failed") from exc
         return record
 
@@ -168,9 +153,7 @@ class SQLiteMemory(Memory):
                     (query, limit),
                 ).fetchall()
         except sqlite3.Error as exc:
-            self._logger.warning(
-                "Memory retrieval failed: %s", type(exc).__name__
-            )
+            self._logger.warning("Memory retrieval failed: %s", type(exc).__name__)
             return MemoryQueryResult.fail(error="memory retrieval failed")
         records = [self._row_to_record(row) for row in rows]
         return MemoryQueryResult.ok(records)
@@ -184,9 +167,7 @@ class SQLiteMemory(Memory):
                 )
                 connection.commit()
         except sqlite3.Error as exc:
-            self._logger.warning(
-                "Memory delete failed: %s", type(exc).__name__
-            )
+            self._logger.warning("Memory delete failed: %s", type(exc).__name__)
             raise MemoryBackendError("memory delete failed") from exc
         return cursor.rowcount > 0
 

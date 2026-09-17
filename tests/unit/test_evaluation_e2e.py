@@ -69,7 +69,11 @@ class TestEndToEndEvaluation:
         run = run_all_evaluation_sync()
         not_measured = [r for r in run.results if r.status == ResultClassification.NOT_MEASURED]
         for r in not_measured:
-            assert "fixture" in (r.limitations or "").lower() or "not real" in (r.limitations or "").lower() or "no" in (r.limitations or "").lower()
+            assert (
+                "fixture" in (r.limitations or "").lower()
+                or "not real" in (r.limitations or "").lower()
+                or "no" in (r.limitations or "").lower()
+            )
 
     def test_deterministic_mode(self):
         run = run_all_evaluation_sync()
@@ -79,7 +83,13 @@ class TestEndToEndEvaluation:
     def test_summary_consistent(self):
         run = run_all_evaluation_sync()
         s = run.summary
-        total = s.pass_count + s.fail_count + s.inconclusive_count + s.not_measured_count + s.not_applicable_count
+        total = (
+            s.pass_count
+            + s.fail_count
+            + s.inconclusive_count
+            + s.not_measured_count
+            + s.not_applicable_count
+        )
         assert total == s.total_metrics
 
     def test_reliability_all_pass(self):
@@ -145,4 +155,8 @@ class TestEndToEndEvaluation:
         avatar_results = [r for r in run.results if r.scenario == "Avatar Synchronization"]
         assert len(avatar_results) > 0
         for r in avatar_results:
-            assert r.status in (ResultClassification.PASS, ResultClassification.FAIL, ResultClassification.NOT_MEASURED)
+            assert r.status in (
+                ResultClassification.PASS,
+                ResultClassification.FAIL,
+                ResultClassification.NOT_MEASURED,
+            )

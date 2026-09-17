@@ -53,9 +53,7 @@ FIXTURES = {
 
 def test_research_pipeline_returns_structured_evidence() -> None:
     provider = FakeResearchProvider(fixtures=FIXTURES)
-    response = asyncio.run(
-        provider.research(SearchRequest(query="current AI news", max_results=2))
-    )
+    response = asyncio.run(provider.research(SearchRequest(query="current AI news", max_results=2)))
     assert response.success is True
     assert response.query == "current AI news"
     assert response.error is None
@@ -70,9 +68,7 @@ def test_research_pipeline_returns_structured_evidence() -> None:
 
 def test_research_pipeline_preserves_citation_metadata() -> None:
     provider = FakeResearchProvider(fixtures=FIXTURES)
-    response = asyncio.run(
-        provider.research(SearchRequest(query="latest research papers"))
-    )
+    response = asyncio.run(provider.research(SearchRequest(query="latest research papers")))
     result = response.results[0]
     assert result.source.reference == "doi:10.0000/example001"
     assert result.source.snippet is not None
@@ -82,9 +78,7 @@ def test_research_pipeline_preserves_citation_metadata() -> None:
 
 def test_research_pipeline_no_results_is_successful() -> None:
     provider = FakeResearchProvider(fixtures=FIXTURES)
-    response = asyncio.run(
-        provider.research(SearchRequest(query="nothing in the index"))
-    )
+    response = asyncio.run(provider.research(SearchRequest(query="nothing in the index")))
     assert response.success is True
     assert response.result_count == 0
     assert response.results == []
@@ -93,9 +87,7 @@ def test_research_pipeline_no_results_is_successful() -> None:
 
 def test_research_pipeline_controlled_provider_failure() -> None:
     provider = FakeResearchProvider(fixtures=FIXTURES, fail=True)
-    response = asyncio.run(
-        provider.research(SearchRequest(query="current AI news"))
-    )
+    response = asyncio.run(provider.research(SearchRequest(query="current AI news")))
     assert response.success is False
     assert response.error == "simulated research failure"
     assert response.result_count == 0
@@ -113,9 +105,7 @@ def test_research_providers_are_interchangeable() -> None:
         name = "echo-research"
         description = "Returns a single fixed evidence source."
 
-        async def research(
-            self, request: SearchRequest
-        ) -> ResearchResponse:
+        async def research(self, request: SearchRequest) -> ResearchResponse:
             return ResearchResponse.ok(
                 query=request.query,
                 results=[
@@ -136,9 +126,7 @@ def test_research_providers_are_interchangeable() -> None:
 
 def test_research_pipeline_evidence_feeds_future_synthesis() -> None:
     provider = FakeResearchProvider(fixtures=FIXTURES)
-    response = asyncio.run(
-        provider.research(SearchRequest(query="current AI news"))
-    )
+    response = asyncio.run(provider.research(SearchRequest(query="current AI news")))
     synthesis_input = [
         {
             "title": result.source.title,

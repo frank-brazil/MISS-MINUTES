@@ -29,12 +29,9 @@ class CodingAgent(Agent):
 
     name: ClassVar[str] = "coding"
     description: ClassVar[str] = (
-        "Handles coding, programming, and code analysis tasks in safe "
-        "deterministic mode."
+        "Handles coding, programming, and code analysis tasks in safe deterministic mode."
     )
-    capabilities: ClassVar[frozenset[str]] = frozenset(
-        {"coding", "programming", "code_analysis"}
-    )
+    capabilities: ClassVar[frozenset[str]] = frozenset({"coding", "programming", "code_analysis"})
 
     def __init__(self) -> None:
         self._logger = logging.getLogger(__name__)

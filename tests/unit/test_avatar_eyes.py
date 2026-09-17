@@ -22,7 +22,9 @@ class _Clock:
 
 def _new_clock() -> tuple[_Clock, EyeController]:
     clock = _Clock()
-    controller = EyeController(now_fn=lambda: clock.value, eye_config=EyeConfig(auto_blink_period_seconds=0.0))
+    controller = EyeController(
+        now_fn=lambda: clock.value, eye_config=EyeConfig(auto_blink_period_seconds=0.0)
+    )
     return clock, controller
 
 
@@ -99,7 +101,9 @@ def test_auto_blink_periodic():
 
 
 def test_auto_blink_disabled_when_period_zero():
-    controller = EyeController(now_fn=lambda: 0.0, eye_config=EyeConfig(auto_blink_period_seconds=0.0))
+    controller = EyeController(
+        now_fn=lambda: 0.0, eye_config=EyeConfig(auto_blink_period_seconds=0.0)
+    )
     assert controller.state(100.0).blinking is False
     assert controller.state(200.0).blinking is False
 
@@ -120,7 +124,9 @@ def test_auto_blink_jitter_is_deterministic_and_bounded():
 
 
 def test_auto_blink_no_jitter_by_default():
-    controller = EyeController(now_fn=lambda: 0.0, eye_config=EyeConfig(auto_blink_period_seconds=2.0))
+    controller = EyeController(
+        now_fn=lambda: 0.0, eye_config=EyeConfig(auto_blink_period_seconds=2.0)
+    )
     controller.state(0.0)
     assert controller._next_auto_blink_at == pytest.approx(2.0)
 

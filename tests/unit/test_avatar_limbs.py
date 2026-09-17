@@ -1,6 +1,5 @@
 """Arms/legs: typed limb states, movement hooks and transform validation."""
 
-
 import pytest
 from pydantic import ValidationError
 
@@ -29,13 +28,34 @@ def test_limbs_constructed_from_config():
 
 def test_limb_state_validation():
     with pytest.raises(ValidationError):
-        LimbState(part=AvatarPart.LEFT_ARM, side=LimbSide.LEFT, attach_x=0, attach_y=0, length=0.0, thickness=4.0)
+        LimbState(
+            part=AvatarPart.LEFT_ARM,
+            side=LimbSide.LEFT,
+            attach_x=0,
+            attach_y=0,
+            length=0.0,
+            thickness=4.0,
+        )
     with pytest.raises(ValidationError):
-        LimbState(part=AvatarPart.LEFT_ARM, side=LimbSide.LEFT, attach_x=0, attach_y=0, length=10.0, thickness=float("nan"))
+        LimbState(
+            part=AvatarPart.LEFT_ARM,
+            side=LimbSide.LEFT,
+            attach_x=0,
+            attach_y=0,
+            length=10.0,
+            thickness=float("nan"),
+        )
 
 
 def test_end_point_rotation_zero_is_down():
-    state = LimbState(part=AvatarPart.LEFT_LEG, side=LimbSide.LEFT, attach_x=10.0, attach_y=90.0, length=36.0, thickness=6.0)
+    state = LimbState(
+        part=AvatarPart.LEFT_LEG,
+        side=LimbSide.LEFT,
+        attach_x=10.0,
+        attach_y=90.0,
+        length=36.0,
+        thickness=6.0,
+    )
     x, y = state.end_point()
     assert x == pytest.approx(10.0)
     assert y == pytest.approx(126.0)

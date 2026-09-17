@@ -45,8 +45,7 @@ def as_security_manager(
     if isinstance(security, SecurityPolicy):
         return SecurityManager(policy=security)
     raise TypeError(
-        f"security must be a SecurityManager or SecurityPolicy, got "
-        f"{type(security).__name__}"
+        f"security must be a SecurityManager or SecurityPolicy, got {type(security).__name__}"
     )
 
 
@@ -97,9 +96,7 @@ class SecurityManager:
         action: str | None = None,
         resource: str | None = None,
     ) -> RiskLevel:
-        return self._risk.assess(
-            category=category, action=action, resource=resource
-        )
+        return self._risk.assess(category=category, action=action, resource=resource)
 
     def create_request(
         self,
@@ -117,9 +114,7 @@ class SecurityManager:
         if isinstance(permission, PermissionCategory):
             permission = Permission(category=permission)
         if resource is not None:
-            permission = Permission(
-                category=permission.category, resource=resource
-            )
+            permission = Permission(category=permission.category, resource=resource)
         effective_risk = risk_level or self._risk.assess(
             category=permission.category,
             action=action,
@@ -163,9 +158,7 @@ class SecurityManager:
 
         if decision.requires_confirmation:
             if approved_confirmation_id is not None and (
-                self._confirmation.is_active_approval_for(
-                    approved_confirmation_id, request
-                )
+                self._confirmation.is_active_approval_for(approved_confirmation_id, request)
             ):
                 decision = SecurityDecision.allow(
                     reason_code="approved_confirmation",
@@ -177,9 +170,7 @@ class SecurityManager:
                 confirmation = self._confirmation.create(request)
                 decision = SecurityDecision.require_confirmation(
                     reason_code="confirmation_required",
-                    reason=(
-                        f"pending confirmation {confirmation.confirmation_id}"
-                    ),
+                    reason=(f"pending confirmation {confirmation.confirmation_id}"),
                     request_id=request.request_id,
                     confirmation_id=confirmation.confirmation_id,
                 )
@@ -211,9 +202,7 @@ class SecurityManager:
         if decision.allowed:
             return decision
         if decision.requires_confirmation:
-            raise ConfirmationRequired(
-                decision.reason or "confirmation is required"
-            )
+            raise ConfirmationRequired(decision.reason or "confirmation is required")
         raise PermissionDenied(decision.reason or "permission denied")
 
     # ------------------------------------------------------------------
@@ -240,9 +229,7 @@ class SecurityManager:
         permission = self.tool_permission(tool)
         if permission is None:
             return RiskLevel.UNKNOWN
-        return self._risk.assess(
-            category=permission.category, action=action
-        )
+        return self._risk.assess(category=permission.category, action=action)
 
     def audit_event(
         self,

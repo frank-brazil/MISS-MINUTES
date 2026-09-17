@@ -34,10 +34,7 @@ class NoEligibleWorkerError(Exception):
 
     def __init__(self, required: frozenset[WorkerCapability]) -> None:
         self.required = required
-        super().__init__(
-            f"no eligible worker for required capabilities "
-            f"{sorted(required)}"
-        )
+        super().__init__(f"no eligible worker for required capabilities {sorted(required)}")
 
 
 class DistributedScheduler:

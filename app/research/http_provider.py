@@ -55,15 +55,9 @@ class HttpSearchProvider(ResearchProvider):
         http_client: Any | None = None,
     ) -> None:
         super().__init__()
-        self._base_url = (
-            (base_url or os.getenv(SEARCH_URL_ENV) or "").strip() or None
-        )
-        self._api_key = (
-            (api_key or os.getenv(SEARCH_API_KEY_ENV) or "").strip() or None
-        )
-        self._timeout = (
-            timeout if timeout is not None else DEFAULT_TIMEOUT_SECONDS
-        )
+        self._base_url = (base_url or os.getenv(SEARCH_URL_ENV) or "").strip() or None
+        self._api_key = (api_key or os.getenv(SEARCH_API_KEY_ENV) or "").strip() or None
+        self._timeout = timeout if timeout is not None else DEFAULT_TIMEOUT_SECONDS
         if not isinstance(self._timeout, (int, float)) or self._timeout <= 0:
             raise ValueError("timeout must be a positive number of seconds")
         self._max_results = max(1, min(int(max_results), ABSOLUTE_MAX_RESULTS))
@@ -104,9 +98,7 @@ class HttpSearchProvider(ResearchProvider):
         import httpx
 
         async with httpx.AsyncClient(timeout=self._timeout) as client:
-            return await client.post(
-                url, headers=headers, json=payload, timeout=self._timeout
-            )
+            return await client.post(url, headers=headers, json=payload, timeout=self._timeout)
 
     def _parse_results(self, query: str, payload: dict[str, Any]) -> ResearchResponse:
         raw_results = payload.get("results")
@@ -143,8 +135,7 @@ class HttpSearchProvider(ResearchProvider):
             raw_score = item.get("score")
             score = (
                 raw_score
-                if isinstance(raw_score, (int, float))
-                and not isinstance(raw_score, bool)
+                if isinstance(raw_score, (int, float)) and not isinstance(raw_score, bool)
                 else None
             )
             results.append(SearchResult(source=source, score=score))
@@ -152,8 +143,7 @@ class HttpSearchProvider(ResearchProvider):
         results = results[: self._max_results]
         results = assign_ranks(results)
         self._logger.info(
-            "Http search provider returned evidence: query=%s "
-            "result_count=%d success=%s",
+            "Http search provider returned evidence: query=%s result_count=%d success=%s",
             query,
             len(results),
             True,
@@ -173,9 +163,7 @@ class HttpSearchProvider(ResearchProvider):
             min(request.max_results, self._max_results),
         )
         try:
-            response = await self._post(
-                self._base_url, self._headers(), self._payload(request)
-            )
+            response = await self._post(self._base_url, self._headers(), self._payload(request))
             response.raise_for_status()
             payload = response.json()
             if not isinstance(payload, dict):
@@ -186,6 +174,4 @@ class HttpSearchProvider(ResearchProvider):
                 "Http search provider call failed: error=%s",
                 type(exc).__name__,
             )
-            return ResearchResponse.fail(
-                query=request.query, error="search provider call failed"
-            )
+            return ResearchResponse.fail(query=request.query, error="search provider call failed")

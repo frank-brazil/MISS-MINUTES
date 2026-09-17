@@ -34,9 +34,27 @@ def test_gesture_spec_validation():
 
 def test_gesture_frame_validation():
     with pytest.raises(ValidationError):
-        GestureFrame(kind=GestureKind.WAVE, name="wave", progress=1.5, left_arm_swing=0.0, right_arm_swing=0.0, body_tilt_deg=0.0, lean=0.0, timestamp=0.0)
+        GestureFrame(
+            kind=GestureKind.WAVE,
+            name="wave",
+            progress=1.5,
+            left_arm_swing=0.0,
+            right_arm_swing=0.0,
+            body_tilt_deg=0.0,
+            lean=0.0,
+            timestamp=0.0,
+        )
     with pytest.raises(ValidationError):
-        GestureFrame(kind=GestureKind.WAVE, name="wave", progress=0.5, left_arm_swing=100.0, right_arm_swing=0.0, body_tilt_deg=0.0, lean=0.0, timestamp=0.0)
+        GestureFrame(
+            kind=GestureKind.WAVE,
+            name="wave",
+            progress=0.5,
+            left_arm_swing=100.0,
+            right_arm_swing=0.0,
+            body_tilt_deg=0.0,
+            lean=0.0,
+            timestamp=0.0,
+        )
 
 
 def test_gesture_controller_start_and_current():

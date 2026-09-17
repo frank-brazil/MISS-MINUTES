@@ -35,14 +35,11 @@ class WorkerExecutor(ABC):
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
         missing = [
-            attribute
-            for attribute in ("name", "description")
-            if not hasattr(cls, attribute)
+            attribute for attribute in ("name", "description") if not hasattr(cls, attribute)
         ]
         if missing:
             raise TypeError(
-                f"{cls.__name__} must define required attribute(s): "
-                f"{', '.join(missing)}"
+                f"{cls.__name__} must define required attribute(s): {', '.join(missing)}"
             )
 
     @property
@@ -57,10 +54,7 @@ class WorkerExecutor(ABC):
         """Return a human-readable error when the task is not approved."""
         unsupported = task.required_capabilities - self.capabilities
         if unsupported:
-            return (
-                f"unsupported capability: "
-                f"{sorted(unsupported)[0]}"
-            )
+            return f"unsupported capability: {sorted(unsupported)[0]}"
         if task.task_type not in self.allowed_task_types:
             return f"unsupported task type: {task.task_type}"
         return None
@@ -80,17 +74,14 @@ class FakeWorkerExecutor(WorkerExecutor):
 
     name = "fake-worker-executor"
     description = (
-        "Deterministic worker executor that performs no real actions; used "
-        "offline and in tests."
+        "Deterministic worker executor that performs no real actions; used offline and in tests."
     )
 
     def __init__(
         self,
         *,
-        capabilities: frozenset[WorkerCapability]
-        = frozenset({"analysis", "research", "coding"}),
-        allowed_task_types: frozenset[str]
-        = frozenset({"analysis", "research", "coding", "test"}),
+        capabilities: frozenset[WorkerCapability] = frozenset({"analysis", "research", "coding"}),
+        allowed_task_types: frozenset[str] = frozenset({"analysis", "research", "coding", "test"}),
         output: str = "Task completed by fake worker executor.",
         fail_task_ids: frozenset[UUID] = frozenset(),
         fail_once_task_ids: frozenset[UUID] = frozenset(),
@@ -127,9 +118,7 @@ class FakeWorkerExecutor(WorkerExecutor):
                 task.distributed_task_id,
                 validation_error,
             )
-            return DistributedTaskResult.fail(
-                task.distributed_task_id, error=validation_error
-            )
+            return DistributedTaskResult.fail(task.distributed_task_id, error=validation_error)
         if self._raise_error is not None:
             self._logger.error(
                 "Fake worker executor raising: %s",
@@ -144,10 +133,7 @@ class FakeWorkerExecutor(WorkerExecutor):
             return DistributedTaskResult.fail(
                 task.distributed_task_id, error="simulated worker failure"
             )
-        if (
-            task.distributed_task_id in self._fail_once_task_ids
-            and attempts == 0
-        ):
+        if task.distributed_task_id in self._fail_once_task_ids and attempts == 0:
             return DistributedTaskResult.fail(
                 task.distributed_task_id, error="simulated first-attempt failure"
             )
@@ -156,6 +142,4 @@ class FakeWorkerExecutor(WorkerExecutor):
             task.distributed_task_id,
             task.task_type,
         )
-        return DistributedTaskResult.ok(
-            task.distributed_task_id, output=self._output
-        )
+        return DistributedTaskResult.ok(task.distributed_task_id, output=self._output)

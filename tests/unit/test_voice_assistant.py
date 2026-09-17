@@ -95,16 +95,12 @@ class Builder:
         turns: ConversationTurnManager | None = None,
     ) -> None:
         self.clock = Clock()
-        self.capture = FakeAudioCaptureProvider(
-            [audio(f) for f in frames]
-        )
+        self.capture = FakeAudioCaptureProvider([audio(f) for f in frames])
         self.wakeword = wakeword or FakeWakeWordDetector(default=False)
         self.vad = vad or FakeVoiceActivityDetector([True, True, False])
         self.stt = stt or FakeSpeechToText(fixtures=STT_FIXTURES)
         self.detector = detector or FakeLanguageDetector(fixtures=DETECTIONS)
-        self.brain = brain or FakeVoiceBrain(
-            default=VoiceBrainResult.ok("Sure, I can help.")
-        )
+        self.brain = brain or FakeVoiceBrain(default=VoiceBrainResult.ok("Sure, I can help."))
         self.tts = FakeTextToSpeech()
         self.output = output or FakeAudioOutputProvider(auto_stop_after=1)
         self.turns = turns or ConversationTurnManager(now_fn=self.clock)
@@ -239,9 +235,7 @@ def test_continuous_session_switches_language_across_turns() -> None:
 
 
 def test_second_utterance_in_window_is_continuation() -> None:
-    turn_manager = ConversationTurnManager(
-        now_fn=None, continuation_window_seconds=30.0
-    )
+    turn_manager = ConversationTurnManager(now_fn=None, continuation_window_seconds=30.0)
     turn_manager._now_fn = lambda: 0.0
     builder = Builder(
         frames=[
@@ -419,9 +413,7 @@ def test_stt_failure_is_structured_and_session_continues() -> None:
 def test_language_detection_failure_is_structured() -> None:
     builder = Builder(
         frames=[b"hello ", b"there", SEP],
-        detector=FakeLanguageDetector(
-            raise_error=RuntimeError("detection down")
-        ),
+        detector=FakeLanguageDetector(raise_error=RuntimeError("detection down")),
     )
     asyncio.run(run_to_stop(builder.service, builder.clock))
     result = builder.service.last_turn_result
@@ -534,9 +526,7 @@ class ScriptedAIModel(AIModel):
         self._calls += 1
         if self._calls == 1:
             return AIResponse.ok(content="calling a tool", tool_calls=[self._tool_call])
-        return AIResponse.fail(
-            error="the requested tool action was denied by security policy"
-        )
+        return AIResponse.fail(error="the requested tool action was denied by security policy")
 
 
 def test_voice_task_dispatch_goes_through_chunk30_security() -> None:

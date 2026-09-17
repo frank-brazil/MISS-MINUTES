@@ -119,9 +119,7 @@ def test_provider_reads_env_configuration(
     client = RecordingClient()
     provider = OpenAISpeechToText(client=client)
     assert provider.model == "gpt-4o-mini-transcribe"
-    result = asyncio.run(
-        provider.transcribe(SpeechInput(audio=b"x", format="wav"))
-    )
+    result = asyncio.run(provider.transcribe(SpeechInput(audio=b"x", format="wav")))
     assert result.success is True
     assert result.text == "hello world"
     assert client.audio.transcriptions.last_kwargs["model"] == "gpt-4o-mini-transcribe"
@@ -154,9 +152,7 @@ def test_missing_api_key_returns_controlled_failure(
 ) -> None:
     monkeypatch.delenv(OPENAI_API_KEY_ENV, raising=False)
     provider = OpenAISpeechToText()
-    result = asyncio.run(
-        provider.transcribe(SpeechInput(audio=b"x", format="wav"))
-    )
+    result = asyncio.run(provider.transcribe(SpeechInput(audio=b"x", format="wav")))
     assert isinstance(result, SpeechToTextResult)
     assert result.success is False
     assert "API key" in (result.error or "")
@@ -168,17 +164,13 @@ def test_blank_api_key_treated_as_missing(
 ) -> None:
     monkeypatch.delenv(OPENAI_API_KEY_ENV, raising=False)
     provider = OpenAISpeechToText(api_key="   ")
-    result = asyncio.run(
-        provider.transcribe(SpeechInput(audio=b"x", format="wav"))
-    )
+    result = asyncio.run(provider.transcribe(SpeechInput(audio=b"x", format="wav")))
     assert result.success is False
 
 
 def test_successful_transcription_with_mocked_client() -> None:
     provider = OpenAISpeechToText(api_key="sk-test", client=FakeClient())
-    result = asyncio.run(
-        provider.transcribe(SpeechInput(audio=b"x", format="wav"))
-    )
+    result = asyncio.run(provider.transcribe(SpeechInput(audio=b"x", format="wav")))
     assert result.success is True
     assert result.text == "hello world"
     assert result.language == "en"
@@ -189,11 +181,7 @@ def test_successful_transcription_with_mocked_client() -> None:
 def test_language_hint_forwarded_to_api() -> None:
     client = RecordingClient()
     provider = OpenAISpeechToText(api_key="sk-test", client=client)
-    result = asyncio.run(
-        provider.transcribe(
-            SpeechInput(audio=b"x", format="wav", language="hi")
-        )
-    )
+    result = asyncio.run(provider.transcribe(SpeechInput(audio=b"x", format="wav", language="hi")))
     assert result.success is True
     sent = client.audio.transcriptions.last_kwargs
     assert sent["model"] == "whisper-1"
@@ -210,9 +198,7 @@ def test_default_language_from_env_forwarded(
     monkeypatch.setenv(STT_LANGUAGE_ENV, "hi")
     client = RecordingClient()
     provider = OpenAISpeechToText(api_key="sk-test", client=client)
-    result = asyncio.run(
-        provider.transcribe(SpeechInput(audio=b"x", format="wav"))
-    )
+    result = asyncio.run(provider.transcribe(SpeechInput(audio=b"x", format="wav")))
     assert result.success is True
     assert client.audio.transcriptions.last_kwargs["language"] == "hi"
 
@@ -223,35 +209,27 @@ def test_language_omitted_when_unset(
     monkeypatch.delenv(STT_LANGUAGE_ENV, raising=False)
     client = RecordingClient()
     provider = OpenAISpeechToText(api_key="sk-test", client=client)
-    result = asyncio.run(
-        provider.transcribe(SpeechInput(audio=b"x", format="wav"))
-    )
+    result = asyncio.run(provider.transcribe(SpeechInput(audio=b"x", format="wav")))
     assert result.success is True
     assert "language" not in client.audio.transcriptions.last_kwargs
 
 
 def test_detected_language_preserved() -> None:
     provider = OpenAISpeechToText(api_key="sk-test", client=FakeClient())
-    result = asyncio.run(
-        provider.transcribe(SpeechInput(audio=b"x", format="wav"))
-    )
+    result = asyncio.run(provider.transcribe(SpeechInput(audio=b"x", format="wav")))
     assert result.language == "en"
 
 
 def test_confidence_preserved_when_provider_supplies_it() -> None:
     provider = OpenAISpeechToText(api_key="sk-test", client=ConfidentClient())
-    result = asyncio.run(
-        provider.transcribe(SpeechInput(audio=b"x", format="wav"))
-    )
+    result = asyncio.run(provider.transcribe(SpeechInput(audio=b"x", format="wav")))
     assert result.success is True
     assert result.confidence == 0.8
 
 
 def test_blank_transcription_not_invented() -> None:
     provider = OpenAISpeechToText(api_key="sk-test", client=BlankClient())
-    result = asyncio.run(
-        provider.transcribe(SpeechInput(audio=b"x", format="wav"))
-    )
+    result = asyncio.run(provider.transcribe(SpeechInput(audio=b"x", format="wav")))
     assert result.success is False
     assert "no transcription text" in (result.error or "")
     assert result.text is None
@@ -259,9 +237,7 @@ def test_blank_transcription_not_invented() -> None:
 
 def test_provider_failure_with_mocked_client() -> None:
     provider = OpenAISpeechToText(api_key="sk-test", client=RaisingClient())
-    result = asyncio.run(
-        provider.transcribe(SpeechInput(audio=b"x", format="wav"))
-    )
+    result = asyncio.run(provider.transcribe(SpeechInput(audio=b"x", format="wav")))
     assert result.success is False
     assert result.error == "OpenAI speech-to-text provider call failed"
     assert result.text is None
@@ -279,9 +255,7 @@ def test_corrupt_audio_failure() -> None:
 def test_unsupported_format_rejected_without_client_call() -> None:
     client = RecordingClient()
     provider = OpenAISpeechToText(api_key="sk-test", client=client)
-    result = asyncio.run(
-        provider.transcribe(SpeechInput(audio=b"x", format="txt"))
-    )
+    result = asyncio.run(provider.transcribe(SpeechInput(audio=b"x", format="txt")))
     assert result.success is False
     assert "Unsupported audio format" in (result.error or "")
     assert client.audio.transcriptions.last_kwargs == {}
@@ -292,8 +266,6 @@ def test_does_not_log_transcribed_text(
 ) -> None:
     caplog.set_level("INFO")
     provider = OpenAISpeechToText(api_key="sk-test", client=FakeClient())
-    result = asyncio.run(
-        provider.transcribe(SpeechInput(audio=b"x", format="wav"))
-    )
+    result = asyncio.run(provider.transcribe(SpeechInput(audio=b"x", format="wav")))
     assert result.success is True
     assert "hello world" not in caplog.text

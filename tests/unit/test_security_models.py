@@ -65,15 +65,9 @@ def test_permission_rule_resource_wildcard_matching() -> None:
         permission=Permission(category=PermissionCategory.READ, resource="*.txt"),
         effect="allow",
     )
-    assert rule.matches(
-        Permission(category=PermissionCategory.READ, resource="notes.txt")
-    )
-    assert not rule.matches(
-        Permission(category=PermissionCategory.READ, resource="notes.md")
-    )
-    assert not rule.matches(
-        Permission(category=PermissionCategory.WRITE, resource="notes.txt")
-    )
+    assert rule.matches(Permission(category=PermissionCategory.READ, resource="notes.txt"))
+    assert not rule.matches(Permission(category=PermissionCategory.READ, resource="notes.md"))
+    assert not rule.matches(Permission(category=PermissionCategory.WRITE, resource="notes.txt"))
 
 
 def test_permission_rule_null_resource_matches_any() -> None:
@@ -81,9 +75,7 @@ def test_permission_rule_null_resource_matches_any() -> None:
         permission=Permission(category=PermissionCategory.READ),
         effect="deny",
     )
-    assert rule.matches(
-        Permission(category=PermissionCategory.READ, resource="anything")
-    )
+    assert rule.matches(Permission(category=PermissionCategory.READ, resource="anything"))
     assert rule.matches(Permission(category=PermissionCategory.READ))
 
 

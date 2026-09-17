@@ -264,7 +264,9 @@ def build_routing_cases(scenario_id: uuid.UUID) -> list[EvaluationCase]:
                 },
                 expected_routing=RoutingMetadata(
                     expected_agent=str(fixture["expected_agent"]),
-                    expected_tool=fixture["expected_tool"] if isinstance(fixture["expected_tool"], str) else None,
+                    expected_tool=fixture["expected_tool"]
+                    if isinstance(fixture["expected_tool"], str)
+                    else None,
                     decision=RoutingDecision.CORRECT,
                 ),
             )

@@ -243,9 +243,7 @@ def test_verification_result_rejects_blank_observed_outcome() -> None:
 
 def test_verification_result_rejects_blank_discrepancy() -> None:
     with pytest.raises(ValidationError, match="discrepancy"):
-        result(
-            status=VerificationStatus.FAILED, discrepancy=" "
-        )
+        result(status=VerificationStatus.FAILED, discrepancy=" ")
 
 
 def test_verification_result_rejects_blank_error() -> None:
@@ -268,9 +266,7 @@ def test_verification_result_verified_cannot_carry_discrepancy() -> None:
 
 def test_verification_result_verified_cannot_carry_error() -> None:
     with pytest.raises(ValidationError, match="error"):
-        result(
-            status=VerificationStatus.VERIFIED, error="verification crashed"
-        )
+        result(status=VerificationStatus.VERIFIED, error="verification crashed")
 
 
 def test_verification_result_success_properties() -> None:
@@ -432,9 +428,7 @@ def test_fake_verifier_passes_supplied_evidence_through() -> None:
         source_ref="https://example.com/logs",
     )
     exp = expectation(conditions=["done"])
-    obs = observation(
-        observations=["done"], evidence=[supplied], action_succeeded=True
-    )
+    obs = observation(observations=["done"], evidence=[supplied], action_succeeded=True)
     assert obs.evidence == [supplied]
     verified_result = asyncio.run(FakeVerifier().verify(exp, obs))
     sources = [item.source_ref for item in verified_result.evidence]

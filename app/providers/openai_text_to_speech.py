@@ -51,9 +51,7 @@ class OpenAITextToSpeech(TextToSpeech):
         self._api_key = self._resolve_api_key(api_key)
         self._model = _resolve_str(model, TTS_MODEL_ENV, DEFAULT_TTS_MODEL)
         self._voice = _resolve_str(voice, TTS_VOICE_ENV, DEFAULT_TTS_VOICE)
-        self._response_format = _resolve_str(
-            response_format, TTS_FORMAT_ENV, DEFAULT_TTS_FORMAT
-        )
+        self._response_format = _resolve_str(response_format, TTS_FORMAT_ENV, DEFAULT_TTS_FORMAT)
         self._client = client
 
     @property
@@ -72,15 +70,13 @@ class OpenAITextToSpeech(TextToSpeech):
                 self._response_format,
             )
             return TextToSpeechResult.fail(
-                f"Unsupported text-to-speech response format: "
-                f"{self._response_format}"
+                f"Unsupported text-to-speech response format: {self._response_format}"
             )
 
         if self._client is None:
             if not self._api_key:
                 self._logger.error(
-                    "OpenAI text-to-speech is not configured: %s is "
-                    "missing or empty",
+                    "OpenAI text-to-speech is not configured: %s is missing or empty",
                     OPENAI_API_KEY_ENV,
                 )
                 return TextToSpeechResult.fail(
@@ -98,21 +94,13 @@ class OpenAITextToSpeech(TextToSpeech):
                 response_format=self._response_format,
             )
         except Exception as exc:
-            self._logger.error(
-                "OpenAI speech synthesis failed: %s", type(exc).__name__
-            )
-            return TextToSpeechResult.fail(
-                "OpenAI text-to-speech provider call failed"
-            )
+            self._logger.error("OpenAI speech synthesis failed: %s", type(exc).__name__)
+            return TextToSpeechResult.fail("OpenAI text-to-speech provider call failed")
 
         audio_bytes = await self._read_audio_bytes(response)
         if not audio_bytes:
-            self._logger.warning(
-                "OpenAI speech synthesis returned no audio content"
-            )
-            return TextToSpeechResult.fail(
-                "OpenAI provider returned no audio content"
-            )
+            self._logger.warning("OpenAI speech synthesis returned no audio content")
+            return TextToSpeechResult.fail("OpenAI provider returned no audio content")
 
         self._logger.info(
             "Synthesized speech: success=%s characters=%d format=%s voice='%s'",

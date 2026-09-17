@@ -25,18 +25,12 @@ class DistributedTaskQueue:
     @property
     def pending_count(self) -> int:
         """Number of queued (non-cancelled) tasks."""
-        return sum(
-            1
-            for task in self._queue
-            if task.status is not DistributedTaskStatus.CANCELLED
-        )
+        return sum(1 for task in self._queue if task.status is not DistributedTaskStatus.CANCELLED)
 
     def enqueue(self, task: DistributedTask) -> DistributedTask:
         """Queue a task; duplicate task IDs are rejected."""
         if task.distributed_task_id in self._by_id:
-            raise DuplicateTaskError(
-                f"task {task.distributed_task_id} is already queued"
-            )
+            raise DuplicateTaskError(f"task {task.distributed_task_id} is already queued")
         task.change_status(DistributedTaskStatus.QUEUED)
         self._by_id[task.distributed_task_id] = task
         self._queue.append(task)

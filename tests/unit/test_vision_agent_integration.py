@@ -26,9 +26,7 @@ class StaticScreenshotProvider(ScreenshotProvider):
 
     async def capture(self, output_path: Path) -> ScreenshotResult:
         output_path.write_bytes(self.content)
-        return ScreenshotResult(
-            path=output_path, width=10, height=10, format="png"
-        )
+        return ScreenshotResult(path=output_path, width=10, height=10, format="png")
 
 
 def _task_with_image(description: str = "describe screenshot") -> Task:
@@ -141,9 +139,7 @@ def test_vision_agent_preserves_legacy_vision_fn() -> None:
 
 def test_vision_agent_exposes_injected_dependencies() -> None:
     vision = FakeVisionProvider()
-    service = ScreenUnderstandingService(
-        StaticScreenshotProvider("s.png"), vision, workspace=None
-    )
+    service = ScreenUnderstandingService(StaticScreenshotProvider("s.png"), vision, workspace=None)
     agent = VisionAgent(provider=vision, screen_understanding=service)
     assert agent.provider is vision
     assert agent.screen_understanding is service

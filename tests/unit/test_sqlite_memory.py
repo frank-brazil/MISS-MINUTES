@@ -1,4 +1,4 @@
-﻿import asyncio
+import asyncio
 import sqlite3
 from datetime import UTC, datetime
 from pathlib import Path
@@ -33,8 +33,7 @@ def test_table_created(tmp_path: Path) -> None:
     SQLiteMemory(db_path)
     with sqlite3.connect(str(db_path)) as connection:
         row = connection.execute(
-            "SELECT name FROM sqlite_master"
-            " WHERE type = 'table' AND name = 'memories'"
+            "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'memories'"
         ).fetchone()
     assert row is not None
     assert row[0] == "memories"
@@ -264,9 +263,7 @@ def test_corrupt_database_retrieve_returns_controlled_failure(
     assert result.error is not None
 
 
-def test_store_failure_is_controlled(
-    memory: SQLiteMemory, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_store_failure_is_controlled(memory: SQLiteMemory, monkeypatch: pytest.MonkeyPatch) -> None:
     def boom(record: MemoryRecord) -> MemoryRecord:
         raise RuntimeError("disk exploded")
 
@@ -289,9 +286,7 @@ def test_delete_failure_returns_controlled_exception(
 def test_isolation_between_separate_databases(tmp_path: Path) -> None:
     first = SQLiteMemory(tmp_path / "first.db")
     second = SQLiteMemory(tmp_path / "second.db")
-    asyncio.run(
-        first.store(MemoryRecord(content="secret of first database"))
-    )
+    asyncio.run(first.store(MemoryRecord(content="secret of first database")))
     second_result = asyncio.run(second.retrieve("secret"))
     assert second_result.count == 0
     first_result = asyncio.run(first.retrieve("secret"))
@@ -308,9 +303,7 @@ def test_reopening_database_persists_data(tmp_path: Path) -> None:
     assert result.results[0].content == "persisted note"
 
 
-def test_from_env_uses_configured_path(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_from_env_uses_configured_path(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     db_path = tmp_path / "env.db"
     monkeypatch.setenv(DEFAULT_MEMORY_DB_ENV, str(db_path))
     memory = SQLiteMemory.from_env()
@@ -319,9 +312,7 @@ def test_from_env_uses_configured_path(
     assert result.count == 1
 
 
-def test_from_env_falls_back_to_default(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_from_env_falls_back_to_default(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv(DEFAULT_MEMORY_DB_ENV, raising=False)
     default = tmp_path / "default.db"
     memory = SQLiteMemory.from_env(default=str(default))

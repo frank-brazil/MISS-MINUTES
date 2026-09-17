@@ -89,9 +89,7 @@ class VoicePrivacyGuard:
             return 0
         buffer.released_at = self._now_fn()
         self._released_bytes += buffer.size_bytes
-        self._logger.info(
-            "Voice buffer released: id=%s bytes=%d", buffer_id, buffer.size_bytes
-        )
+        self._logger.info("Voice buffer released: id=%s bytes=%d", buffer_id, buffer.size_bytes)
         return buffer.size_bytes
 
     def live_buffers(self) -> tuple[VoiceAudioBuffer, ...]:

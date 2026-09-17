@@ -34,6 +34,7 @@ def test_headless_startup_all_fakes():
         assert runtime.security is not None
         assert runtime.voice_service is not None
         await runtime.shutdown()
+
     _run(flow())
 
 
@@ -47,6 +48,7 @@ def test_headless_text_request():
         assert response.source == "text"
         assert response.text_response is not None
         await runtime.shutdown()
+
     _run(flow())
 
 
@@ -59,6 +61,7 @@ def test_headless_voice_request():
         response = await runtime.handle_voice(b"test audio")
         assert response.source == "voice"
         await runtime.shutdown()
+
     _run(flow())
 
 
@@ -72,6 +75,7 @@ def test_headless_multiple_requests():
             assert response.success is True
         assert runtime.request_count == 5
         await runtime.shutdown()
+
     _run(flow())
 
 
@@ -86,6 +90,7 @@ def test_headless_capabilities():
         assert caps.get("agents") is True
         assert caps.get("security") is True
         await runtime.shutdown()
+
     _run(flow())
 
 
@@ -102,11 +107,13 @@ def test_headless_health_report():
         assert report.uptime_seconds >= 0
         assert report.request_count == 0
         await runtime.shutdown()
+
     _run(flow())
 
 
 def test_headless_no_real_providers():
     """Verify headless mode does not import real providers."""
+
     async def flow():
         config = MissMinutesConfig()
         config.voice.enabled = True
@@ -119,4 +126,5 @@ def test_headless_no_real_providers():
             assert "fake" in type(stt).__name__.lower() or "fake" in stt.name.lower()
             assert "fake" in type(tts).__name__.lower() or "fake" in tts.name.lower()
         await runtime.shutdown()
+
     _run(flow())

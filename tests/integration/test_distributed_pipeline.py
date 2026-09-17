@@ -38,9 +38,7 @@ def test_full_master_worker_pipeline():
     # --- Master side ---------------------------------------------------
     registry = WorkerRegistry()
     queue = DistributedTaskQueue()
-    master_transport = EndpointAwareWorkerTransport(
-        registry=registry, config=config
-    )
+    master_transport = EndpointAwareWorkerTransport(registry=registry, config=config)
     coordinator = DistributedCoordinator(
         registry=registry,
         queue=queue,

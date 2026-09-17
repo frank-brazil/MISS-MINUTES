@@ -312,9 +312,7 @@ def test_decision_analysis_recommendation_none_allowed() -> None:
 
 def test_decision_analysis_recommended_option_property() -> None:
     opt = option()
-    result = analysis(
-        candidate_options=[opt], recommended_option_id=opt.option_id
-    )
+    result = analysis(candidate_options=[opt], recommended_option_id=opt.option_id)
     assert result.recommended_option is opt
 
 
@@ -354,9 +352,7 @@ def test_decision_analysis_aggregates_prediction_assumptions() -> None:
                     "Load stays constant.",
                 ]
             ),
-            prediction(
-                assumptions=["The feed is reliable.", "A second premise."]
-            ),
+            prediction(assumptions=["The feed is reliable.", "A second premise."]),
         ]
     )
     assert result.assumptions == (
@@ -378,9 +374,7 @@ def test_predictor_requires_metadata() -> None:
     with pytest.raises(TypeError, match="name"):
 
         class MissingMetadata(Predictor):
-            async def predict(
-                self, req: PredictionRequest
-            ) -> DecisionAnalysis:
+            async def predict(self, req: PredictionRequest) -> DecisionAnalysis:
                 return DecisionAnalysis(request=req, predictions=[], candidate_options=[])
 
 
@@ -428,12 +422,8 @@ def test_fake_predictor_returns_deterministic_result() -> None:
     first = asyncio.run(predictor.predict(req))
     second = asyncio.run(predictor.predict(req))
     assert first.analysis_id == second.analysis_id
-    assert [p.outcome for p in first.predictions] == [
-        p.outcome for p in second.predictions
-    ]
-    assert [p.probability for p in first.predictions] == [
-        p.probability for p in second.predictions
-    ]
+    assert [p.outcome for p in first.predictions] == [p.outcome for p in second.predictions]
+    assert [p.probability for p in first.predictions] == [p.probability for p in second.predictions]
     assert [o.description for o in first.candidate_options] == [
         o.description for o in second.candidate_options
     ]

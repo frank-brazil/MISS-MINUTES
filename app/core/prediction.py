@@ -43,12 +43,9 @@ CONFIDENCE_RANGE_DESCRIPTION = (
     "They are not calibrated probabilities."
 )
 BENEFIT_SCORE_RANGE_DESCRIPTION = (
-    "Benefit scores are heuristic ordinal comparisons in [0, 1]; "
-    "they are not measured utilities."
+    "Benefit scores are heuristic ordinal comparisons in [0, 1]; they are not measured utilities."
 )
-HEURISTIC_NOTICE = (
-    "This is a heuristic estimate based on the supplied information."
-)
+HEURISTIC_NOTICE = "This is a heuristic estimate based on the supplied information."
 
 
 def _utc_now() -> datetime:
@@ -159,7 +156,8 @@ class Prediction(BaseModel):
     @field_validator("assumptions", "evidence_refs")
     @classmethod
     def _strings_not_blank(
-        cls, value: list[str],
+        cls,
+        value: list[str],
     ) -> list[str]:
         for item in value:
             if not item.strip():
@@ -308,13 +306,9 @@ class DecisionAnalysis(BaseModel):
     @model_validator(mode="after")
     def _recommendation_must_be_option(self) -> "DecisionAnalysis":
         if self.recommended_option_id is not None:
-            option_ids = {
-                option.option_id for option in self.candidate_options
-            }
+            option_ids = {option.option_id for option in self.candidate_options}
             if self.recommended_option_id not in option_ids:
-                raise ValueError(
-                    "recommended option must refer to a candidate option"
-                )
+                raise ValueError("recommended option must refer to a candidate option")
         return self
 
     @property
@@ -357,9 +351,7 @@ class Predictor(ABC):
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
         missing = [
-            attribute
-            for attribute in ("name", "description")
-            if not hasattr(cls, attribute)
+            attribute for attribute in ("name", "description") if not hasattr(cls, attribute)
         ]
         if missing:
             raise TypeError(
@@ -402,17 +394,14 @@ class FakePredictor(Predictor):
     async def predict(self, request: PredictionRequest) -> DecisionAnalysis:
         self._requests.append(request)
         if self._raise_error is not None:
-            self._logger.error(
-                "Fake predictor raising: %s", type(self._raise_error).__name__
-            )
+            self._logger.error("Fake predictor raising: %s", type(self._raise_error).__name__)
             raise self._raise_error
 
         seed = request.question.strip()
         favourable = Prediction(
             prediction_id=_stable_uuid(seed, "prediction:favourable"),
             outcome=(
-                f"'{request.question}' proceeds with no major disruption "
-                "(heuristic estimate)."
+                f"'{request.question}' proceeds with no major disruption (heuristic estimate)."
             ),
             probability=0.55,
             confidence=0.5,
@@ -425,8 +414,7 @@ class FakePredictor(Predictor):
         complications = Prediction(
             prediction_id=_stable_uuid(seed, "prediction:complications"),
             outcome=(
-                f"'{request.question}' encounters material complications "
-                "(heuristic estimate)."
+                f"'{request.question}' encounters material complications (heuristic estimate)."
             ),
             probability=0.35,
             confidence=0.4,
@@ -438,8 +426,7 @@ class FakePredictor(Predictor):
         )
 
         option_texts = list(request.candidate_options) or [
-            "Proceed with the most favorable course given the estimated "
-            "likelihood.",
+            "Proceed with the most favorable course given the estimated likelihood.",
             "Gather more information before committing to a course.",
         ]
         options: list[DecisionOption] = []
@@ -449,14 +436,11 @@ class FakePredictor(Predictor):
                     option_id=_stable_uuid(seed, f"option:{index}"),
                     description=text,
                     predicted_outcomes=[
-                        f"Outcome for option {index + 1} is estimated "
-                        "heuristically (no guarantee)."
+                        f"Outcome for option {index + 1} is estimated heuristically (no guarantee)."
                     ],
                     benefit_score=round(max(0.6 - 0.1 * index, 0.1), 2),
                     risk=RiskLevel.LOW if index == 0 else RiskLevel.MEDIUM,
-                    required_capabilities=frozenset(
-                        {"analysis"} if index == 0 else {"research"}
-                    ),
+                    required_capabilities=frozenset({"analysis"} if index == 0 else {"research"}),
                 )
             )
 
@@ -472,8 +456,7 @@ class FakePredictor(Predictor):
             ),
             uncertainty=[
                 HEURISTIC_NOTICE,
-                "Estimated probabilities and confidence are heuristic and are "
-                "not calibrated.",
+                "Estimated probabilities and confidence are heuristic and are not calibrated.",
             ],
             unresolved_questions=[
                 "What additional information could reduce uncertainty?",

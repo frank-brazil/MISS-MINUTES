@@ -67,9 +67,7 @@ def test_empty_string() -> None:
 
 
 def test_redact_alias() -> None:
-    assert redact("Bearer token123456789012345") == redact_value(
-        "Bearer token123456789012345"
-    )
+    assert redact("Bearer token123456789012345") == redact_value("Bearer token123456789012345")
 
 
 def test_is_redacted_detects_marker() -> None:

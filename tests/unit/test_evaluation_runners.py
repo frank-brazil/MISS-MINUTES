@@ -143,7 +143,10 @@ class TestRunVoiceTiming:
         results = _run_voice_timing(env)
         assert len(results) > 0
         for r in results:
-            assert r.status == ResultClassification.NOT_MEASURED or r.status == ResultClassification.PASS
+            assert (
+                r.status == ResultClassification.NOT_MEASURED
+                or r.status == ResultClassification.PASS
+            )
 
 
 class TestRunAvatar:
@@ -219,7 +222,14 @@ class TestRunAllEvaluation:
         run = run_all_evaluation_sync()
         s = run.summary
         assert s.total_metrics > 0
-        assert s.pass_count + s.fail_count + s.inconclusive_count + s.not_measured_count + s.not_applicable_count == s.total_metrics
+        assert (
+            s.pass_count
+            + s.fail_count
+            + s.inconclusive_count
+            + s.not_measured_count
+            + s.not_applicable_count
+            == s.total_metrics
+        )
 
     def test_reliability_results(self):
         run = run_all_evaluation_sync()

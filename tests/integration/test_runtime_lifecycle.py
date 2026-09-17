@@ -29,6 +29,7 @@ def _headless_config(**overrides) -> MissMinutesConfig:
 # Startup
 # ------------------------------------------------------------------
 
+
 def test_startup_sets_ready():
     async def flow():
         config = MissMinutesConfig()
@@ -37,6 +38,7 @@ def test_startup_sets_ready():
         await runtime.startup()
         assert runtime.ready is True
         await runtime.shutdown()
+
     _run(flow())
 
 
@@ -49,6 +51,7 @@ def test_startup_initializes_orchestrator():
         assert len(runtime.orchestrator.agents()) > 0
         assert len(runtime.orchestrator.tools()) > 0
         await runtime.shutdown()
+
     _run(flow())
 
 
@@ -59,6 +62,7 @@ def test_startup_initializes_security():
         await runtime.startup()
         assert runtime.security is not None
         await runtime.shutdown()
+
     _run(flow())
 
 
@@ -75,6 +79,7 @@ def test_startup_registers_agents():
         assert "verification" in names
         assert "research" in names
         await runtime.shutdown()
+
     _run(flow())
 
 
@@ -90,12 +95,14 @@ def test_startup_registers_tools():
         assert "file_read" in names
         assert "file_search" in names
         await runtime.shutdown()
+
     _run(flow())
 
 
 # ------------------------------------------------------------------
 # Shutdown
 # ------------------------------------------------------------------
+
 
 def test_shutdown_sets_not_ready():
     async def flow():
@@ -105,6 +112,7 @@ def test_shutdown_sets_not_ready():
         assert runtime.ready is True
         await runtime.shutdown()
         assert runtime.ready is False
+
     _run(flow())
 
 
@@ -116,6 +124,7 @@ def test_repeated_shutdown_is_idempotent():
         await runtime.shutdown()
         await runtime.shutdown()  # second call
         assert runtime.ready is False
+
     _run(flow())
 
 
@@ -127,12 +136,14 @@ def test_repeated_startup_is_idempotent():
         await runtime.startup()  # second call
         assert runtime.ready is True
         await runtime.shutdown()
+
     _run(flow())
 
 
 # ------------------------------------------------------------------
 # Capabilities
 # ------------------------------------------------------------------
+
 
 def test_capabilities_reported():
     async def flow():
@@ -148,6 +159,7 @@ def test_capabilities_reported():
         assert caps["voice"] is False  # voice disabled by default
         assert caps["avatar"] is False  # avatar disabled by default
         await runtime.shutdown()
+
     _run(flow())
 
 
@@ -164,12 +176,14 @@ def test_health_report():
         assert report.request_count == 0
         assert len(report.capabilities) > 0
         await runtime.shutdown()
+
     _run(flow())
 
 
 # ------------------------------------------------------------------
 # Headless mode
 # ------------------------------------------------------------------
+
 
 def test_headless_runtime_creates():
     config = MissMinutesConfig()
@@ -186,12 +200,14 @@ def test_headless_runtime_startup_and_shutdown():
         assert runtime.ready is True
         await runtime.shutdown()
         assert runtime.ready is False
+
     _run(flow())
 
 
 # ------------------------------------------------------------------
 # Audit trail
 # ------------------------------------------------------------------
+
 
 def test_audit_trail_records_events():
     async def flow():
@@ -203,4 +219,5 @@ def test_audit_trail_records_events():
         assert len(entries) > 0
         assert entries[0].stage == "accepted"
         await runtime.shutdown()
+
     _run(flow())

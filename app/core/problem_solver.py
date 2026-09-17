@@ -237,13 +237,9 @@ class ProblemAnalysis(BaseModel):
     @model_validator(mode="after")
     def _recommendation_must_be_candidate(self) -> "ProblemAnalysis":
         if self.recommended_solution_id is not None:
-            candidate_ids = {
-                solution.solution_id for solution in self.candidate_solutions
-            }
+            candidate_ids = {solution.solution_id for solution in self.candidate_solutions}
             if self.recommended_solution_id not in candidate_ids:
-                raise ValueError(
-                    "recommended solution must refer to a candidate solution"
-                )
+                raise ValueError("recommended solution must refer to a candidate solution")
         return self
 
     @property
@@ -271,9 +267,7 @@ class ProblemSolver(ABC):
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
         missing = [
-            attribute
-            for attribute in ("name", "description")
-            if not hasattr(cls, attribute)
+            attribute for attribute in ("name", "description") if not hasattr(cls, attribute)
         ]
         if missing:
             raise TypeError(
@@ -303,9 +297,7 @@ class FakeProblemSolver(ProblemSolver):
     """
 
     name = "fake-problem-solver"
-    description = (
-        "Deterministic heuristic problem-solving fake for offline tests."
-    )
+    description = "Deterministic heuristic problem-solving fake for offline tests."
 
     def __init__(self, raise_error: Exception | None = None) -> None:
         self._raise_error = raise_error
@@ -319,9 +311,7 @@ class FakeProblemSolver(ProblemSolver):
     async def solve(self, problem: Problem) -> ProblemAnalysis:
         self._requests.append(problem)
         if self._raise_error is not None:
-            self._logger.error(
-                "Fake problem solver raising: %s", type(self._raise_error).__name__
-            )
+            self._logger.error("Fake problem solver raising: %s", type(self._raise_error).__name__)
             raise self._raise_error
 
         seed = problem.description.strip()
@@ -332,9 +322,7 @@ class FakeProblemSolver(ProblemSolver):
         )
         primary = Hypothesis(
             hypothesis_id=_stable_uuid(seed, "hypothesis:primary"),
-            description=(
-                "The problem as stated is the primary subject to investigate."
-            ),
+            description=("The problem as stated is the primary subject to investigate."),
             confidence=0.5,
             evidence_for=[reported],
         )
@@ -343,8 +331,7 @@ class FakeProblemSolver(ProblemSolver):
             context_evidence = Evidence(
                 evidence_id=_stable_uuid(seed, "evidence:context"),
                 description=(
-                    "The problem includes structured context that may explain "
-                    "contributing causes."
+                    "The problem includes structured context that may explain contributing causes."
                 ),
                 kind=EvidenceKind.OBSERVATION,
             )
@@ -352,16 +339,14 @@ class FakeProblemSolver(ProblemSolver):
             context_evidence = Evidence(
                 evidence_id=_stable_uuid(seed, "evidence:no-context"),
                 description=(
-                    "No structured context was provided; additional causes "
-                    "remain unknown."
+                    "No structured context was provided; additional causes remain unknown."
                 ),
                 kind=EvidenceKind.ASSUMPTION,
             )
         secondary = Hypothesis(
             hypothesis_id=_stable_uuid(seed, "hypothesis:secondary"),
             description=(
-                "Contributing causes may only become clear after gathering "
-                "more information."
+                "Contributing causes may only become clear after gathering more information."
             ),
             confidence=0.3,
             evidence_for=[context_evidence],
@@ -369,26 +354,16 @@ class FakeProblemSolver(ProblemSolver):
 
         first_action = Solution(
             solution_id=_stable_uuid(seed, "solution:research"),
-            description=(
-                "Gather more information about the problem before choosing an "
-                "action."
-            ),
-            expected_outcome=(
-                "A clearer understanding of causes, constraints, and context."
-            ),
+            description=("Gather more information about the problem before choosing an action."),
+            expected_outcome=("A clearer understanding of causes, constraints, and context."),
             confidence=0.4,
             risk=RiskLevel.LOW,
             required_capabilities=frozenset({"research"}),
         )
         second_action = Solution(
             solution_id=_stable_uuid(seed, "solution:first-step"),
-            description=(
-                "Take a small, reversible first action based on the stated "
-                "problem."
-            ),
-            expected_outcome=(
-                "Early feedback that either resolves the problem or narrows it."
-            ),
+            description=("Take a small, reversible first action based on the stated problem."),
+            expected_outcome=("Early feedback that either resolves the problem or narrows it."),
             confidence=0.3,
             risk=RiskLevel.MEDIUM,
             required_capabilities=frozenset({"analysis"}),

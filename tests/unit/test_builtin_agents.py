@@ -68,9 +68,7 @@ class FailingResearchProvider(ResearchProvider):
     description = "Always fails."
 
     async def research(self, request: SearchRequest) -> ResearchResponse:
-        return ResearchResponse.fail(
-            query=request.query, error="simulated provider failure"
-        )
+        return ResearchResponse.fail(query=request.query, error="simulated provider failure")
 
 
 class RaisingResearchProvider(ResearchProvider):
@@ -84,9 +82,7 @@ class RaisingResearchProvider(ResearchProvider):
 def test_research_agent_metadata() -> None:
     assert ResearchAgent.name == "research"
     assert ResearchAgent.description
-    assert ResearchAgent.capabilities == frozenset(
-        {"research", "web_search", "evidence"}
-    )
+    assert ResearchAgent.capabilities == frozenset({"research", "web_search", "evidence"})
 
 
 def test_research_agent_is_an_agent() -> None:
@@ -150,9 +146,7 @@ def test_research_agent_empty_results() -> None:
 def test_coding_agent_metadata() -> None:
     assert CodingAgent.name == "coding"
     assert CodingAgent.description
-    assert CodingAgent.capabilities == frozenset(
-        {"coding", "programming", "code_analysis"}
-    )
+    assert CodingAgent.capabilities == frozenset({"coding", "programming", "code_analysis"})
 
 
 def test_coding_agent_successful_execution() -> None:
@@ -273,9 +267,7 @@ def test_prediction_agent_handles_predictor_error() -> None:
 def test_critic_agent_metadata() -> None:
     assert CriticAgent.name == "critic"
     assert CriticAgent.description
-    assert CriticAgent.capabilities == frozenset(
-        {"critique", "risk_review", "quality_review"}
-    )
+    assert CriticAgent.capabilities == frozenset({"critique", "risk_review", "quality_review"})
 
 
 def test_critic_agent_without_critic_succeeds() -> None:
@@ -364,9 +356,7 @@ def test_verification_agent_handles_verifier_error() -> None:
     from app.core.verification import FakeVerifier
 
     verifier = FakeVerifier(raise_error=RuntimeError("verifier down"))
-    result = _run(
-        VerificationAgent(verifier=verifier).execute(_task("verify"))
-    )
+    result = _run(VerificationAgent(verifier=verifier).execute(_task("verify")))
     assert result.success is False
     assert "verifier down" in result.error
 

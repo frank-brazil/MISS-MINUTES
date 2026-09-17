@@ -80,9 +80,7 @@ class HttpWorkerTransport(WorkerTransport):
         try:
             response = await self._client.post(url, json=payload, headers=headers)
         except httpx.HTTPError as exc:
-            self._logger.warning(
-                "HTTP dispatch request failed: url=%s error=%s", url, exc
-            )
+            self._logger.warning("HTTP dispatch request failed: url=%s error=%s", url, exc)
             raise WorkerUnreachableError(
                 f"cannot reach worker at {self._base_url}: {type(exc).__name__}"
             ) from exc
@@ -92,13 +90,9 @@ class HttpWorkerTransport(WorkerTransport):
                 f"worker at {self._base_url} does not expose {EXECUTE_PATH}"
             )
         if response.status_code == 401:
-            raise TransportError(
-                f"worker at {self._base_url} rejected the auth token"
-            )
+            raise TransportError(f"worker at {self._base_url} rejected the auth token")
         if response.status_code >= 400:
-            raise TransportError(
-                f"worker returned HTTP {response.status_code}"
-            )
+            raise TransportError(f"worker returned HTTP {response.status_code}")
         try:
             data = response.json()
             return DistributedTaskResult.model_validate(data)
@@ -141,9 +135,7 @@ class EndpointAwareWorkerTransport(WorkerTransport):
     async def dispatch_task(self, assignment, task: DistributedTask) -> DistributedTaskResult:
         worker = self._registry.lookup(assignment.worker_id)
         if worker is None or not worker.endpoint:
-            raise WorkerUnreachableError(
-                f"no endpoint for worker {assignment.worker_id}"
-            )
+            raise WorkerUnreachableError(f"no endpoint for worker {assignment.worker_id}")
         from app.distributed.httptransports import HttpWorkerTransport
 
         transport = HttpWorkerTransport(
@@ -184,15 +176,11 @@ class HttpMasterTransport(MasterTransport):
         return self._base_url
 
     async def register_worker(self, info: WorkerInfo) -> bool:
-        response = await self._post(
-            REGISTER_PATH, info.model_dump(mode="json")
-        )
+        response = await self._post(REGISTER_PATH, info.model_dump(mode="json"))
         return 200 <= response.status_code < 300
 
     async def send_heartbeat(self, heartbeat: WorkerHeartbeat) -> bool:
-        response = await self._post(
-            HEARTBEAT_PATH, heartbeat.model_dump(mode="json")
-        )
+        response = await self._post(HEARTBEAT_PATH, heartbeat.model_dump(mode="json"))
         return 200 <= response.status_code < 300
 
     async def _post(self, path: str, payload: dict) -> httpx.Response:
@@ -202,9 +190,7 @@ class HttpMasterTransport(MasterTransport):
         try:
             return await self._client.post(url, json=payload, headers=headers)
         except httpx.HTTPError as exc:
-            self._logger.warning(
-                "HTTP master request failed: url=%s error=%s", url, exc
-            )
+            self._logger.warning("HTTP master request failed: url=%s error=%s", url, exc)
             raise TransportError(
                 f"cannot reach master at {self._base_url}: {type(exc).__name__}"
             ) from exc

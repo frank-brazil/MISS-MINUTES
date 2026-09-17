@@ -65,7 +65,6 @@ class CritiqueAspect(StrEnum):
     ALTERNATIVE_EXPLANATION = "alternative_explanation"
 
 
-
 class CritiquePoint(BaseModel):
     """A single critique observation.
 
@@ -197,9 +196,7 @@ class Critique(BaseModel):
         return value
 
     def _points_for(self, aspect: CritiqueAspect) -> tuple[CritiquePoint, ...]:
-        return tuple(
-            point for point in self.points if point.aspect is aspect
-        )
+        return tuple(point for point in self.points if point.aspect is aspect)
 
     @property
     def weaknesses(self) -> tuple[CritiquePoint, ...]:
@@ -257,9 +254,7 @@ class Critic(ABC):
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
         missing = [
-            attribute
-            for attribute in ("name", "description")
-            if not hasattr(cls, attribute)
+            attribute for attribute in ("name", "description") if not hasattr(cls, attribute)
         ]
         if missing:
             raise TypeError(
@@ -288,9 +283,7 @@ class FakeCritic(Critic):
     """
 
     name = "fake-critic"
-    description = (
-        "Deterministic heuristic critique fake for offline tests."
-    )
+    description = "Deterministic heuristic critique fake for offline tests."
 
     def __init__(self, raise_error: Exception | None = None) -> None:
         self._raise_error = raise_error
@@ -304,9 +297,7 @@ class FakeCritic(Critic):
     async def critique(self, request: CritiqueRequest) -> Critique:
         self._requests.append(request)
         if self._raise_error is not None:
-            self._logger.error(
-                "Fake critic raising: %s", type(self._raise_error).__name__
-            )
+            self._logger.error("Fake critic raising: %s", type(self._raise_error).__name__)
             raise self._raise_error
 
         seed = request.target.strip()
@@ -320,16 +311,13 @@ class FakeCritic(Critic):
                 ),
                 severity=Severity.LOW,
                 confidence=0.4,
-                suggestion=(
-                    "Provide more context so the review can consider it."
-                ),
+                suggestion=("Provide more context so the review can consider it."),
             ),
             CritiquePoint(
                 point_id=_stable_uuid(seed, "point:risk"),
                 aspect=CritiqueAspect.RISK,
                 description=(
-                    "The target includes estimated claims that are not "
-                    "guaranteed to hold."
+                    "The target includes estimated claims that are not guaranteed to hold."
                 ),
                 severity=Severity.MEDIUM,
                 confidence=0.5,
@@ -338,8 +326,7 @@ class FakeCritic(Critic):
                 point_id=_stable_uuid(seed, "point:assumption"),
                 aspect=CritiqueAspect.UNSUPPORTED_ASSUMPTION,
                 description=(
-                    "The target's assumptions are stated, but no external "
-                    "evidence confirms them."
+                    "The target's assumptions are stated, but no external evidence confirms them."
                 ),
                 severity=Severity.MEDIUM,
                 confidence=0.5,

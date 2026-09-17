@@ -36,9 +36,19 @@ def test_render_scene_produces_character_frame():
     for part in (AvatarPart.LEFT_EYE, AvatarPart.RIGHT_EYE):
         assert frame.primitives_for(part)
     assert frame.primitives_for(AvatarPart.MOUTH)
-    for part in (AvatarPart.LEFT_ARM, AvatarPart.RIGHT_ARM, AvatarPart.LEFT_LEG, AvatarPart.RIGHT_LEG):
+    for part in (
+        AvatarPart.LEFT_ARM,
+        AvatarPart.RIGHT_ARM,
+        AvatarPart.LEFT_LEG,
+        AvatarPart.RIGHT_LEG,
+    ):
         assert frame.primitives_for(part)
-    for part in (AvatarPart.LEFT_SHOE, AvatarPart.RIGHT_SHOE, AvatarPart.LEFT_HAND, AvatarPart.RIGHT_HAND):
+    for part in (
+        AvatarPart.LEFT_SHOE,
+        AvatarPart.RIGHT_SHOE,
+        AvatarPart.LEFT_HAND,
+        AvatarPart.RIGHT_HAND,
+    ):
         assert frame.primitives_for(part)
 
 
@@ -82,7 +92,9 @@ def test_update_expression_and_eyes():
 
 def test_update_transform_overrides_limb_geometry():
     renderer = _renderer()
-    transform = AvatarTransform(part=AvatarPart.LEFT_ARM, offset_x=15.0, offset_y=-20.0, rotation_deg=45.0)
+    transform = AvatarTransform(
+        part=AvatarPart.LEFT_ARM, offset_x=15.0, offset_y=-20.0, rotation_deg=45.0
+    )
     renderer.update_transform(transform.part, transform)
     frame = renderer.render_scene()
     arm_lines = [p for p in frame.primitives_for(AvatarPart.LEFT_ARM)]

@@ -19,9 +19,7 @@ def _run(coro):
 def _bundle(tmp_path: Path, *, allow_hosts: tuple[str, ...] = ("localhost",)) -> BrowserToolBundle:
     download_root = tmp_path / "downloads"
     download_root.mkdir()
-    config = FileToolConfig(
-        allowed_roots=(download_root,), write_max_bytes=65_536
-    )
+    config = FileToolConfig(allowed_roots=(download_root,), write_max_bytes=65_536)
     policy = UrlPolicy(allow_domains=allow_hosts)
     provider = FakeBrowserProvider()
     bundle = BrowserToolBundle(
@@ -229,11 +227,7 @@ def test_type_replace_action(tmp_path: Path) -> None:
     bundle = _bundle(tmp_path)
     _run(bundle.start())
     _run(bundle.provider.seed_page())
-    result = _run(
-        bundle.type_tool.execute(
-            selector="#search", text="dogs", action="replace"
-        )
-    )
+    result = _run(bundle.type_tool.execute(selector="#search", text="dogs", action="replace"))
     assert result.success is True
     assert "Replaced" in (result.output or "")
 
@@ -285,9 +279,7 @@ def test_download_to_explicit_file(tmp_path: Path) -> None:
     bundle.provider.register_download("http://localhost/a.bin", b"\x00\x01")
     target = tmp_path / "downloads" / "custom.bin"
     result = _run(
-        bundle.download_tool.execute(
-            url="http://localhost/a.bin", destination=str(target)
-        )
+        bundle.download_tool.execute(url="http://localhost/a.bin", destination=str(target))
     )
     assert result.success is True
     assert target.exists()
@@ -298,9 +290,7 @@ def test_download_rejects_unsafe_url(tmp_path: Path) -> None:
     _run(bundle.start())
     dest_root = tmp_path / "downloads"
     result = _run(
-        bundle.download_tool.execute(
-            url="file:///C:/Windows/x", destination=str(dest_root)
-        )
+        bundle.download_tool.execute(url="file:///C:/Windows/x", destination=str(dest_root))
     )
     assert result.success is False
     assert "URL rejected" in (result.error or "")
@@ -352,9 +342,7 @@ def test_download_no_registered_content_fails(tmp_path: Path) -> None:
     _run(bundle.start())
     dest_root = tmp_path / "downloads"
     result = _run(
-        bundle.download_tool.execute(
-            url="http://localhost/missing.bin", destination=str(dest_root)
-        )
+        bundle.download_tool.execute(url="http://localhost/missing.bin", destination=str(dest_root))
     )
     assert result.success is False
     assert "no download available" in (result.error or "")
@@ -367,9 +355,7 @@ def test_download_existing_target_fails(tmp_path: Path) -> None:
     target = tmp_path / "downloads" / "f.bin"
     target.write_bytes(b"existing")
     result = _run(
-        bundle.download_tool.execute(
-            url="http://localhost/f.bin", destination=str(target)
-        )
+        bundle.download_tool.execute(url="http://localhost/f.bin", destination=str(target))
     )
     assert result.success is False
     assert "already exists" in (result.error or "")

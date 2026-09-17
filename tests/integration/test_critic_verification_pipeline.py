@@ -44,8 +44,7 @@ def test_critic_providers_are_interchangeable() -> None:
                     {
                         "aspect": "risk",
                         "description": (
-                            "The echo critic flags an estimated risk that is "
-                            "not guaranteed."
+                            "The echo critic flags an estimated risk that is not guaranteed."
                         ),
                         "severity": Severity.MEDIUM,
                         "confidence": 0.5,
@@ -103,9 +102,7 @@ def test_critique_logs_do_not_leak_target_text(caplog) -> None:
         asyncio.run(
             _review(
                 critic,
-                CritiqueRequest(
-                    target="A private proposed solution to an internal issue."
-                ),
+                CritiqueRequest(target="A private proposed solution to an internal issue."),
             )
         )
     messages = "\n".join(record.getMessage() for record in caplog.records)

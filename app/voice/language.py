@@ -97,9 +97,7 @@ class LanguageDetectionResult(BaseModel):
             if not self.is_mixed:
                 raise ValueError("mixed label requires is_mixed=True")
             if len(self.languages) < 2:
-                raise ValueError(
-                    "mixed detection requires at least two languages"
-                )
+                raise ValueError("mixed detection requires at least two languages")
         if self.is_mixed and len(self.languages) < 2:
             raise ValueError("mixed detection requires at least two languages")
         if (
@@ -126,9 +124,7 @@ class LanguageDetector(ABC):
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
         missing = [
-            attribute
-            for attribute in ("name", "description")
-            if not hasattr(cls, attribute)
+            attribute for attribute in ("name", "description") if not hasattr(cls, attribute)
         ]
         if missing:
             raise TypeError(
@@ -161,21 +157,15 @@ class LanguagePreference(BaseModel):
     @classmethod
     def explicit_language(cls, label: LanguageLabel) -> "LanguagePreference":
         if label not in EXPLICIT_LABELS:
-            raise ValueError(
-                "explicit language must be english, hindi, hinglish, or urdu"
-            )
+            raise ValueError("explicit language must be english, hindi, hinglish, or urdu")
         return cls(mode=LanguageMode.EXPLICIT, explicit=label)
 
     @model_validator(mode="after")
     def _validate_explicit(self) -> "LanguagePreference":
         if self.mode is LanguageMode.EXPLICIT and self.explicit is None:
-            raise ValueError(
-                "explicit preference requires a concrete language label"
-            )
+            raise ValueError("explicit preference requires a concrete language label")
         if self.explicit is not None and self.explicit not in EXPLICIT_LABELS:
-            raise ValueError(
-                "explicit language must be english, hindi, hinglish, or urdu"
-            )
+            raise ValueError("explicit language must be english, hindi, hinglish, or urdu")
         return self
 
 
@@ -191,9 +181,7 @@ _MIXED_GUIDANCE = (
     "forcing it into a single language."
 )
 
-_UNKNOWN_GUIDANCE = (
-    "Reply using the language or style that best fits the user's message."
-)
+_UNKNOWN_GUIDANCE = "Reply using the language or style that best fits the user's message."
 
 
 class ResponseStyle(BaseModel):
@@ -252,9 +240,7 @@ class ConversationLanguage:
         if self._preference.mode is LanguageMode.EXPLICIT:
             label = self._preference.explicit
             if label is None:
-                raise ValueError(
-                    "explicit language preference requires an explicit label"
-                )
+                raise ValueError("explicit language preference requires an explicit label")
             style = ResponseStyle(
                 label=label,
                 confidence=detection.confidence,
@@ -271,8 +257,7 @@ class ConversationLanguage:
                 label=detection.label,
                 confidence=detection.confidence,
                 explicit=False,
-                preserve_mixed=detection.label
-                in (LanguageLabel.HINGLISH, LanguageLabel.MIXED),
+                preserve_mixed=detection.label in (LanguageLabel.HINGLISH, LanguageLabel.MIXED),
             )
         self._latest_style = style
         self._logger.info(

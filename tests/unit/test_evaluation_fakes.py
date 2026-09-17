@@ -111,9 +111,7 @@ class TestEvaluationEnvironment:
         env = EvaluationEnvironment()
         from app.core.verification import ObservedResult, VerificationExpectation
 
-        expectation = VerificationExpectation(
-            description="Test", conditions=["file exists"]
-        )
+        expectation = VerificationExpectation(description="Test", conditions=["file exists"])
         observation = ObservedResult(
             description="Found",
             observations=["file exists"],

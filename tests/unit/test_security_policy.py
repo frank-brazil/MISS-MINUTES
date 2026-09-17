@@ -43,9 +43,7 @@ def test_precedence_explicit_deny_beats_everything() -> None:
             ),
         ]
     )
-    decision = policy.evaluate(
-        _request(PermissionCategory.WRITE, RiskLevel.LOW)
-    )
+    decision = policy.evaluate(_request(PermissionCategory.WRITE, RiskLevel.LOW))
     assert decision.decision is PermissionDecision.DENY
     assert decision.reason_code == "deny_rule"
 
@@ -54,16 +52,12 @@ def test_unknown_risk_fails_closed() -> None:
     policy = ConservativePolicy(
         rules=[
             PermissionRule(
-                permission=Permission(
-                    category=PermissionCategory.READ
-                ),
+                permission=Permission(category=PermissionCategory.READ),
                 effect="allow",
             )
         ]
     )
-    decision = policy.evaluate(
-        _request(PermissionCategory.READ, RiskLevel.UNKNOWN)
-    )
+    decision = policy.evaluate(_request(PermissionCategory.READ, RiskLevel.UNKNOWN))
     assert decision.decision is PermissionDecision.DENY
     assert decision.reason_code == "unknown_risk"
 
@@ -72,26 +66,20 @@ def test_critical_risk_never_auto_approved() -> None:
     policy = AllowDenyPolicy(
         rules=[
             PermissionRule(
-                permission=Permission(
-                    category=PermissionCategory.SENSITIVE
-                ),
+                permission=Permission(category=PermissionCategory.SENSITIVE),
                 effect="allow",
             )
         ],
         allow_default=True,
     )
-    decision = policy.evaluate(
-        _request(PermissionCategory.SENSITIVE, RiskLevel.CRITICAL)
-    )
+    decision = policy.evaluate(_request(PermissionCategory.SENSITIVE, RiskLevel.CRITICAL))
     assert decision.decision is PermissionDecision.DENY
     assert decision.reason_code == "critical_risk"
 
 
 def test_missing_permission_denied() -> None:
     policy = ConservativePolicy()
-    decision = policy.evaluate(
-        _request(PermissionCategory.READ, RiskLevel.LOW)
-    )
+    decision = policy.evaluate(_request(PermissionCategory.READ, RiskLevel.LOW))
     assert decision.decision is PermissionDecision.DENY
     assert decision.reason_code == "missing_permission"
 
@@ -100,16 +88,12 @@ def test_allow_via_rule() -> None:
     policy = AllowDenyPolicy(
         rules=[
             PermissionRule(
-                permission=Permission(
-                    category=PermissionCategory.READ
-                ),
+                permission=Permission(category=PermissionCategory.READ),
                 effect="allow",
             )
         ]
     )
-    decision = policy.evaluate(
-        _request(PermissionCategory.READ, RiskLevel.LOW)
-    )
+    decision = policy.evaluate(_request(PermissionCategory.READ, RiskLevel.LOW))
     assert decision.decision is PermissionDecision.ALLOW
     assert decision.reason_code == "allow_rule"
 
@@ -118,20 +102,13 @@ def test_high_risk_requires_confirmation_even_when_allowed() -> None:
     policy = AllowDenyPolicy(
         rules=[
             PermissionRule(
-                permission=Permission(
-                    category=PermissionCategory.SYSTEM
-                ),
+                permission=Permission(category=PermissionCategory.SYSTEM),
                 effect="allow",
             )
         ]
     )
-    decision = policy.evaluate(
-        _request(PermissionCategory.SYSTEM, RiskLevel.HIGH)
-    )
-    assert (
-        decision.decision
-        is PermissionDecision.REQUIRE_CONFIRMATION
-    )
+    decision = policy.evaluate(_request(PermissionCategory.SYSTEM, RiskLevel.HIGH))
+    assert decision.decision is PermissionDecision.REQUIRE_CONFIRMATION
     assert decision.reason_code == "confirmation_required"
 
 
@@ -139,40 +116,30 @@ def test_medium_risk_rule_allowed_without_confirmation() -> None:
     policy = AllowDenyPolicy(
         rules=[
             PermissionRule(
-                permission=Permission(
-                    category=PermissionCategory.WRITE
-                ),
+                permission=Permission(category=PermissionCategory.WRITE),
                 effect="allow",
             )
         ]
     )
-    decision = policy.evaluate(
-        _request(PermissionCategory.WRITE, RiskLevel.MEDIUM)
-    )
+    decision = policy.evaluate(_request(PermissionCategory.WRITE, RiskLevel.MEDIUM))
     assert decision.decision is PermissionDecision.ALLOW
 
 
 def test_default_policy_auto_allows_low_medium() -> None:
     policy = DefaultPolicy()
     assert (
-        policy.evaluate(
-            _request(PermissionCategory.READ, RiskLevel.LOW)
-        ).decision
+        policy.evaluate(_request(PermissionCategory.READ, RiskLevel.LOW)).decision
         is PermissionDecision.ALLOW
     )
     assert (
-        policy.evaluate(
-            _request(PermissionCategory.WRITE, RiskLevel.MEDIUM)
-        ).decision
+        policy.evaluate(_request(PermissionCategory.WRITE, RiskLevel.MEDIUM)).decision
         is PermissionDecision.ALLOW
     )
 
 
 def test_default_policy_high_without_rule_is_denied() -> None:
     policy = DefaultPolicy()
-    high = policy.evaluate(
-        _request(PermissionCategory.SYSTEM, RiskLevel.HIGH)
-    )
+    high = policy.evaluate(_request(PermissionCategory.SYSTEM, RiskLevel.HIGH))
     assert high.decision is PermissionDecision.DENY
     assert high.reason_code == "missing_permission"
 
@@ -201,9 +168,7 @@ def test_default_policy_critical_is_denied_even_with_rule() -> None:
         allow_default=True,
         risk_floor=RiskLevel.MEDIUM,
     )
-    critical = policy.evaluate(
-        _request(PermissionCategory.SENSITIVE, RiskLevel.CRITICAL)
-    )
+    critical = policy.evaluate(_request(PermissionCategory.SENSITIVE, RiskLevel.CRITICAL))
     assert critical.decision is PermissionDecision.DENY
     assert critical.reason_code == "critical_risk"
 
@@ -211,18 +176,14 @@ def test_default_policy_critical_is_denied_even_with_rule() -> None:
 def test_conservative_policy_denies_without_rules() -> None:
     policy = ConservativePolicy()
     assert (
-        policy.evaluate(
-            _request(PermissionCategory.READ, RiskLevel.LOW)
-        ).decision
+        policy.evaluate(_request(PermissionCategory.READ, RiskLevel.LOW)).decision
         is PermissionDecision.DENY
     )
 
 
 def test_deny_all_policy() -> None:
     policy = DenyAllPolicy()
-    decision = policy.evaluate(
-        _request(PermissionCategory.READ, RiskLevel.LOW)
-    )
+    decision = policy.evaluate(_request(PermissionCategory.READ, RiskLevel.LOW))
     assert decision.decision is PermissionDecision.DENY
     assert decision.reason_code == "deny_all"
 
@@ -261,9 +222,7 @@ def test_policy_is_deterministic() -> None:
     policy = AllowDenyPolicy(
         rules=[
             PermissionRule(
-                permission=Permission(
-                    category=PermissionCategory.READ
-                ),
+                permission=Permission(category=PermissionCategory.READ),
                 effect="allow",
             )
         ]

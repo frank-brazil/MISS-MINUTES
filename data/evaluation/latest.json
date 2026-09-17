@@ -1,7 +1,7 @@
 {
-  "run_id": "b5ae5006-230a-41f5-b4d0-a78cc6e5e7ab",
-  "started_at": "2026-09-16T23:22:38.082353+00:00",
-  "completed_at": "2026-09-16T23:22:38.176586+00:00",
+  "run_id": "9b95ecbb-4eda-415d-a0a6-2b61ce6d98f4",
+  "started_at": "2026-09-17T05:04:39.664181+00:00",
+  "completed_at": "2026-09-17T05:04:39.770663+00:00",
   "environment": {
     "mode": "deterministic",
     "python_version": "3.13.7",
@@ -535,7 +535,7 @@
       "case_id": null,
       "value": 1.0,
       "status": "pass",
-      "evidence": "assignment_id=8215105c-5b09-41b3-9357-98f9dbe06ccd",
+      "evidence": "assignment_id=884a57a9-71bf-4b33-8872-02cbd1e3e3d6",
       "limitations": "FakeWorkerTransport; no real distributed workers.",
       "mode": "deterministic"
     },

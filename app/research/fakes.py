@@ -63,9 +63,7 @@ class FakeResearchProvider(ResearchProvider):
             raise self._raise_error
         if self._fail:
             self._logger.warning("Fake research provider configured to fail")
-            return ResearchResponse.fail(
-                query=request.query, error=self._fail_message
-            )
+            return ResearchResponse.fail(query=request.query, error=self._fail_message)
 
         results = self._fixtures.get(request.query, self._default_results)
         results = list(results)[: request.max_results]
@@ -74,8 +72,7 @@ class FakeResearchProvider(ResearchProvider):
         results = assign_ranks(results)
 
         self._logger.info(
-            "Fake research provider returned evidence: query=%s "
-            "result_count=%d success=%s",
+            "Fake research provider returned evidence: query=%s result_count=%d success=%s",
             request.query,
             len(results),
             True,

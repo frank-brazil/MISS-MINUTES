@@ -45,9 +45,7 @@ class InMemoryMemory(Memory):
 
     async def retrieve(self, query: str, *, limit: int = 10) -> MemoryQueryResult:
         query_lower = query.lower()
-        matched = [
-            r for r in self._records if query_lower in r.content.lower()
-        ]
+        matched = [r for r in self._records if query_lower in r.content.lower()]
         return MemoryQueryResult.ok(matched[:limit])
 
     async def delete(self, memory_id: Any) -> bool:
@@ -161,7 +159,8 @@ class EvaluationEnvironment:
     ) -> None:
         if ai_fail:
             self.ai_model = FakeAIModel(
-                replies=[], default_reply="Default.",
+                replies=[],
+                default_reply="Default.",
                 raise_error=RuntimeError("simulated AI provider failure"),
             )
         if stt_fail:

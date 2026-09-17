@@ -66,9 +66,7 @@ def test_default_policy_speech_speed_by_length() -> None:
 
 def test_default_policy_configurable_voice() -> None:
     policy = DefaultVoiceResponsePolicy(voice="amrita")
-    profile = policy.profile_for(
-        text="hi", style=_style(LanguageLabel.ENGLISH), response_text="Hi"
-    )
+    profile = policy.profile_for(text="hi", style=_style(LanguageLabel.ENGLISH), response_text="Hi")
     assert profile.voice == "amrita"
 
 

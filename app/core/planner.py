@@ -73,13 +73,9 @@ class Plan(BaseModel):
                 if dependency == step.step_id:
                     raise ValueError("a step cannot depend on itself")
                 if dependency not in seen:
-                    raise ValueError(
-                        f"dependency references unknown step: {dependency}"
-                    )
+                    raise ValueError(f"dependency references unknown step: {dependency}")
                 if order[dependency] >= order[step.step_id]:
-                    raise ValueError(
-                        "dependency must reference an earlier step"
-                    )
+                    raise ValueError("dependency must reference an earlier step")
         return self
 
 
@@ -90,9 +86,7 @@ class Planner(ABC):
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
         missing = [
-            attribute
-            for attribute in ("name", "description")
-            if not hasattr(cls, attribute)
+            attribute for attribute in ("name", "description") if not hasattr(cls, attribute)
         ]
         if missing:
             raise TypeError(
@@ -113,15 +107,10 @@ class ManualPlanner(Planner):
 
     def __init__(self, step_descriptions: Sequence[str]) -> None:
         self._logger = logging.getLogger(__name__)
-        self._step_descriptions = tuple(
-            description.strip() for description in step_descriptions
-        )
+        self._step_descriptions = tuple(description.strip() for description in step_descriptions)
 
     async def plan(self, task: Task) -> Plan:
-        steps = [
-            PlanStep(description=description)
-            for description in self._step_descriptions
-        ]
+        steps = [PlanStep(description=description) for description in self._step_descriptions]
         plan = Plan(
             task_id=task.task_id,
             goal=task.description,

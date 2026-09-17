@@ -26,9 +26,7 @@ async def transcribe(audio_path: Path) -> None:
     data = audio_path.read_bytes()
     audio_format = audio_path.suffix.lstrip(".") or "wav"
     print(f"Transcribing {audio_path} ({len(data)} bytes, format={audio_format})...")
-    result = await stt.transcribe(
-        SpeechInput(audio=data, format=audio_format)
-    )
+    result = await stt.transcribe(SpeechInput(audio=data, format=audio_format))
     if result.success:
         print(f"  success: {result.success}")
         print(f"  text: {result.text}")
@@ -58,15 +56,9 @@ async def main(audio: Path | None, text: str | None, output: Path) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Manual voice provider demo.")
-    parser.add_argument(
-        "--audio", type=Path, default=None, help="Audio file to transcribe."
-    )
-    parser.add_argument(
-        "--text", default=None, help="Text to synthesize into speech."
-    )
-    parser.add_argument(
-        "--output", type=Path, default=Path("output.mp3"), help="TTS output file."
-    )
+    parser.add_argument("--audio", type=Path, default=None, help="Audio file to transcribe.")
+    parser.add_argument("--text", default=None, help="Text to synthesize into speech.")
+    parser.add_argument("--output", type=Path, default=Path("output.mp3"), help="TTS output file.")
     args = parser.parse_args()
     if args.audio is None and args.text is None:
         parser.error("provide at least one of --audio or --text")

@@ -1,3 +1,8 @@
+from __future__ import annotations
+
+import logging
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 
 from app.api.router import router
@@ -7,6 +12,8 @@ from app.distributed.httpapi import create_master_app
 from app.memory.base import Memory
 from app.runtime.runtime import MissMinutesRuntime
 from app.security.manager import SecurityManager
+
+logger = logging.getLogger(__name__)
 
 
 def create_app(
@@ -19,10 +26,23 @@ def create_app(
     security_manager: SecurityManager | None = None,
     runtime: MissMinutesRuntime | None = None,
 ) -> FastAPI:
+    @asynccontextmanager
+    async def lifespan(app: FastAPI):
+        # Startup: initialize the runtime if provided
+        if runtime is not None and not runtime.ready:
+            logger.info("Lifespan: starting runtime")
+            await runtime.startup()
+        yield
+        # Shutdown: clean up the runtime
+        if runtime is not None:
+            logger.info("Lifespan: shutting down runtime")
+            await runtime.shutdown()
+
     app = FastAPI(
         title="MISSMINUTES",
         version="0.1.0",
         description="Personal intelligent AI computer agent",
+        lifespan=lifespan,
     )
 
     if runtime is not None:

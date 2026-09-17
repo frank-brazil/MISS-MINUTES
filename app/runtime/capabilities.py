@@ -35,13 +35,9 @@ class CapabilityRegistry:
         self._capabilities: dict[str, CapabilityStatus] = {}
         self._start_time: float = time.time()
 
-    def register(
-        self, name: str, available: bool, detail: str | None = None
-    ) -> None:
+    def register(self, name: str, available: bool, detail: str | None = None) -> None:
         """Register or update a capability status."""
-        self._capabilities[name] = CapabilityStatus(
-            name=name, available=available, detail=detail
-        )
+        self._capabilities[name] = CapabilityStatus(name=name, available=available, detail=detail)
 
     def is_available(self, name: str) -> bool:
         """Check if a named capability is available."""
@@ -52,9 +48,7 @@ class CapabilityRegistry:
     def start_time(self) -> float:
         return self._start_time
 
-    def health_report(
-        self, ready: bool, request_count: int = 0
-    ) -> HealthReport:
+    def health_report(self, ready: bool, request_count: int = 0) -> HealthReport:
         """Build a snapshot health report."""
         return HealthReport(
             ready=ready,

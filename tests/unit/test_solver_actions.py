@@ -100,9 +100,7 @@ def test_fake_action_executor_fail() -> None:
 def test_fake_action_executor_fail_iterations() -> None:
     executor = FakeActionExecutor(fail_iterations=frozenset({1}))
     first = _run(executor.execute(ActionRequest(description="a", iteration=1)))
-    second = _run(
-        executor.execute(ActionRequest(description="a", iteration=2))
-    )
+    second = _run(executor.execute(ActionRequest(description="a", iteration=2)))
     assert first.success is False
     assert second.success is True
 

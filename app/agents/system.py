@@ -33,9 +33,7 @@ class SystemAgent(Agent):
     """
 
     name: ClassVar[str] = "system"
-    description: ClassVar[str] = (
-        "Provides system information and controlled system-level tasks."
-    )
+    description: ClassVar[str] = "Provides system information and controlled system-level tasks."
     capabilities: ClassVar[frozenset[str]] = frozenset(
         {"system_information", "application_control", "system_tasks"}
     )

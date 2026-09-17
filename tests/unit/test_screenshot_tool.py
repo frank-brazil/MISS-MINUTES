@@ -66,20 +66,14 @@ def test_screenshot_provider_success(config: FileToolConfig, tmp_path: Path) -> 
 
 def test_screenshot_unsupported_environment(config: FileToolConfig) -> None:
     tool = ScreenshotTool(config=config)
-    result = asyncio.run(
-        tool.execute(output_path=str(config.allowed_roots[0] / "cap.png"))
-    )
+    result = asyncio.run(tool.execute(output_path=str(config.allowed_roots[0] / "cap.png")))
     assert result.success is False
     assert "not supported" in (result.error or "").lower()
 
 
-def test_screenshot_provider_failure_is_controlled(
-    config: FileToolConfig, tmp_path: Path
-) -> None:
+def test_screenshot_provider_failure_is_controlled(config: FileToolConfig, tmp_path: Path) -> None:
     tool = ScreenshotTool(provider=FailingScreenshotProvider(), config=config)
-    result = asyncio.run(
-        tool.execute(output_path=str(tmp_path / "shots" / "cap.png"))
-    )
+    result = asyncio.run(tool.execute(output_path=str(tmp_path / "shots" / "cap.png")))
     assert result.success is False
     assert "backend unavailable" in (result.error or "")
 
@@ -88,29 +82,21 @@ def test_screenshot_provider_exception_is_controlled(
     config: FileToolConfig, tmp_path: Path
 ) -> None:
     tool = ScreenshotTool(provider=RaisingScreenshotProvider(), config=config)
-    result = asyncio.run(
-        tool.execute(output_path=str(tmp_path / "shots" / "cap.png"))
-    )
+    result = asyncio.run(tool.execute(output_path=str(tmp_path / "shots" / "cap.png")))
     assert result.success is False
     assert "RuntimeError" in (result.error or "")
 
 
 def test_screenshot_output_path_outside_root(config: FileToolConfig) -> None:
     tool = ScreenshotTool(provider=FakeScreenshotProvider(), config=config)
-    result = asyncio.run(
-        tool.execute(output_path=r"C:\\tmp-outside\\cap.png")
-    )
+    result = asyncio.run(tool.execute(output_path=r"C:\\tmp-outside\\cap.png"))
     assert result.success is False
     assert "not allowed" in (result.error or "")
 
 
-def test_screenshot_output_directory_missing(
-    config: FileToolConfig, tmp_path: Path
-) -> None:
+def test_screenshot_output_directory_missing(config: FileToolConfig, tmp_path: Path) -> None:
     tool = ScreenshotTool(provider=FakeScreenshotProvider(), config=config)
-    result = asyncio.run(
-        tool.execute(output_path=str(tmp_path / "shots" / "missing" / "cap.png"))
-    )
+    result = asyncio.run(tool.execute(output_path=str(tmp_path / "shots" / "missing" / "cap.png")))
     assert result.success is False
     assert "Output directory does not exist" in (result.error or "")
 
@@ -121,9 +107,7 @@ def test_screenshot_default_provider_is_unsupported() -> None:
         asyncio.run(provider.capture(Path("dummy.png")))
 
 
-def test_screenshot_no_upload_or_content_in_output(
-    config: FileToolConfig, tmp_path: Path
-) -> None:
+def test_screenshot_no_upload_or_content_in_output(config: FileToolConfig, tmp_path: Path) -> None:
     tool = ScreenshotTool(provider=FakeScreenshotProvider(), config=config)
     target = tmp_path / "shots" / "cap.png"
     result = asyncio.run(tool.execute(output_path=str(target)))

@@ -200,5 +200,6 @@ class TestReliabilityScenarios:
 
     def test_all_have_failure_types(self):
         from app.evaluation.models import FailureCategory
+
         for s in build_reliability_scenarios():
             assert isinstance(s.failure_type, FailureCategory)

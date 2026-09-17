@@ -39,9 +39,7 @@ class FakeVisionProvider(VisionProvider):
     def register_image_text(self, reference: str, text: str) -> None:
         self._image_texts[reference] = text
 
-    def register_detected_elements(
-        self, reference: str, elements: list[DetectedElement]
-    ) -> None:
+    def register_detected_elements(self, reference: str, elements: list[DetectedElement]) -> None:
         self._image_elements[reference] = tuple(elements)
 
     async def analyze(self, request: VisionRequest) -> VisionResult:

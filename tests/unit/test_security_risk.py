@@ -10,14 +10,8 @@ def test_category_defaults() -> None:
     assert assessor.assess(category=PermissionCategory.BROWSER) is RiskLevel.MEDIUM
     assert assessor.assess(category=PermissionCategory.NETWORK) is RiskLevel.MEDIUM
     assert assessor.assess(category=PermissionCategory.SYSTEM) is RiskLevel.HIGH
-    assert (
-        assessor.assess(category=PermissionCategory.SENSITIVE)
-        is RiskLevel.CRITICAL
-    )
-    assert (
-        assessor.assess(category=PermissionCategory.DISTRIBUTED)
-        is RiskLevel.MEDIUM
-    )
+    assert assessor.assess(category=PermissionCategory.SENSITIVE) is RiskLevel.CRITICAL
+    assert assessor.assess(category=PermissionCategory.DISTRIBUTED) is RiskLevel.MEDIUM
 
 
 def test_unknown_category_is_unknown_risk() -> None:
@@ -26,23 +20,17 @@ def test_unknown_category_is_unknown_risk() -> None:
     class UnknownCategory(StrEnum):
         WEIRD = "weird"
 
-    assert RiskAssessor().assess(category=UnknownCategory.WEIRD) is (
-        RiskLevel.UNKNOWN
-    )
+    assert RiskAssessor().assess(category=UnknownCategory.WEIRD) is (RiskLevel.UNKNOWN)
 
 
 def test_destructive_keyword_escalates() -> None:
     assessor = RiskAssessor()
     assert (
-        assessor.assess(
-            category=PermissionCategory.WRITE, action="delete all files"
-        )
+        assessor.assess(category=PermissionCategory.WRITE, action="delete all files")
         is RiskLevel.HIGH
     )
     assert (
-        assessor.assess(
-            category=PermissionCategory.WRITE, action="drop table users"
-        )
+        assessor.assess(category=PermissionCategory.WRITE, action="drop table users")
         is RiskLevel.HIGH
     )
 
@@ -50,9 +38,7 @@ def test_destructive_keyword_escalates() -> None:
 def test_high_keyword_escalates_medium_to_high() -> None:
     assessor = RiskAssessor()
     assert (
-        assessor.assess(
-            category=PermissionCategory.EXECUTE, action="run admin command"
-        )
+        assessor.assess(category=PermissionCategory.EXECUTE, action="run admin command")
         is RiskLevel.HIGH
     )
 
@@ -60,9 +46,7 @@ def test_high_keyword_escalates_medium_to_high() -> None:
 def test_shell_meta_escalates() -> None:
     assessor = RiskAssessor()
     assert (
-        assessor.assess(
-            category=PermissionCategory.EXECUTE, action="run with $HOME"
-        )
+        assessor.assess(category=PermissionCategory.EXECUTE, action="run with $HOME")
         is RiskLevel.HIGH
     )
 
@@ -70,23 +54,15 @@ def test_shell_meta_escalates() -> None:
 def test_benign_action_stays_at_base() -> None:
     assessor = RiskAssessor()
     assert (
-        assessor.assess(
-            category=PermissionCategory.READ, action="read config file"
-        )
+        assessor.assess(category=PermissionCategory.READ, action="read config file")
         is RiskLevel.LOW
     )
 
 
 def test_category_overrides() -> None:
-    assessor = RiskAssessor(
-        category_overrides={
-            PermissionCategory.NETWORK: RiskLevel.HIGH
-        }
-    )
+    assessor = RiskAssessor(category_overrides={PermissionCategory.NETWORK: RiskLevel.HIGH})
     assert assessor.assess(category=PermissionCategory.NETWORK) is RiskLevel.HIGH
-    assert assessor.category_overrides == {
-        PermissionCategory.NETWORK: RiskLevel.HIGH
-    }
+    assert assessor.category_overrides == {PermissionCategory.NETWORK: RiskLevel.HIGH}
 
 
 def test_risk_rank_order() -> None:

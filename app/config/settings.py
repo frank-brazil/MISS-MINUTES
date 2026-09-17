@@ -13,6 +13,7 @@ from pathlib import Path
 
 from app.config.schema import (
     AIConfig,
+    AppConfig,
     AvatarConfig,
     BrowserConfig,
     DistributedConfigSchema,
@@ -28,6 +29,11 @@ logger = logging.getLogger(__name__)
 _ENV_PREFIX = "MISSMINUTES_"
 
 _ENV_MAP: dict[str, tuple[str, type]] = {
+    # Application
+    "MISSMINUTES_HOST": ("app.host", str),
+    "MISSMINUTES_PORT": ("app.port", int),
+    "MISSMINUTES_LOG_LEVEL": ("app.log_level", str),
+    "MISSMINUTES_ENV": ("app.environment", str),
     # AI
     "MISSMINUTES_AI_PROVIDER": ("ai.provider", str),
     "MISSMINUTES_AI_MODEL": ("ai.model", str),
@@ -104,9 +110,7 @@ def load_config(path: Path | str | None = None) -> MissMinutesConfig:
                 raw = tomllib.load(fh)
             logger.info("Loaded configuration from %s", resolved)
         except Exception:
-            logger.warning(
-                "Failed to load TOML config from %s, using defaults", resolved
-            )
+            logger.warning("Failed to load TOML config from %s, using defaults", resolved)
     else:
         logger.info("No config file at %s, using defaults + env vars", resolved)
 
@@ -132,6 +136,7 @@ def load_config(path: Path | str | None = None) -> MissMinutesConfig:
             )
 
     # Build sub-configs, ignoring unknown keys
+    app_cfg = AppConfig(**raw.get("app", {}))
     ai = AIConfig(**raw.get("ai", {}))
     voice = VoiceConfig(**raw.get("voice", {}))
     avatar = AvatarConfig(**raw.get("avatar", {}))
@@ -142,6 +147,7 @@ def load_config(path: Path | str | None = None) -> MissMinutesConfig:
     vision = VisionConfig(**raw.get("vision", {}))
 
     return MissMinutesConfig(
+        app=app_cfg,
         ai=ai,
         voice=voice,
         avatar=avatar,

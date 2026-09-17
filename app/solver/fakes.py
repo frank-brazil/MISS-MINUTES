@@ -19,8 +19,7 @@ from app.solver.observation import (
 class FakeActionExecutor(ActionExecutor):
     name = "fake-action-executor"
     description = (
-        "Deterministic action executor that performs no real actions, used "
-        "offline and in tests."
+        "Deterministic action executor that performs no real actions, used offline and in tests."
     )
 
     def __init__(
@@ -111,9 +110,7 @@ class FakeObservationProvider(ObservationProvider):
             )
             raise self._raise_error
         if self._fail:
-            self._logger.warning(
-                "Fake observation provider configured to fail"
-            )
+            self._logger.warning("Fake observation provider configured to fail")
             return ObservationResult.fail(
                 observation_id=request.observation_id,
                 error=self._fail_message,

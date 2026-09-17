@@ -87,9 +87,7 @@ class FakeWorkerTransport(WorkerTransport):
             await asyncio.sleep(self._delay)
         if self._raise_error is not None:
             raise self._raise_error
-        if self._fail or (
-            self._fail_once and self.dispatch_count == 1
-        ):
+        if self._fail or (self._fail_once and self.dispatch_count == 1):
             self._logger.warning(
                 "Fake worker transport unreachable: assignment_id=%s",
                 assignment.assignment_id,
@@ -108,9 +106,7 @@ class FakeWorkerTransport(WorkerTransport):
         try:
             result = await self._executor.execute(task)
         except Exception as exc:
-            raise TransportError(
-                f"worker crashed during execution: {type(exc).__name__}"
-            ) from exc
+            raise TransportError(f"worker crashed during execution: {type(exc).__name__}") from exc
         result.assignment_id = assignment.assignment_id
         result.worker_id = self._worker_id or assignment.worker_id
         return result

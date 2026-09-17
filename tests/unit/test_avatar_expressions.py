@@ -120,7 +120,9 @@ def test_expression_controller_unknown_raises():
 
 
 def test_expression_controller_custom_set():
-    custom = ExpressionSet({"soft": AvatarExpression(eye_openness=0.5, mouth_shape=MouthShape.SMILE)})
+    custom = ExpressionSet(
+        {"soft": AvatarExpression(eye_openness=0.5, mouth_shape=MouthShape.SMILE)}
+    )
     controller = ExpressionController(custom)
     assert controller.current == "soft"
     assert controller.names() == ("soft",)

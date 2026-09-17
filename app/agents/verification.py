@@ -37,9 +37,7 @@ class VerificationAgent(Agent):
     """
 
     name: ClassVar[str] = "verification"
-    description: ClassVar[str] = (
-        "Verifies whether observed outcomes match expected outcomes."
-    )
+    description: ClassVar[str] = "Verifies whether observed outcomes match expected outcomes."
     capabilities: ClassVar[frozenset[str]] = frozenset(
         {"verification", "validation", "result_checking"}
     )

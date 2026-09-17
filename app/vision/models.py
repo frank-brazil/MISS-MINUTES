@@ -118,9 +118,7 @@ class ImageInput(BaseModel):
 
         mime = self.mime_type
         if mime is None:
-            mime = (
-                _MIME_BY_SUFFIX.get(self.path.suffix.lower()) if self.path else None
-            )
+            mime = _MIME_BY_SUFFIX.get(self.path.suffix.lower()) if self.path else None
         if mime is None:
             raise ValueError("unsupported image type: mime_type required")
         if mime not in SUPPORTED_IMAGE_MIME_TYPES:
@@ -132,9 +130,7 @@ class ImageInput(BaseModel):
                 raise ValueError("image data must not be empty")
             limit = self.max_bytes or DEFAULT_MAX_IMAGE_BYTES
             if len(self.data) > limit:
-                raise ValueError(
-                    f"image data exceeds size limit of {limit} bytes"
-                )
+                raise ValueError(f"image data exceeds size limit of {limit} bytes")
 
         return self
 

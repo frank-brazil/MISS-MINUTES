@@ -165,8 +165,7 @@ class WorkerService:
                     reason = "task requires confirmation; worker cannot auto-confirm"
                 else:
                     reason = (
-                        "task denied by worker security policy: "
-                        f"{decision.reason_code or 'denied'}"
+                        f"task denied by worker security policy: {decision.reason_code or 'denied'}"
                     )
                 self._logger.warning(
                     "Worker security refused task: task_id=%s reason=%s",

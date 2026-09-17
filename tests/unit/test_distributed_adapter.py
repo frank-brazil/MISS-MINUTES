@@ -65,9 +65,7 @@ def test_submit_and_await_fails_after_retries():
     task = DistributedTask(task_type="analysis", required_capabilities=frozenset({"analysis"}))
     adapter, coordinator = _adapter(
         max_retries=2,
-        executor=FakeWorkerExecutor(
-            fail_task_ids=frozenset({task.distributed_task_id})
-        ),
+        executor=FakeWorkerExecutor(fail_task_ids=frozenset({task.distributed_task_id})),
     )
     result = _run(adapter.submit_and_await_async(task))
     assert result.success is False
@@ -98,9 +96,7 @@ def test_disabled_adapter_returns_early_failure():
 
 
 def test_result_factories():
-    ok = DistributedExecutionResult.ok(
-        output="x", task_id=WorkerInfo(worker_name="w").worker_id
-    )
+    ok = DistributedExecutionResult.ok(output="x", task_id=WorkerInfo(worker_name="w").worker_id)
     assert ok.success is True
     failed = DistributedExecutionResult.fail(error="nope")
     assert failed.success is False

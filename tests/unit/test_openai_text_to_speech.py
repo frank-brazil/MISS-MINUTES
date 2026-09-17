@@ -121,9 +121,7 @@ def test_provider_reads_env_configuration(
     client = RecordingClient()
     provider = OpenAITextToSpeech(client=client)
     assert provider.model == "gpt-4o-mini-tts"
-    result = asyncio.run(
-        provider.synthesize(TextToSpeechRequest(text="hello"))
-    )
+    result = asyncio.run(provider.synthesize(TextToSpeechRequest(text="hello")))
     assert result.success is True
     sent = client.audio.speech.last_kwargs
     assert sent["model"] == "gpt-4o-mini-tts"
@@ -170,9 +168,7 @@ def test_missing_api_key_returns_controlled_failure(
 ) -> None:
     monkeypatch.delenv(OPENAI_API_KEY_ENV, raising=False)
     provider = OpenAITextToSpeech()
-    result = asyncio.run(
-        provider.synthesize(TextToSpeechRequest(text="hello"))
-    )
+    result = asyncio.run(provider.synthesize(TextToSpeechRequest(text="hello")))
     assert isinstance(result, TextToSpeechResult)
     assert result.success is False
     assert "API key" in (result.error or "")
@@ -184,17 +180,13 @@ def test_blank_api_key_treated_as_missing(
 ) -> None:
     monkeypatch.delenv(OPENAI_API_KEY_ENV, raising=False)
     provider = OpenAITextToSpeech(api_key="   ")
-    result = asyncio.run(
-        provider.synthesize(TextToSpeechRequest(text="hello"))
-    )
+    result = asyncio.run(provider.synthesize(TextToSpeechRequest(text="hello")))
     assert result.success is False
 
 
 def test_successful_synthesis_with_mocked_client() -> None:
     provider = OpenAITextToSpeech(api_key="sk-test", client=FakeClient())
-    result = asyncio.run(
-        provider.synthesize(TextToSpeechRequest(text="hello"))
-    )
+    result = asyncio.run(provider.synthesize(TextToSpeechRequest(text="hello")))
     assert result.success is True
     assert result.error is None
     assert result.audio is not None
@@ -206,9 +198,7 @@ def test_successful_synthesis_with_mocked_client() -> None:
 
 def test_synthesis_reads_async_payload() -> None:
     provider = OpenAITextToSpeech(api_key="sk-test", client=AreadClient())
-    result = asyncio.run(
-        provider.synthesize(TextToSpeechRequest(text="hello"))
-    )
+    result = asyncio.run(provider.synthesize(TextToSpeechRequest(text="hello")))
     assert result.success is True
     assert result.audio is not None
     assert result.audio.content == b"streamed audio bytes"
@@ -217,11 +207,7 @@ def test_synthesis_reads_async_payload() -> None:
 def test_request_voice_overrides_default_voice() -> None:
     client = RecordingClient()
     provider = OpenAITextToSpeech(api_key="sk-test", client=client)
-    result = asyncio.run(
-        provider.synthesize(
-            TextToSpeechRequest(text="hello", voice="nova")
-        )
-    )
+    result = asyncio.run(provider.synthesize(TextToSpeechRequest(text="hello", voice="nova")))
     assert result.success is True
     assert client.audio.speech.last_kwargs["voice"] == "nova"
 
@@ -229,9 +215,7 @@ def test_request_voice_overrides_default_voice() -> None:
 def test_default_voice_used_when_request_has_none() -> None:
     client = RecordingClient()
     provider = OpenAITextToSpeech(api_key="sk-test", client=client)
-    result = asyncio.run(
-        provider.synthesize(TextToSpeechRequest(text="hello"))
-    )
+    result = asyncio.run(provider.synthesize(TextToSpeechRequest(text="hello")))
     assert result.success is True
     assert client.audio.speech.last_kwargs["voice"] == "alloy"
 
@@ -239,18 +223,14 @@ def test_default_voice_used_when_request_has_none() -> None:
 def test_input_text_forwarded_to_api() -> None:
     client = RecordingClient()
     provider = OpenAITextToSpeech(api_key="sk-test", client=client)
-    result = asyncio.run(
-        provider.synthesize(TextToSpeechRequest(text="greetings"))
-    )
+    result = asyncio.run(provider.synthesize(TextToSpeechRequest(text="greetings")))
     assert result.success is True
     assert client.audio.speech.last_kwargs["input"] == "greetings"
 
 
 def test_empty_audio_from_provider_not_invented() -> None:
     provider = OpenAITextToSpeech(api_key="sk-test", client=EmptyClient())
-    result = asyncio.run(
-        provider.synthesize(TextToSpeechRequest(text="hello"))
-    )
+    result = asyncio.run(provider.synthesize(TextToSpeechRequest(text="hello")))
     assert result.success is False
     assert "no audio content" in (result.error or "")
     assert result.audio is None
@@ -258,9 +238,7 @@ def test_empty_audio_from_provider_not_invented() -> None:
 
 def test_provider_failure_with_mocked_client() -> None:
     provider = OpenAITextToSpeech(api_key="sk-test", client=RaisingClient())
-    result = asyncio.run(
-        provider.synthesize(TextToSpeechRequest(text="hello"))
-    )
+    result = asyncio.run(provider.synthesize(TextToSpeechRequest(text="hello")))
     assert result.success is False
     assert result.error == "OpenAI text-to-speech provider call failed"
     assert result.audio is None
@@ -273,9 +251,7 @@ def test_unsupported_response_format_rejected_without_client_call() -> None:
         response_format="mp4",
         client=client,
     )
-    result = asyncio.run(
-        provider.synthesize(TextToSpeechRequest(text="hello"))
-    )
+    result = asyncio.run(provider.synthesize(TextToSpeechRequest(text="hello")))
     assert result.success is False
     assert "Unsupported" in (result.error or "")
     assert client.audio.speech.last_kwargs == {}
@@ -286,9 +262,7 @@ def test_does_not_log_input_text(
 ) -> None:
     caplog.set_level("INFO")
     provider = OpenAITextToSpeech(api_key="sk-test", client=FakeClient())
-    result = asyncio.run(
-        provider.synthesize(TextToSpeechRequest(text="secret greeting"))
-    )
+    result = asyncio.run(provider.synthesize(TextToSpeechRequest(text="secret greeting")))
     assert result.success is True
     assert "secret greeting" not in caplog.text
     assert "fake mp3 bytes" not in caplog.text

@@ -144,10 +144,7 @@ class AllowDenyPolicy(SecurityPolicy):
                     if risk in self._require_confirmation:
                         return SecurityDecision.require_confirmation(
                             reason_code="confirmation_required",
-                            reason=(
-                                f"risk '{risk.value}' requires "
-                                "confirmation before approval"
-                            ),
+                            reason=(f"risk '{risk.value}' requires confirmation before approval"),
                             request_id=request_id,
                         )
                     return SecurityDecision.allow(
@@ -164,10 +161,7 @@ class AllowDenyPolicy(SecurityPolicy):
         if risk in self._require_confirmation:
             return SecurityDecision.require_confirmation(
                 reason_code="confirmation_required",
-                reason=(
-                    f"risk '{risk.value}' requires confirmation before "
-                    "approval"
-                ),
+                reason=(f"risk '{risk.value}' requires confirmation before approval"),
                 request_id=request_id,
             )
         return SecurityDecision.allow(

@@ -68,9 +68,7 @@ class AudioCaptureProvider(ABC):
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
         missing = [
-            attribute
-            for attribute in ("name", "description")
-            if not hasattr(cls, attribute)
+            attribute for attribute in ("name", "description") if not hasattr(cls, attribute)
         ]
         if missing:
             raise TypeError(
@@ -123,9 +121,7 @@ class FakeAudioCaptureProvider(AudioCaptureProvider):
         raise_on_start: Exception | None = None,
         raise_on_read: Exception | None = None,
     ) -> None:
-        self._queue: list[AudioFrame] = [
-            self._normalize(frame) for frame in (frames or [])
-        ]
+        self._queue: list[AudioFrame] = [self._normalize(frame) for frame in (frames or [])]
         self._consumed: list[AudioFrame] = []
         self._fail_start = fail_start
         self._fail_start_message = fail_start_message
@@ -176,9 +172,7 @@ class FakeAudioCaptureProvider(AudioCaptureProvider):
             raise CaptureError(self._fail_start_message)
         self._started = True
         self._state = AudioCaptureState.CAPTURING
-        self._logger.info(
-            "Fake capture started: queued_frames=%d", len(self._queue)
-        )
+        self._logger.info("Fake capture started: queued_frames=%d", len(self._queue))
 
     async def stop(self) -> None:
         self._started = False
@@ -187,9 +181,7 @@ class FakeAudioCaptureProvider(AudioCaptureProvider):
 
     async def read(self) -> AudioFrame | None:
         if self._raise_on_read is not None:
-            self._logger.error(
-                "Fake capture read raising: %s", type(self._raise_on_read).__name__
-            )
+            self._logger.error("Fake capture read raising: %s", type(self._raise_on_read).__name__)
             raise self._raise_on_read
         if not self._queue:
             return None

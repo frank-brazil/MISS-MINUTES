@@ -25,9 +25,7 @@ def _run(coro):
 def _build(*, max_retries: int = 2, transport=None, executor=None):
     registry = WorkerRegistry()
     queue = DistributedTaskQueue()
-    transport = transport or FakeWorkerTransport(
-        executor=executor or FakeWorkerExecutor()
-    )
+    transport = transport or FakeWorkerTransport(executor=executor or FakeWorkerExecutor())
     config = DistributedConfig(max_retries=max_retries)
     coordinator = DistributedCoordinator(
         registry=registry,
@@ -128,9 +126,7 @@ def test_accept_failure_retries_within_budget_then_fails():
 
     # Attempt 1
     coordinator.dispatch_next()
-    coordinator.accept_result(
-        DistributedTaskResult.fail(task.distributed_task_id, error="boom")
-    )
+    coordinator.accept_result(DistributedTaskResult.fail(task.distributed_task_id, error="boom"))
     assert task.status is DistributedTaskStatus.QUEUED
     assert task.attempt_count == 1
     assert coordinator.queue_depth == 1
@@ -178,9 +174,7 @@ def test_stale_assignment_result_is_ignored():
     task = coordinator.submit(_task())
 
     first_assignment = coordinator.dispatch_next()
-    coordinator.accept_result(
-        DistributedTaskResult.fail(task.distributed_task_id, error="first")
-    )
+    coordinator.accept_result(DistributedTaskResult.fail(task.distributed_task_id, error="first"))
     second_assignment = coordinator.dispatch_next()
     assert second_assignment.assignment_id != first_assignment.assignment_id
 

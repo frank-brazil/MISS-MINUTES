@@ -34,9 +34,7 @@ class VoiceActivityDetector(ABC):
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
         missing = [
-            attribute
-            for attribute in ("name", "description")
-            if not hasattr(cls, attribute)
+            attribute for attribute in ("name", "description") if not hasattr(cls, attribute)
         ]
         if missing:
             raise TypeError(
@@ -121,9 +119,7 @@ class FakeVoiceActivityDetector(VoiceActivityDetector):
 
     async def feed(self, frame: AudioFrame) -> VADResult:
         if self._raise_error is not None:
-            self._logger.error(
-                "Fake VAD feed raising: %s", type(self._raise_error).__name__
-            )
+            self._logger.error("Fake VAD feed raising: %s", type(self._raise_error).__name__)
             raise self._raise_error
         if self._index < len(self._active_frames):
             active = self._active_frames[self._index]

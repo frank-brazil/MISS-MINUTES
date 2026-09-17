@@ -76,10 +76,7 @@ class ScreenUnderstandingService:
         """Capture the current screen and produce structured understanding."""
         if self._workspace is None:
             return VisionResult.fail(
-                error=(
-                    "Cannot capture a screenshot: no screenshot workspace "
-                    "is configured"
-                )
+                error=("Cannot capture a screenshot: no screenshot workspace is configured")
             )
         if not self._workspace.is_dir():
             return VisionResult.fail(
@@ -97,9 +94,7 @@ class ScreenUnderstandingService:
                 "screen_understanding screenshot failed: %s",
                 type(exc).__name__,
             )
-            return VisionResult.fail(
-                error=f"Screenshot failed: {type(exc).__name__}"
-            )
+            return VisionResult.fail(error=f"Screenshot failed: {type(exc).__name__}")
 
         logger.info("screen_understanding captured %s", shot.path)
         image = ImageInput(
@@ -108,9 +103,7 @@ class ScreenUnderstandingService:
             width=shot.width,
             height=shot.height,
         )
-        return await self.analyze_image(
-            image, question=question, language=language, mode=mode
-        )
+        return await self.analyze_image(image, question=question, language=language, mode=mode)
 
     async def analyze_image(
         self,
@@ -125,26 +118,19 @@ class ScreenUnderstandingService:
         data = image.data
         if data is None and image.path is not None:
             if not image.path.is_file():
-                return VisionResult.fail(
-                    error=f"Image file does not exist: {image.path}"
-                )
+                return VisionResult.fail(error=f"Image file does not exist: {image.path}")
             try:
                 data = image.path.read_bytes()
             except OSError as exc:
                 logger.warning("screen_understanding read error: %s", type(exc).__name__)
-                return VisionResult.fail(
-                    error=f"Failed to read image: {type(exc).__name__}"
-                )
+                return VisionResult.fail(error=f"Failed to read image: {type(exc).__name__}")
 
         if not data:
             return VisionResult.fail(error="Image data is empty")
 
         if len(data) > self._max_image_bytes:
             return VisionResult.fail(
-                error=(
-                    f"Image exceeds maximum size of "
-                    f"{self._max_image_bytes} bytes"
-                )
+                error=(f"Image exceeds maximum size of {self._max_image_bytes} bytes")
             )
 
         try:
@@ -162,9 +148,7 @@ class ScreenUnderstandingService:
             return VisionResult.fail(error=f"Invalid image: {message}")
 
         try:
-            request = VisionRequest(
-                image=built, question=question, language=language, mode=mode
-            )
+            request = VisionRequest(image=built, question=question, language=language, mode=mode)
         except ValidationError as exc:
             message = exc.errors()[0].get("msg", "invalid request")
             return VisionResult.fail(error=f"Invalid vision request: {message}")
@@ -183,9 +167,7 @@ class ScreenUnderstandingService:
             try:
                 data = image.path.read_bytes()
             except OSError as exc:
-                return OcrResult.fail(
-                    error=f"Failed to read image: {type(exc).__name__}"
-                )
+                return OcrResult.fail(error=f"Failed to read image: {type(exc).__name__}")
         if not data:
             return OcrResult.fail(error="Image data is empty")
         if len(data) > self._max_image_bytes:
@@ -203,9 +185,7 @@ class ScreenUnderstandingService:
                 max_bytes=self._max_image_bytes,
             )
         except ValidationError as exc:
-            return OcrResult.fail(
-                error=f"Invalid image: {exc.errors()[0].get('msg', 'invalid')}"
-            )
+            return OcrResult.fail(error=f"Invalid image: {exc.errors()[0].get('msg', 'invalid')}")
 
         return await self._ocr.extract_text(OcrRequest(image=built))
 
@@ -217,29 +197,18 @@ class ScreenUnderstandingService:
             except VisionError as exc:
                 return VisionResult.fail(error=f"Vision provider error: {exc}")
             except Exception as exc:  # noqa: BLE001 - controlled failure
-                logger.warning(
-                    "screen_understanding vision error: %s", type(exc).__name__
-                )
-                return VisionResult.fail(
-                    error=f"Vision provider raised: {type(exc).__name__}"
-                )
+                logger.warning("screen_understanding vision error: %s", type(exc).__name__)
+                return VisionResult.fail(error=f"Vision provider raised: {type(exc).__name__}")
 
         try:
             return await asyncio.wait_for(coro, timeout=self._timeout_seconds)
         except asyncio.TimeoutError:
             logger.warning("screen_understanding vision timed out")
             return VisionResult.fail(
-                error=(
-                    f"Vision analysis timed out after "
-                    f"{self._timeout_seconds:g} seconds"
-                )
+                error=(f"Vision analysis timed out after {self._timeout_seconds:g} seconds")
             )
         except VisionError as exc:
             return VisionResult.fail(error=f"Vision provider error: {exc}")
         except Exception as exc:  # noqa: BLE001 - controlled failure
-            logger.warning(
-                "screen_understanding vision error: %s", type(exc).__name__
-            )
-            return VisionResult.fail(
-                error=f"Vision provider raised: {type(exc).__name__}"
-            )
+            logger.warning("screen_understanding vision error: %s", type(exc).__name__)
+            return VisionResult.fail(error=f"Vision provider raised: {type(exc).__name__}")

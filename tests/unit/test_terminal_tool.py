@@ -22,9 +22,7 @@ class FakeCommandExecutor(CommandExecutor):
         self.responses: list[CommandOutput] = []
         self.timeout = 10.0
 
-    async def run(
-        self, argv: tuple[str, ...], *, timeout: float
-    ) -> CommandOutput:
+    async def run(self, argv: tuple[str, ...], *, timeout: float) -> CommandOutput:
         self.executed.append(argv)
         self.timeout = timeout
         if self.responses:
@@ -33,9 +31,7 @@ class FakeCommandExecutor(CommandExecutor):
 
 
 class RaisingCommandExecutor(CommandExecutor):
-    async def run(
-        self, argv: tuple[str, ...], *, timeout: float
-    ) -> CommandOutput:
+    async def run(self, argv: tuple[str, ...], *, timeout: float) -> CommandOutput:
         raise RuntimeError("executor exploded")
 
 
@@ -77,9 +73,7 @@ def test_approved_command_success() -> None:
 
 def test_approved_command_captures_stderr_and_exit_code() -> None:
     executor = FakeCommandExecutor()
-    executor.responses.append(
-        CommandOutput(stdout="", stderr="warn", exit_code=3)
-    )
+    executor.responses.append(CommandOutput(stdout="", stderr="warn", exit_code=3))
     tool = ApprovedTerminalTool(executor=executor)
     result = asyncio.run(tool.execute(command="hostname"))
     assert result.success is True
@@ -106,9 +100,7 @@ def test_command_chaining_rejected_by_allowlist_lookup() -> None:
 def test_timeout_returns_controlled_failure() -> None:
     executor = FakeCommandExecutor()
     executor.responses.append(
-        CommandOutput(
-            stdout="partial", stderr="", exit_code=1, timed_out=True
-        )
+        CommandOutput(stdout="partial", stderr="", exit_code=1, timed_out=True)
     )
     tool = ApprovedTerminalTool(executor=executor)
     result = asyncio.run(tool.execute(command="whoami"))
@@ -125,20 +117,14 @@ def test_executor_exception_is_controlled() -> None:
 
 def test_timeout_propagated_to_executor() -> None:
     executor = FakeCommandExecutor()
-    tool = ApprovedTerminalTool(
-        executor=executor, config=TerminalConfig(timeout=2.5)
-    )
+    tool = ApprovedTerminalTool(executor=executor, config=TerminalConfig(timeout=2.5))
     asyncio.run(tool.execute(command="whoami"))
     assert executor.timeout == 2.5
 
 
 def test_custom_allowlist_only() -> None:
-    custom = (
-        CommandEntry(name="python_version", argv=("python", "--version"), description="py"),
-    )
-    tool = ApprovedTerminalTool(
-        executor=FakeCommandExecutor(), commands=custom
-    )
+    custom = (CommandEntry(name="python_version", argv=("python", "--version"), description="py"),)
+    tool = ApprovedTerminalTool(executor=FakeCommandExecutor(), commands=custom)
     result = asyncio.run(tool.execute(command="whoami"))
     assert result.success is False
     assert "python_version" in (result.error or "")
@@ -190,9 +176,7 @@ def test_approved_command_names_are_sorted() -> None:
 
 def test_subprocess_executor_runs_approved_command() -> None:
     executor = SubprocessCommandExecutor()
-    output = asyncio.run(
-        executor.run(("python", "--version"), timeout=10.0)
-    )
+    output = asyncio.run(executor.run(("python", "--version"), timeout=10.0))
     assert output.exit_code == 0
     assert "Python" in output.stdout
     assert not output.timed_out
@@ -200,9 +184,7 @@ def test_subprocess_executor_runs_approved_command() -> None:
 
 def test_subprocess_executor_missing_command() -> None:
     executor = SubprocessCommandExecutor()
-    output = asyncio.run(
-        executor.run(("definitely-not-a-real-command-xyz",), timeout=5.0)
-    )
+    output = asyncio.run(executor.run(("definitely-not-a-real-command-xyz",), timeout=5.0))
     assert output.exit_code != 0
     assert not output.timed_out
 

@@ -83,9 +83,7 @@ class RenderFrame(BaseModel):
     timestamp: float = 0.0
 
     def primitives_for(self, part: AvatarPart) -> tuple[RenderPrimitive, ...]:
-        return tuple(
-            primitive for primitive in self.primitives if primitive.part is part
-        )
+        return tuple(primitive for primitive in self.primitives if primitive.part is part)
 
 
 class AvatarRenderer(ABC):
@@ -97,9 +95,7 @@ class AvatarRenderer(ABC):
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
         missing = [
-            attribute
-            for attribute in ("name", "description")
-            if not hasattr(cls, attribute)
+            attribute for attribute in ("name", "description") if not hasattr(cls, attribute)
         ]
         if missing:
             raise TypeError(
@@ -486,7 +482,12 @@ class FakeAvatarRenderer(AvatarRenderer):
         mouth_y = cfg.mouth_y_offset + bob
         mouth_half = cfg.mouth_size / 2.0
         shape = self._mouth.shape
-        if shape in (MouthShape.OPEN, MouthShape.SURPRISED, MouthShape.SPEAKING, MouthShape.SMALL_OPEN):
+        if shape in (
+            MouthShape.OPEN,
+            MouthShape.SURPRISED,
+            MouthShape.SPEAKING,
+            MouthShape.SMALL_OPEN,
+        ):
             openness_m = self._mouth.openness
             primitives.append(
                 RenderPrimitive(

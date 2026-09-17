@@ -58,9 +58,7 @@ class SearchRequest(BaseModel):
     @classmethod
     def _max_results_bounded(cls, value: int) -> int:
         if value > ABSOLUTE_MAX_RESULTS:
-            raise ValueError(
-                f"max_results must not exceed {ABSOLUTE_MAX_RESULTS}"
-            )
+            raise ValueError(f"max_results must not exceed {ABSOLUTE_MAX_RESULTS}")
         return value
 
 
@@ -162,9 +160,7 @@ class ResearchResponse(BaseModel):
         return len(self.results)
 
     @classmethod
-    def ok(
-        cls, query: str, results: Sequence[SearchResult]
-    ) -> "ResearchResponse":
+    def ok(cls, query: str, results: Sequence[SearchResult]) -> "ResearchResponse":
         return cls(success=True, query=query, results=list(results))
 
     @classmethod
@@ -224,9 +220,7 @@ class ResearchProvider(ABC):
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
         missing = [
-            attribute
-            for attribute in ("name", "description")
-            if not hasattr(cls, attribute)
+            attribute for attribute in ("name", "description") if not hasattr(cls, attribute)
         ]
         if missing:
             raise TypeError(

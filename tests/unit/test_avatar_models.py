@@ -34,9 +34,24 @@ def test_state_enum_contains_required_states():
 
 def test_part_enum_covers_character():
     values = {part.value for part in AvatarPart}
-    assert {"clock_body", "clock_face", "hour_hand", "minute_hand", "left_eye",
-            "right_eye", "mouth", "left_arm", "right_arm", "left_hand", "right_hand",
-            "left_leg", "right_leg", "left_shoe", "right_shoe", "center_pivot"} <= values
+    assert {
+        "clock_body",
+        "clock_face",
+        "hour_hand",
+        "minute_hand",
+        "left_eye",
+        "right_eye",
+        "mouth",
+        "left_arm",
+        "right_arm",
+        "left_hand",
+        "right_hand",
+        "left_leg",
+        "right_leg",
+        "left_shoe",
+        "right_shoe",
+        "center_pivot",
+    } <= values
 
 
 def test_transform_defaults():

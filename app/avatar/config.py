@@ -108,7 +108,19 @@ class AvatarConfig(BaseModel):
     def _positive_dims(cls, value: float) -> float:
         return _positive(value, "dimension")
 
-    @field_validator("body_color", "outline_color", "eye_color", "pupil_color", "arm_color", "leg_color", "shoe_color", "hand_color", "markings_color", "center_pivot_color", "mouth_color")
+    @field_validator(
+        "body_color",
+        "outline_color",
+        "eye_color",
+        "pupil_color",
+        "arm_color",
+        "leg_color",
+        "shoe_color",
+        "hand_color",
+        "markings_color",
+        "center_pivot_color",
+        "mouth_color",
+    )
     @classmethod
     def _hex_color(cls, value: str) -> str:
         if not _HEX_COLOR.match(value):

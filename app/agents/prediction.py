@@ -30,9 +30,7 @@ class PredictionAgent(Agent):
     """
 
     name: ClassVar[str] = "prediction"
-    description: ClassVar[str] = (
-        "Performs prediction, decision analysis, and risk assessment."
-    )
+    description: ClassVar[str] = "Performs prediction, decision analysis, and risk assessment."
     capabilities: ClassVar[frozenset[str]] = frozenset(
         {"prediction", "decision_analysis", "risk_analysis"}
     )

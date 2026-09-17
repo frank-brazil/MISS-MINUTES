@@ -39,14 +39,11 @@ class WorkerTransport(ABC):
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
         missing = [
-            attribute
-            for attribute in ("name", "description")
-            if not hasattr(cls, attribute)
+            attribute for attribute in ("name", "description") if not hasattr(cls, attribute)
         ]
         if missing:
             raise TypeError(
-                f"{cls.__name__} must define required attribute(s): "
-                f"{', '.join(missing)}"
+                f"{cls.__name__} must define required attribute(s): {', '.join(missing)}"
             )
 
     @abstractmethod
@@ -69,14 +66,11 @@ class MasterTransport(ABC):
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
         missing = [
-            attribute
-            for attribute in ("name", "description")
-            if not hasattr(cls, attribute)
+            attribute for attribute in ("name", "description") if not hasattr(cls, attribute)
         ]
         if missing:
             raise TypeError(
-                f"{cls.__name__} must define required attribute(s): "
-                f"{', '.join(missing)}"
+                f"{cls.__name__} must define required attribute(s): {', '.join(missing)}"
             )
 
     @abstractmethod
@@ -96,9 +90,7 @@ def transport_error_from(exc: Exception) -> TransportError:
     """Convert an arbitrary exception into a typed transport error."""
     if isinstance(exc, TransportError):
         return exc
-    return TransportError(
-        f"{type(exc).__name__}: {_safe_message(exc)}"
-    )
+    return TransportError(f"{type(exc).__name__}: {_safe_message(exc)}")
 
 
 def _safe_message(exc: Exception) -> str:

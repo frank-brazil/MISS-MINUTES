@@ -54,7 +54,9 @@ class WalkingFrame(BaseModel):
     bob: float
     timestamp: float = 0.0
 
-    @field_validator("phase", "left_leg_raise", "right_leg_raise", "left_arm_swing", "right_arm_swing", "bob")
+    @field_validator(
+        "phase", "left_leg_raise", "right_leg_raise", "left_arm_swing", "right_arm_swing", "bob"
+    )
     @classmethod
     def _finite(cls, value: float) -> float:
         if not math.isfinite(value):
@@ -157,8 +159,12 @@ class WalkingController:
         return WalkingFrame(
             state=self._state,
             phase=phase,
-            left_leg_raise=max(0.0, direction * abs(math.sin(angle)) * self._config.step_amplitude_deg),
-            right_leg_raise=max(0.0, direction * abs(math.sin(angle + math.pi)) * self._config.step_amplitude_deg),
+            left_leg_raise=max(
+                0.0, direction * abs(math.sin(angle)) * self._config.step_amplitude_deg
+            ),
+            right_leg_raise=max(
+                0.0, direction * abs(math.sin(angle + math.pi)) * self._config.step_amplitude_deg
+            ),
             left_arm_swing=-math.sin(angle) * self._config.arm_swing_deg,
             right_arm_swing=math.sin(angle) * self._config.arm_swing_deg,
             bob=abs(math.cos(angle)) * self._config.bob_amplitude,

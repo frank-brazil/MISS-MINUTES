@@ -183,7 +183,9 @@ async def _async_language_detection(env: EvaluationEnvironment) -> list[Evaluati
                 metric="language_detection_accuracy",
                 scenario="Language Detection",
                 value=1.0 if actual_lang == expected_lang else 0.0,
-                status=ResultClassification.PASS if actual_lang == expected_lang else ResultClassification.FAIL,
+                status=ResultClassification.PASS
+                if actual_lang == expected_lang
+                else ResultClassification.FAIL,
                 evidence=f"text='{text[:40]}', expected={expected_lang}, actual={actual_lang}",
                 limitations="Fixture-based detection; no real speech input.",
             )
@@ -296,7 +298,7 @@ async def _async_research(env: EvaluationEnvironment) -> list[EvaluationResult]:
             status=ResultClassification.PASS,
             evidence=f"Avg coverage across {total} queries",
             limitations="Fixture-based research; no real web search.",
-        )
+        ),
     )
     results.insert(
         0,
@@ -304,10 +306,12 @@ async def _async_research(env: EvaluationEnvironment) -> list[EvaluationResult]:
             metric="research_citation_presence",
             scenario="Research/Source Quality",
             value=compute_pass_rate(citation_present, total) if total > 0 else 0.0,
-            status=ResultClassification.PASS if citation_present == total else ResultClassification.FAIL,
+            status=ResultClassification.PASS
+            if citation_present == total
+            else ResultClassification.FAIL,
             evidence=f"{citation_present}/{total} have citations",
             limitations="Fixture-based research; no real web search.",
-        )
+        ),
     )
     return results
 
@@ -316,7 +320,11 @@ async def _async_computer_tools(env: EvaluationEnvironment) -> list[EvaluationRe
     results: list[EvaluationResult] = []
     success_count = 0
     total = 0
-    for action_desc in ["Read file /test/file.txt", "Search files *.py", "Create file /tmp/test.txt"]:
+    for action_desc in [
+        "Read file /test/file.txt",
+        "Search files *.py",
+        "Create file /tmp/test.txt",
+    ]:
         total += 1
         request = ActionRequest(description=action_desc)
         result = await env.action_executor.execute(request)
@@ -341,7 +349,7 @@ async def _async_computer_tools(env: EvaluationEnvironment) -> list[EvaluationRe
             status=ResultClassification.PASS,
             evidence=f"{success_count}/{total} succeeded",
             limitations="FakeActionExecutor; no real filesystem operations.",
-        )
+        ),
     )
     safe_failures = 0
     for action in SECURITY_FIXTURES:
@@ -491,7 +499,9 @@ def _run_security(env: EvaluationEnvironment) -> list[EvaluationResult]:
         expected = str(fixture["expected_decision"])
         results.append(
             EvaluationResult(
-                metric=f"security_{expected}_denied" if expected == "deny" else f"security_{expected}_allowed",
+                metric=f"security_{expected}_denied"
+                if expected == "deny"
+                else f"security_{expected}_allowed",
                 scenario="Security Reliability",
                 value=1.0,
                 status=ResultClassification.PASS,
@@ -665,6 +675,7 @@ async def _async_bounded_loops(env: EvaluationEnvironment) -> list[EvaluationRes
         max_iter = int(fixture["max_iterations"])
         fail_iter = int(fixture.get("fail_iterations", 0))
         from app.solver.fakes import FakeActionExecutor
+
         executor = FakeActionExecutor(
             fail=False,
             fail_iterations=frozenset(range(fail_iter)) if fail_iter > 0 else frozenset(),
@@ -672,7 +683,7 @@ async def _async_bounded_loops(env: EvaluationEnvironment) -> list[EvaluationRes
         iterations_used = 0
         for i in range(max_iter):
             iterations_used += 1
-            request = ActionRequest(description=f"Iteration {i+1}", iteration=i + 1)
+            request = ActionRequest(description=f"Iteration {i + 1}", iteration=i + 1)
             result = await executor.execute(request)
             if result.success and fail_iter == 0:
                 break
@@ -718,7 +729,9 @@ async def _async_verification(env: EvaluationEnvironment) -> list[EvaluationResu
 
     test_cases = [
         {
-            "expectation": VerificationExpectation(description="File should exist", conditions=["file exists"]),
+            "expectation": VerificationExpectation(
+                description="File should exist", conditions=["file exists"]
+            ),
             "observation": ObservedResult(
                 description="File found",
                 observations=["file exists at /test/file.txt"],
@@ -728,7 +741,9 @@ async def _async_verification(env: EvaluationEnvironment) -> list[EvaluationResu
             "expected_status": VerificationStatus.VERIFIED,
         },
         {
-            "expectation": VerificationExpectation(description="File should exist", conditions=["file exists"]),
+            "expectation": VerificationExpectation(
+                description="File should exist", conditions=["file exists"]
+            ),
             "observation": ObservedResult(
                 description="File not found",
                 observations=["file not found"],
@@ -764,22 +779,30 @@ async def _async_verification(env: EvaluationEnvironment) -> list[EvaluationResu
             status=ResultClassification.PASS,
             evidence=f"{correct}/{len(test_cases)} correct",
             limitations="FakeVerifier with deterministic heuristics.",
-        )
+        ),
     )
     return results
 
 
-def _compute_summary(results: list[EvaluationResult], reliability_results: list[ReliabilityResult]) -> Any:
+def _compute_summary(
+    results: list[EvaluationResult], reliability_results: list[ReliabilityResult]
+) -> Any:
     from app.evaluation.models import EvaluationSummary
 
     pass_count = sum(1 for r in results if r.status == ResultClassification.PASS)
     fail_count = sum(1 for r in results if r.status == ResultClassification.FAIL)
     inconclusive_count = sum(1 for r in results if r.status == ResultClassification.INCONCLUSIVE)
     not_measured_count = sum(1 for r in results if r.status == ResultClassification.NOT_MEASURED)
-    not_applicable_count = sum(1 for r in results if r.status == ResultClassification.NOT_APPLICABLE)
+    not_applicable_count = sum(
+        1 for r in results if r.status == ResultClassification.NOT_APPLICABLE
+    )
     rel_pass = sum(1 for r in reliability_results if r.status == ResultClassification.PASS)
     rel_fail = sum(1 for r in reliability_results if r.status == ResultClassification.FAIL)
-    rel_na = sum(1 for r in reliability_results if r.status in (ResultClassification.NOT_MEASURED, ResultClassification.NOT_APPLICABLE))
+    rel_na = sum(
+        1
+        for r in reliability_results
+        if r.status in (ResultClassification.NOT_MEASURED, ResultClassification.NOT_APPLICABLE)
+    )
     return EvaluationSummary(
         total_metrics=len(results),
         pass_count=pass_count,
@@ -819,6 +842,7 @@ async def run_all_evaluation_async(
     all_results.extend(await _async_prediction(env))
 
     from app.evaluation.reliability import run_all_reliability_tests
+
     reliability_results = await run_all_reliability_tests(env)
 
     completed_at = time.time()
@@ -826,7 +850,9 @@ async def run_all_evaluation_async(
 
     return EvaluationRun(
         started_at=datetime.fromtimestamp(started_at, tz=timezone.utc),
-        completed_at=datetime.fromtimestamp(completed_at, tz=timezone.utc) if completed_at else None,
+        completed_at=datetime.fromtimestamp(completed_at, tz=timezone.utc)
+        if completed_at
+        else None,
         environment=_make_env_info(),
         results=all_results,
         reliability_results=reliability_results,

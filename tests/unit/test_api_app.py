@@ -36,7 +36,10 @@ def test_create_app_custom_orchestrator_attached() -> None:
 
 def test_create_app_no_security_manager_by_default() -> None:
     application = create_app()
-    assert not hasattr(application.state, "security_manager") or application.state.security_manager is None
+    assert (
+        not hasattr(application.state, "security_manager")
+        or application.state.security_manager is None
+    )
 
 
 def test_create_app_routes_are_included() -> None:

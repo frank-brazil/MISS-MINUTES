@@ -140,9 +140,7 @@ def test_critique_request_fields() -> None:
     assert isinstance(req.request_id, UUID)
     assert req.target.startswith("Proposed solution:")
     assert req.context == {"service": "db"}
-    assert req.supporting_evidence_refs == [
-        "https://example.com/research/report"
-    ]
+    assert req.supporting_evidence_refs == ["https://example.com/research/report"]
     assert isinstance(req.created_at, datetime)
 
 
@@ -220,9 +218,7 @@ def test_critique_rejects_blank_unresolved_question() -> None:
 
 def test_critique_groups_points_by_aspect() -> None:
     weakness = point(aspect=CritiqueAspect.WEAKNESS)
-    risk = point(
-        aspect=CritiqueAspect.RISK, description="a risk statement"
-    )
+    risk = point(aspect=CritiqueAspect.RISK, description="a risk statement")
     assumption = point(
         aspect=CritiqueAspect.UNSUPPORTED_ASSUMPTION,
         description="an assumption statement",
@@ -239,9 +235,7 @@ def test_critique_groups_points_by_aspect() -> None:
         aspect=CritiqueAspect.ALTERNATIVE_EXPLANATION,
         description="an alternative exists",
     )
-    result = critique(
-        points=[weakness, risk, assumption, missing, contradiction, alternative]
-    )
+    result = critique(points=[weakness, risk, assumption, missing, contradiction, alternative])
     assert result.weaknesses == (weakness,)
     assert result.risks == (risk,)
     assert result.unsupported_assumptions == (assumption,)
@@ -265,9 +259,7 @@ def test_critique_highest_severity() -> None:
 
 
 def test_critique_highest_severity_from_overall_when_empty() -> None:
-    result = critique(
-        points=[], overall_severity=Severity.UNKNOWN
-    )
+    result = critique(points=[], overall_severity=Severity.UNKNOWN)
     assert result.highest_severity is Severity.UNKNOWN
 
 
@@ -310,9 +302,7 @@ def test_critic_metadata_enforced_on_subclass() -> None:
 
     assert MetaCritic.name == "meta-critic"
     assert MetaCritic.description
-    result = asyncio.run(
-        MetaCritic().critique(request())
-    )
+    result = asyncio.run(MetaCritic().critique(request()))
     assert result.target == request().target
 
 
@@ -356,12 +346,8 @@ def test_fake_critic_is_deterministic() -> None:
 
 def test_fake_critic_is_not_hardcoded_to_one_problem() -> None:
     critic = FakeCritic()
-    first = asyncio.run(
-        critic.critique(request(target="Target about the database."))
-    )
-    second = asyncio.run(
-        critic.critique(request(target="Completely different target text."))
-    )
+    first = asyncio.run(critic.critique(request(target="Target about the database.")))
+    second = asyncio.run(critic.critique(request(target="Completely different target text.")))
     assert first.critique_id != second.critique_id
     assert first.target != second.target
     assert [p.aspect for p in first.points] == [p.aspect for p in second.points]

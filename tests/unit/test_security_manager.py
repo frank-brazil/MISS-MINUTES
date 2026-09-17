@@ -1,4 +1,3 @@
-
 import pytest
 
 from app.core.permissions import ToolPermission
@@ -26,9 +25,7 @@ def _manager(
     allow_default: bool = False,
 ) -> SecurityManager:
     rules = [
-        PermissionRule(
-            permission=Permission(category=category), effect="allow"
-        )
+        PermissionRule(permission=Permission(category=category), effect="allow")
         for category in allow
     ]
     return SecurityManager(
@@ -42,9 +39,7 @@ def _manager(
 
 def test_create_request_computes_risk() -> None:
     manager = _manager()
-    request = manager.create_request(
-        permission=PermissionCategory.READ, action="tool:file_read"
-    )
+    request = manager.create_request(permission=PermissionCategory.READ, action="tool:file_read")
     assert request.risk_level is RiskLevel.LOW
 
 
@@ -71,9 +66,7 @@ def test_create_request_maps_category_to_permission() -> None:
 
 def test_check_allow_and_audits() -> None:
     manager = _manager(allow=(PermissionCategory.READ,))
-    request = manager.create_request(
-        permission=PermissionCategory.READ, action="tool:file_read"
-    )
+    request = manager.create_request(permission=PermissionCategory.READ, action="tool:file_read")
     decision = manager.check(request)
     assert decision.allowed
     assert manager.audit_store.count() == 1
@@ -81,9 +74,7 @@ def test_check_allow_and_audits() -> None:
 
 def test_check_deny_and_audits() -> None:
     manager = _manager()
-    request = manager.create_request(
-        permission=PermissionCategory.READ, action="tool:file_read"
-    )
+    request = manager.create_request(permission=PermissionCategory.READ, action="tool:file_read")
     decision = manager.check(request)
     assert decision.denied
     assert decision.reason_code == "missing_permission"
@@ -95,9 +86,7 @@ def test_check_requires_confirmation_creates_pending() -> None:
         policy=AllowDenyPolicy(
             rules=[
                 PermissionRule(
-                    permission=Permission(
-                        category=PermissionCategory.SYSTEM
-                    ),
+                    permission=Permission(category=PermissionCategory.SYSTEM),
                     effect="allow",
                 )
             ]
@@ -120,9 +109,7 @@ def test_confirmation_approval_enables_recheck() -> None:
         policy=AllowDenyPolicy(
             rules=[
                 PermissionRule(
-                    permission=Permission(
-                        category=PermissionCategory.SYSTEM
-                    ),
+                    permission=Permission(category=PermissionCategory.SYSTEM),
                     effect="allow",
                 )
             ]
@@ -141,9 +128,7 @@ def test_confirmation_approval_enables_recheck() -> None:
 
 def test_require_allowed_raises_on_deny() -> None:
     manager = _manager()
-    request = manager.create_request(
-        permission=PermissionCategory.READ, action="tool:file_read"
-    )
+    request = manager.create_request(permission=PermissionCategory.READ, action="tool:file_read")
     with pytest.raises(PermissionDenied):
         manager.require_allowed(request)
 
@@ -153,17 +138,13 @@ def test_require_allowed_raises_on_confirmation() -> None:
         policy=AllowDenyPolicy(
             rules=[
                 PermissionRule(
-                    permission=Permission(
-                        category=PermissionCategory.SYSTEM
-                    ),
+                    permission=Permission(category=PermissionCategory.SYSTEM),
                     effect="allow",
                 )
             ]
         )
     )
-    request = manager.create_request(
-        permission=PermissionCategory.SYSTEM, action="tool:system"
-    )
+    request = manager.create_request(permission=PermissionCategory.SYSTEM, action="tool:system")
     with pytest.raises(ConfirmationRequired):
         manager.require_allowed(request)
 
@@ -182,18 +163,9 @@ def test_tool_permission_mapping() -> None:
         pass
 
     manager = _manager()
-    assert (
-        manager.tool_permission(FakeReadTool()).category
-        is PermissionCategory.READ
-    )
-    assert (
-        manager.tool_permission(FakeWriteTool()).category
-        is PermissionCategory.WRITE
-    )
-    assert (
-        manager.tool_permission(FakeSystemTool()).category
-        is PermissionCategory.SYSTEM
-    )
+    assert manager.tool_permission(FakeReadTool()).category is PermissionCategory.READ
+    assert manager.tool_permission(FakeWriteTool()).category is PermissionCategory.WRITE
+    assert manager.tool_permission(FakeSystemTool()).category is PermissionCategory.SYSTEM
     assert manager.tool_permission(FakeUndeclaredTool()) is None
 
 
@@ -238,9 +210,7 @@ def test_audit_event_with_secret_is_redacted() -> None:
 
 def test_evaluate_is_pure() -> None:
     manager = _manager(allow=(PermissionCategory.READ,))
-    request = manager.create_request(
-        permission=PermissionCategory.READ, action="tool:file_read"
-    )
+    request = manager.create_request(permission=PermissionCategory.READ, action="tool:file_read")
     before = manager.evaluate(request)
     assert manager.audit_store.count() == 0
     assert before.allowed
@@ -248,17 +218,13 @@ def test_evaluate_is_pure() -> None:
 
 def test_default_policy_manager_allows_low_risk() -> None:
     manager = SecurityManager(policy=DefaultPolicy())
-    request = manager.create_request(
-        permission=PermissionCategory.READ, action="tool:file_read"
-    )
+    request = manager.create_request(permission=PermissionCategory.READ, action="tool:file_read")
     assert manager.check(request).allowed
 
 
 def test_deny_all_manager_blocks_everything() -> None:
     manager = SecurityManager(policy=DenyAllPolicy())
-    request = manager.create_request(
-        permission=PermissionCategory.READ, action="tool:file_read"
-    )
+    request = manager.create_request(permission=PermissionCategory.READ, action="tool:file_read")
     assert manager.check(request).denied
 
 

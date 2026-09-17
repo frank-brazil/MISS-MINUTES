@@ -53,7 +53,10 @@ def test_timeline_empty():
 
 def test_timeline_play_pause():
     timeline = AnimationTimeline(
-        [TimelineKeyframe(time=0.0, values={"x": 0.0}), TimelineKeyframe(time=1.0, values={"x": 1.0})],
+        [
+            TimelineKeyframe(time=0.0, values={"x": 0.0}),
+            TimelineKeyframe(time=1.0, values={"x": 1.0}),
+        ],
         now_fn=lambda: 0.0,
     )
     assert timeline.play() is True
@@ -69,7 +72,10 @@ def test_timeline_play_pause():
 
 def test_timeline_completion():
     timeline = AnimationTimeline(
-        [TimelineKeyframe(time=0.0, values={"x": 0.0}), TimelineKeyframe(time=1.0, values={"x": 10.0})],
+        [
+            TimelineKeyframe(time=0.0, values={"x": 0.0}),
+            TimelineKeyframe(time=1.0, values={"x": 10.0}),
+        ],
         now_fn=lambda: 0.0,
     )
     timeline.play()
@@ -83,7 +89,10 @@ def test_timeline_completion():
 
 def test_timeline_easing():
     timeline = AnimationTimeline(
-        [TimelineKeyframe(time=0.0, values={"x": 0.0}, easing=Easing.LINEAR), TimelineKeyframe(time=1.0, values={"x": 1.0})],
+        [
+            TimelineKeyframe(time=0.0, values={"x": 0.0}, easing=Easing.LINEAR),
+            TimelineKeyframe(time=1.0, values={"x": 1.0}),
+        ],
         now_fn=lambda: 0.0,
     )
     timeline.play()
@@ -94,7 +103,10 @@ def test_timeline_easing():
 
 def test_timeline_cancel():
     timeline = AnimationTimeline(
-        [TimelineKeyframe(time=0.0, values={"x": 0.0}), TimelineKeyframe(time=10.0, values={"x": 100.0})],
+        [
+            TimelineKeyframe(time=0.0, values={"x": 0.0}),
+            TimelineKeyframe(time=10.0, values={"x": 100.0}),
+        ],
         now_fn=lambda: 0.0,
     )
     timeline.play()
@@ -105,11 +117,17 @@ def test_timeline_cancel():
 
 def test_timeline_deterministic():
     a = AnimationTimeline(
-        [TimelineKeyframe(time=0.0, values={"x": 0.0}), TimelineKeyframe(time=1.0, values={"x": 1.0})],
+        [
+            TimelineKeyframe(time=0.0, values={"x": 0.0}),
+            TimelineKeyframe(time=1.0, values={"x": 1.0}),
+        ],
         now_fn=lambda: 0.0,
     )
     b = AnimationTimeline(
-        [TimelineKeyframe(time=0.0, values={"x": 0.0}), TimelineKeyframe(time=1.0, values={"x": 1.0})],
+        [
+            TimelineKeyframe(time=0.0, values={"x": 0.0}),
+            TimelineKeyframe(time=1.0, values={"x": 1.0}),
+        ],
         now_fn=lambda: 0.0,
     )
     a.play()

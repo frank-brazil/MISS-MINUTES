@@ -124,10 +124,7 @@ def _orchestrator_with_tool(
     tool_call: ToolCall | None = None,
 ) -> Orchestrator:
     orch = Orchestrator(
-        ai_model=ScriptedAIModel(
-            tool_call
-            or ToolCall(id="call-1", name=tool.name, arguments={})
-        ),
+        ai_model=ScriptedAIModel(tool_call or ToolCall(id="call-1", name=tool.name, arguments={})),
         security=security,
     )
     orch.register_tool(tool)
@@ -146,9 +143,7 @@ def test_orchestrator_allows_read_tool_under_default_policy() -> None:
     assert result.success is True
     assert tool.called is True
     assert orch.security is not None
-    decisions = [
-        event.decision for event in orch.security.audit_store.snapshot()
-    ]
+    decisions = [event.decision for event in orch.security.audit_store.snapshot()]
     assert decisions == ["allow"]
 
 
@@ -160,9 +155,7 @@ def test_orchestrator_denies_read_tool_under_deny_all() -> None:
     assert tool.called is False
     assert orch.security is not None
     events = orch.security.audit_store.snapshot()
-    denied = [
-        event for event in events if event.reason_code == "deny_all"
-    ]
+    denied = [event for event in events if event.reason_code == "deny_all"]
     assert denied
 
 
@@ -223,9 +216,7 @@ def _engine(security, *, action_executor: FakeActionExecutor | None = None) -> P
         agent_router=AgentRouter([TrivialAgent()]),
         verifier=FakeVerifier(),
         observation_provider=FakeObservationProvider(
-            observations=[
-                "A clearer understanding of causes, constraints, and context. observed"
-            ],
+            observations=["A clearer understanding of causes, constraints, and context. observed"],
             action_succeeded=True,
         ),
         action_executor=action_executor or FakeActionExecutor(),
@@ -248,9 +239,7 @@ def test_loop_denies_action_under_deny_all() -> None:
     assert result.success is False
     assert executor.requests == ()
     assert engine.security is not None
-    rendered = " ".join(
-        [*(event.message for event in result.events), result.failure_reason or ""]
-    )
+    rendered = " ".join([*(event.message for event in result.events), result.failure_reason or ""])
     assert "denied by security policy" in rendered
 
 
@@ -271,9 +260,7 @@ def test_loop_gates_action_behind_confirmation() -> None:
     assert executor.requests == ()
     assert engine.security is not None
     assert engine.security.confirmation.pending() != ()
-    rendered = " ".join(
-        [*(event.message for event in result.events), result.failure_reason or ""]
-    )
+    rendered = " ".join([*(event.message for event in result.events), result.failure_reason or ""])
     assert "requires confirmation" in rendered
 
 
@@ -342,15 +329,11 @@ def test_coordinator_dispatch_allowed_by_explicit_rule() -> None:
 def test_worker_denies_task_under_deny_all() -> None:
     executor = FakeWorkerExecutor()
     service = WorkerService(
-        worker_info=WorkerInfo(
-            worker_name="worker-a", capabilities=frozenset({"analysis"})
-        ),
+        worker_info=WorkerInfo(worker_name="worker-a", capabilities=frozenset({"analysis"})),
         executor=executor,
         security=DenyAllPolicy(),
     )
-    result = _run(
-        service.handle_task(DistributedTask(task_type="analysis"))
-    )
+    result = _run(service.handle_task(DistributedTask(task_type="analysis")))
     assert result.success is False
     assert "denied by worker security policy" in (result.error or "")
     assert executor.requests == ()
@@ -359,9 +342,7 @@ def test_worker_denies_task_under_deny_all() -> None:
 def test_worker_allows_task_by_explicit_rule() -> None:
     executor = FakeWorkerExecutor()
     service = WorkerService(
-        worker_info=WorkerInfo(
-            worker_name="worker-a", capabilities=frozenset({"analysis"})
-        ),
+        worker_info=WorkerInfo(worker_name="worker-a", capabilities=frozenset({"analysis"})),
         executor=executor,
         security=AllowDenyPolicy(
             rules=[
@@ -389,9 +370,7 @@ def test_worker_allows_task_by_explicit_rule() -> None:
 def test_security_sources_have_no_banned_imports() -> None:
     from pathlib import Path
 
-    security_dir = (
-        Path(__file__).resolve().parents[2] / "app" / "security"
-    )
+    security_dir = Path(__file__).resolve().parents[2] / "app" / "security"
     banned = (
         "app.browser",
         "app.vision",
@@ -408,6 +387,4 @@ def test_security_sources_have_no_banned_imports() -> None:
     for path in source_files:
         content = path.read_text(encoding="utf-8")
         for token in banned:
-            assert token not in content, (
-                f"{path.name} must not contain '{token}'"
-            )
+            assert token not in content, f"{path.name} must not contain '{token}'"

@@ -44,12 +44,8 @@ def test_manager_first_turn_is_first_kind() -> None:
 
 
 def test_manager_continuation_within_window() -> None:
-    manager = ConversationTurnManager(
-        continuation_window_seconds=8.0, now_fn=time.time
-    )
-    manager.begin_turn(
-        "s1", text="first", detection=_detection(LanguageLabel.ENGLISH), now=10.0
-    )
+    manager = ConversationTurnManager(continuation_window_seconds=8.0, now_fn=time.time)
+    manager.begin_turn("s1", text="first", detection=_detection(LanguageLabel.ENGLISH), now=10.0)
     turn = manager.begin_turn(
         "s1", text="second", detection=_detection(LanguageLabel.ENGLISH), now=12.0
     )
@@ -59,9 +55,7 @@ def test_manager_continuation_within_window() -> None:
 
 def test_manager_follow_up_outside_window() -> None:
     manager = ConversationTurnManager(continuation_window_seconds=4.0)
-    manager.begin_turn(
-        "s1", text="first", detection=_detection(LanguageLabel.ENGLISH), now=10.0
-    )
+    manager.begin_turn("s1", text="first", detection=_detection(LanguageLabel.ENGLISH), now=10.0)
     turn = manager.begin_turn(
         "s1", text="second", detection=_detection(LanguageLabel.ENGLISH), now=20.0
     )
@@ -86,9 +80,7 @@ def test_manager_complete_turn_sets_fields() -> None:
     turn = manager.begin_turn(
         "s1", text="hello", detection=_detection(LanguageLabel.ENGLISH), now=5.0
     )
-    completed = manager.complete_turn(
-        turn.turn_id, response_text="Hi!", success=True, now=6.0
-    )
+    completed = manager.complete_turn(turn.turn_id, response_text="Hi!", success=True, now=6.0)
     assert completed.success is True
     assert completed.response_text == "Hi!"
     assert completed.completed_at == 6.0
@@ -104,9 +96,7 @@ def test_manager_complete_unknown_turn_raises() -> None:
 def test_manager_begin_blank_is_rejected() -> None:
     manager = ConversationTurnManager()
     with pytest.raises(ValueError):
-        manager.begin_turn(
-            "s1", text="  ", detection=_detection(LanguageLabel.ENGLISH), now=1.0
-        )
+        manager.begin_turn("s1", text="  ", detection=_detection(LanguageLabel.ENGLISH), now=1.0)
 
 
 def test_manager_preserves_style_and_metadata() -> None:

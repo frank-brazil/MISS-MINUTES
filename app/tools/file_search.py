@@ -18,9 +18,7 @@ class FileSearchArguments(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     directory: str = Field(description="Directory to search inside")
-    pattern: str = Field(
-        description="Filename wildcard pattern (e.g. '*.txt', '*.py')"
-    )
+    pattern: str = Field(description="Filename wildcard pattern (e.g. '*.txt', '*.py')")
     recursive: bool = Field(default=True, description="Search subdirectories")
     max_results: int = Field(
         default=50,
@@ -68,9 +66,7 @@ class FileSearchTool(Tool):
             return ToolResult.fail(error=f"Directory not allowed: {exc}")
 
         if not root.exists():
-            return ToolResult.fail(
-                error=f"Directory does not exist: {root}"
-            )
+            return ToolResult.fail(error=f"Directory does not exist: {root}")
         if not root.is_dir():
             return ToolResult.fail(error=f"Not a directory: {root}")
 
@@ -91,16 +87,12 @@ class FileSearchTool(Tool):
                     continue
                 matches.append(os.fspath(resolved))
         except OSError as exc:
-            return ToolResult.fail(
-                error=f"Search failed: {type(exc).__name__}"
-            )
+            return ToolResult.fail(error=f"Search failed: {type(exc).__name__}")
 
         matches.sort()
 
         if not matches:
-            return ToolResult.ok(
-                output=f"No files matched '{args.pattern}' in {root}"
-            )
+            return ToolResult.ok(output=f"No files matched '{args.pattern}' in {root}")
 
         lines = [f"Found {len(matches)} match(es)", *matches]
         return ToolResult.ok(output="\n".join(lines))

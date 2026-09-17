@@ -73,9 +73,7 @@ class PlaywrightBrowserProvider(BrowserProvider):
         self._playwright = await async_playwright().start()
         launcher = getattr(self._playwright, self._browser_type, None)
         if launcher is None:
-            raise BrowserUnsupportedError(
-                f"Unsupported browser type: {self._browser_type}"
-            )
+            raise BrowserUnsupportedError(f"Unsupported browser type: {self._browser_type}")
         try:
             self._browser = await launcher.launch(headless=self._headless)
         except Exception as exc:
@@ -102,9 +100,7 @@ class PlaywrightBrowserProvider(BrowserProvider):
 
     # ------------------------------------------------------------ sessions
 
-    async def create_session(
-        self, *, session_id: str | None = None
-    ) -> BrowserSession:
+    async def create_session(self, *, session_id: str | None = None) -> BrowserSession:
         if self._context is None:
             raise BrowserStartupError("browser is not started")
         sid = session_id or f"session-{len(self._sessions) + 1}"
@@ -145,17 +141,13 @@ class PlaywrightBrowserProvider(BrowserProvider):
         try:
             response = await page.goto(url)
         except Exception as exc:
-            raise BrowserNavigationError(
-                f"navigation failed: {type(exc).__name__}"
-            ) from exc
+            raise BrowserNavigationError(f"navigation failed: {type(exc).__name__}") from exc
         status = response.status if response is not None else None
         current = page.url
         session = self._sessions.get(session_id)
         if session is not None:
             session.current_url = current
-        return BrowserNavigation(
-            session_id=session_id, url=current, status=status
-        )
+        return BrowserNavigation(session_id=session_id, url=current, status=status)
 
     async def get_current_url(self, session_id: str) -> str:
         return self._page(session_id).url or ""
@@ -167,9 +159,7 @@ class PlaywrightBrowserProvider(BrowserProvider):
         try:
             title = await page.title()
         except Exception as exc:
-            raise BrowserContentError(
-                f"failed to read title: {type(exc).__name__}"
-            ) from exc
+            raise BrowserContentError(f"failed to read title: {type(exc).__name__}") from exc
         return title
 
     async def read_content(
@@ -191,9 +181,7 @@ class PlaywrightBrowserProvider(BrowserProvider):
             else:
                 text = await page.inner_text("body")
         except Exception as exc:
-            raise BrowserContentError(
-                f"failed to read content: {type(exc).__name__}"
-            ) from exc
+            raise BrowserContentError(f"failed to read content: {type(exc).__name__}") from exc
 
         truncated = False
         if len(text) > max_chars:
@@ -214,9 +202,7 @@ class PlaywrightBrowserProvider(BrowserProvider):
         try:
             await page.click(selector)
         except Exception as exc:
-            raise BrowserActionError(
-                f"click failed on '{selector}': {type(exc).__name__}"
-            ) from exc
+            raise BrowserActionError(f"click failed on '{selector}': {type(exc).__name__}") from exc
         return BrowserClickResult(session_id=session_id, selector=selector)
 
     async def type_text(
@@ -241,9 +227,7 @@ class PlaywrightBrowserProvider(BrowserProvider):
                 await page.fill(selector, text)
                 chars_typed = len(text)
         except Exception as exc:
-            raise BrowserActionError(
-                f"type failed on '{selector}': {type(exc).__name__}"
-            ) from exc
+            raise BrowserActionError(f"type failed on '{selector}': {type(exc).__name__}") from exc
         return BrowserTypeResult(
             session_id=session_id,
             selector=selector,
@@ -252,9 +236,7 @@ class PlaywrightBrowserProvider(BrowserProvider):
 
     # ---------------------------------------------------------- media/files
 
-    async def screenshot(
-        self, session_id: str, *, path: str | Path
-    ) -> BrowserScreenshot:
+    async def screenshot(self, session_id: str, *, path: str | Path) -> BrowserScreenshot:
         from app.browser.errors import BrowserContentError
 
         page = self._page(session_id)
@@ -262,9 +244,7 @@ class PlaywrightBrowserProvider(BrowserProvider):
         try:
             await page.screenshot(path=str(destination))
         except Exception as exc:
-            raise BrowserContentError(
-                f"screenshot failed: {type(exc).__name__}"
-            ) from exc
+            raise BrowserContentError(f"screenshot failed: {type(exc).__name__}") from exc
         size = destination.stat().st_size if destination.exists() else None
         return BrowserScreenshot(
             session_id=session_id,
@@ -293,9 +273,7 @@ class PlaywrightBrowserProvider(BrowserProvider):
             download = await download_info.value
             await download.save_as(str(destination_path))
         except Exception as exc:
-            raise BrowserDownloadError(
-                f"download failed: {type(exc).__name__}"
-            ) from exc
+            raise BrowserDownloadError(f"download failed: {type(exc).__name__}") from exc
         size = await asyncio.to_thread(os.path.getsize, destination_path)
         return BrowserDownload(
             session_id=session_id,

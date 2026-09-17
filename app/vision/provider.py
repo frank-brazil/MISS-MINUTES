@@ -25,9 +25,7 @@ class VisionProvider(ABC):
     """
 
     name: ClassVar[str] = "vision"
-    description: ClassVar[str] = (
-        "Analyses images and produces structured visual understanding."
-    )
+    description: ClassVar[str] = "Analyses images and produces structured visual understanding."
 
     @abstractmethod
     async def analyze(self, request: VisionRequest) -> VisionResult:

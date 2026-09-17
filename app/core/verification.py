@@ -221,9 +221,7 @@ class VerificationResult(BaseModel):
         if self.status is VerificationStatus.VERIFIED and (
             self.discrepancy is not None or self.error is not None
         ):
-            raise ValueError(
-                "a verified result cannot carry a discrepancy or error"
-            )
+            raise ValueError("a verified result cannot carry a discrepancy or error")
         return self
 
     @property
@@ -255,9 +253,7 @@ class Verifier(ABC):
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
         missing = [
-            attribute
-            for attribute in ("name", "description")
-            if not hasattr(cls, attribute)
+            attribute for attribute in ("name", "description") if not hasattr(cls, attribute)
         ]
         if missing:
             raise TypeError(
@@ -294,9 +290,7 @@ class FakeVerifier(Verifier):
     """
 
     name = "fake-verifier"
-    description = (
-        "Deterministic heuristic verification fake for offline tests."
-    )
+    description = "Deterministic heuristic verification fake for offline tests."
 
     _FAILURE_MARKERS = ("did not", "failed", "unsuccessful", "not observed")
 
@@ -316,28 +310,17 @@ class FakeVerifier(Verifier):
     ) -> VerificationResult:
         self._requests.append((expectation, observation))
         if self._raise_error is not None:
-            self._logger.error(
-                "Fake verifier raising: %s", type(self._raise_error).__name__
-            )
+            self._logger.error("Fake verifier raising: %s", type(self._raise_error).__name__)
             raise self._raise_error
 
         seed = expectation.description.strip()
-        conditions = [
-            condition.lower() for condition in expectation.conditions
-        ]
-        expected_block = " ".join(
-            [expectation.description, *expectation.conditions]
-        ).lower()
-        observed_block = " ".join(
-            [observation.description, *observation.observations]
-        ).lower()
+        conditions = [condition.lower() for condition in expectation.conditions]
+        expected_block = " ".join([expectation.description, *expectation.conditions]).lower()
+        observed_block = " ".join([observation.description, *observation.observations]).lower()
 
         if observation.action_succeeded is False:
             status = VerificationStatus.FAILED
-        elif any(
-            condition in observed_block
-            for condition in conditions or [expected_block]
-        ):
+        elif any(condition in observed_block for condition in conditions or [expected_block]):
             status = VerificationStatus.VERIFIED
         elif any(marker in observed_block for marker in self._FAILURE_MARKERS):
             status = VerificationStatus.FAILED
@@ -370,9 +353,7 @@ class FakeVerifier(Verifier):
             evidence.append(
                 Evidence(
                     evidence_id=_stable_uuid(seed, "evidence:no-detail"),
-                    description=(
-                        "The observation carried no granular observed facts."
-                    ),
+                    description=("The observation carried no granular observed facts."),
                     kind=EvidenceKind.OBSERVATION,
                 )
             )

@@ -82,10 +82,22 @@ TRANSITIONS: Mapping[AvatarState, frozenset[AvatarState]] = {
         }
     ),
     AvatarState.HAPPY: frozenset(
-        {AvatarState.IDLE, AvatarState.SPEAKING, AvatarState.SUCCESS, AvatarState.ERROR, AvatarState.HIDDEN}
+        {
+            AvatarState.IDLE,
+            AvatarState.SPEAKING,
+            AvatarState.SUCCESS,
+            AvatarState.ERROR,
+            AvatarState.HIDDEN,
+        }
     ),
     AvatarState.CONCERNED: frozenset(
-        {AvatarState.ERROR, AvatarState.WARNING, AvatarState.IDLE, AvatarState.SPEAKING, AvatarState.HIDDEN}
+        {
+            AvatarState.ERROR,
+            AvatarState.WARNING,
+            AvatarState.IDLE,
+            AvatarState.SPEAKING,
+            AvatarState.HIDDEN,
+        }
     ),
     AvatarState.WARNING: frozenset(
         {AvatarState.ERROR, AvatarState.CONCERNED, AvatarState.IDLE, AvatarState.HIDDEN}
