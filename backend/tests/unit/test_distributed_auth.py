@@ -1,14 +1,13 @@
 import asyncio
 
 import pytest
-from fastapi import HTTPException
-
 from app.distributed.auth import (
     AUTH_HEADER,
     build_auth_dependency,
     request_headers,
 )
 from app.distributed.config import DistributedConfig
+from fastapi import HTTPException
 
 
 class _FakeRequest:

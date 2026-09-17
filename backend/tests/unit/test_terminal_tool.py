@@ -1,8 +1,6 @@
 import asyncio
 
 import pytest
-from pydantic import ValidationError
-
 from app.core.permissions import ToolPermission
 from app.tools.base import Tool, ToolResult
 from app.tools.terminal import (
@@ -14,6 +12,7 @@ from app.tools.terminal import (
     SubprocessCommandExecutor,
     TerminalConfig,
 )
+from pydantic import ValidationError
 
 
 class FakeCommandExecutor(CommandExecutor):

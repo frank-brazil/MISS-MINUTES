@@ -2,7 +2,6 @@ import asyncio
 from pathlib import Path
 
 import pytest
-
 from app.browser.fakes import FakeBrowserProvider
 from app.browser.policy import UrlPolicy
 from app.browser.tools import BrowserToolBundle

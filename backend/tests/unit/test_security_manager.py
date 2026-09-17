@@ -1,5 +1,4 @@
 import pytest
-
 from app.core.permissions import ToolPermission
 from app.security.exceptions import ConfirmationRequired, PermissionDenied
 from app.security.manager import SecurityManager, as_security_manager

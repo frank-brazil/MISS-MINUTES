@@ -3,7 +3,6 @@ from uuid import uuid4
 
 import httpx
 import pytest
-
 from app.distributed.config import DistributedConfig
 from app.distributed.coordinator import DistributedCoordinator
 from app.distributed.executor import FakeWorkerExecutor

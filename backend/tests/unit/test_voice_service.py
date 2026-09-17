@@ -3,8 +3,6 @@ import logging
 from collections.abc import Sequence
 
 import pytest
-from pydantic import ValidationError
-
 from app.core.ai import AIMessage, AIModel, AIResponse, ToolDefinition
 from app.voice.base import TextToSpeechRequest, TextToSpeechResult
 from app.voice.fakes import (
@@ -20,6 +18,7 @@ from app.voice.service import (
     VoiceConversationService,
     VoicePipelineStage,
 )
+from pydantic import ValidationError
 
 EN_AUDIO = b"hello there"
 EN_TEXT = "Hello there, how can I help?"

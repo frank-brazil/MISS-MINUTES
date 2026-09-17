@@ -1,5 +1,4 @@
 import pytest
-
 from app.agents.base import Agent, AgentResult
 from app.core.routing import (
     AgentRouter,

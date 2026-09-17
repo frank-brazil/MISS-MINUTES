@@ -1,7 +1,6 @@
 """Tests for evaluation metrics and computation functions."""
 
 import pytest
-
 from app.evaluation.metrics import (
     METRICS,
     compute_accuracy,

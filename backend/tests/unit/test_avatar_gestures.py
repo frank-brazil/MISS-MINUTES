@@ -1,8 +1,6 @@
 """Arm gestures and sequencing controller."""
 
 import pytest
-from pydantic import ValidationError
-
 from app.avatar.gestures import (
     GESTURE_SPECS,
     GestureController,
@@ -10,6 +8,7 @@ from app.avatar.gestures import (
     GestureKind,
     GestureSpec,
 )
+from pydantic import ValidationError
 
 
 def test_gesture_specs_all_present():

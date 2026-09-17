@@ -1,7 +1,6 @@
 """Avatar controller: signals, lifecycle, direct controls and events."""
 
 import pytest
-
 from app.avatar.config import AvatarConfig
 from app.avatar.controller import SIGNAL_MAP, AvatarController, AvatarSignal
 from app.avatar.events import AvatarEventType

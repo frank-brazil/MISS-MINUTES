@@ -2,12 +2,11 @@ from datetime import UTC, datetime
 from uuid import uuid4
 
 import pytest
-from pydantic import ValidationError
-
 from app.distributed.events import (
     DistributedEvent,
     DistributedEventType,
 )
+from pydantic import ValidationError
 
 
 def test_event_types_cover_the_lifecycle():

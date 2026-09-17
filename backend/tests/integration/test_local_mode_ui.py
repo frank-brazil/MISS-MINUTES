@@ -12,11 +12,10 @@ Verifies that the web interface works correctly with the backend:
 
 import asyncio
 
-from fastapi.testclient import TestClient
-
 from app.api.app import create_app
 from app.config.schema import MissMinutesConfig
 from app.runtime.runtime import MissMinutesRuntime
+from fastapi.testclient import TestClient
 
 
 def _headless_runtime() -> MissMinutesRuntime:
@@ -176,7 +175,6 @@ class TestStaticFiles:
 
 class TestHeadlessModePreserved:
     def test_headless_flag_works(self):
-        from main import main
         import sys
         sys.argv = ["main.py", "--headless"]
         assert "--headless" in sys.argv

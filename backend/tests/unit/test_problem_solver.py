@@ -3,8 +3,6 @@ from datetime import datetime
 from uuid import UUID
 
 import pytest
-from pydantic import ValidationError
-
 from app.core.problem_solver import (
     CONFIDENCE_RANGE_DESCRIPTION,
     Evidence,
@@ -17,6 +15,7 @@ from app.core.problem_solver import (
     RiskLevel,
     Solution,
 )
+from pydantic import ValidationError
 
 
 def evidence(description: str = "evidence", **kwargs: object) -> Evidence:

@@ -1,14 +1,13 @@
 """Typed avatar models: enums, transforms and poses."""
 
 import pytest
-from pydantic import ValidationError
-
 from app.avatar.models import (
     AvatarPart,
     AvatarPose,
     AvatarState,
     AvatarTransform,
 )
+from pydantic import ValidationError
 
 
 def test_state_enum_contains_required_states():

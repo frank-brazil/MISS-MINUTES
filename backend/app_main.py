@@ -14,6 +14,7 @@ import argparse
 import logging
 import signal
 import sys
+from pathlib import Path
 
 
 def main() -> None:
@@ -57,7 +58,6 @@ def main() -> None:
         runtime = MissMinutesRuntime(config)
 
     import uvicorn
-
     from app.api.app import create_app
 
     app_instance = create_app(runtime=runtime)

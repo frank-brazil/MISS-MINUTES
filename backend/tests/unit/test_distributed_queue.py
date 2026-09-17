@@ -1,5 +1,4 @@
 import pytest
-
 from app.distributed.models import DistributedTask, DistributedTaskStatus
 from app.distributed.queue import DistributedTaskQueue, DuplicateTaskError
 

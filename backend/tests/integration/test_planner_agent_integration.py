@@ -12,9 +12,6 @@ import asyncio
 from collections.abc import Sequence
 
 import pytest
-from fastapi.testclient import TestClient
-from pydantic import ValidationError
-
 from app.agents.base import Agent, AgentResult
 from app.api.app import create_app
 from app.core.orchestrator import (
@@ -23,6 +20,8 @@ from app.core.orchestrator import (
 )
 from app.core.planner import Plan, Planner, PlanStep
 from app.core.task import Task, TaskStatus
+from fastapi.testclient import TestClient
+from pydantic import ValidationError
 
 # ------------------------------------------------------------------
 # Test doubles

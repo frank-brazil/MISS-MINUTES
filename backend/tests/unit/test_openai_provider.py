@@ -1,7 +1,6 @@
 import asyncio
 
 import pytest
-
 from app.core.ai import AIMessage, AIResponse, ToolCall, ToolDefinition
 from app.providers.openai_provider import (
     DEFAULT_OPENAI_MODEL,

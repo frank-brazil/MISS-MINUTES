@@ -1,6 +1,4 @@
 import pytest
-from pydantic import ValidationError
-
 from app.distributed.config import (
     BIND_HOST,
     DISPATCH_TIMEOUT_SECONDS,
@@ -12,6 +10,7 @@ from app.distributed.config import (
     WORKER_BIND_PORT,
     DistributedConfig,
 )
+from pydantic import ValidationError
 
 
 def test_defaults_are_loopback_and_safe():

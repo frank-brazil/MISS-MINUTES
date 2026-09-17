@@ -1,8 +1,6 @@
 """Lip-sync timing, controller and provider."""
 
 import pytest
-from pydantic import ValidationError
-
 from app.avatar.lipsync import (
     ApproximateLipSyncProvider,
     LipSyncController,
@@ -11,6 +9,7 @@ from app.avatar.lipsync import (
     TimingAccuracy,
     VisemeState,
 )
+from pydantic import ValidationError
 
 
 def test_speech_unit_validation():

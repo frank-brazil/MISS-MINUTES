@@ -2,11 +2,10 @@
 
 from collections.abc import Sequence
 
-from fastapi.testclient import TestClient
-
 from app.api.app import create_app
 from app.core.ai import AIMessage, AIModel, AIResponse, ToolDefinition
 from app.core.orchestrator import Orchestrator
+from fastapi.testclient import TestClient
 
 
 class FakeAIModel(AIModel):

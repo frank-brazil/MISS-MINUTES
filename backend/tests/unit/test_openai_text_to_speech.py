@@ -1,7 +1,6 @@
 import asyncio
 
 import pytest
-
 from app.providers.openai_text_to_speech import (
     OPENAI_API_KEY_ENV,
     TTS_FORMAT_ENV,

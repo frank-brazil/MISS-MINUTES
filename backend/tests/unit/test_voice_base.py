@@ -2,8 +2,6 @@ import asyncio
 from datetime import timedelta
 
 import pytest
-from pydantic import ValidationError
-
 from app.voice.base import (
     AudioData,
     SpeechError,
@@ -14,6 +12,7 @@ from app.voice.base import (
     TextToSpeechRequest,
     TextToSpeechResult,
 )
+from pydantic import ValidationError
 
 
 class SampleSpeechToText(SpeechToText):

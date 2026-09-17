@@ -2,8 +2,6 @@ from datetime import datetime
 from uuid import UUID
 
 import pytest
-from pydantic import ValidationError
-
 from app.core.task import Task
 from app.research.base import ResearchResponse
 from app.solver.events import ExecutionEvent, ExecutionEventType
@@ -13,6 +11,7 @@ from app.solver.session import (
     ProblemSolvingSession,
     ProblemSolvingStatus,
 )
+from pydantic import ValidationError
 
 
 def test_status_values() -> None:

@@ -1,7 +1,6 @@
 import time
 
 import pytest
-
 from app.voice.language import (
     LanguageDetectionResult,
     LanguageLabel,

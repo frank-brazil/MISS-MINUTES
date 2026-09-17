@@ -2,9 +2,8 @@ import asyncio
 from uuid import UUID, uuid4
 
 import pytest
-from pydantic import ValidationError
-
 from app.memory.base import Memory, MemoryQueryResult, MemoryRecord
+from pydantic import ValidationError
 
 
 class InMemoryMemory(Memory):

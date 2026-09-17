@@ -1,8 +1,6 @@
 import asyncio
 
 import pytest
-from pydantic import ValidationError
-
 from app.voice.audio import (
     AudioCaptureProvider,
     AudioCaptureState,
@@ -11,6 +9,7 @@ from app.voice.audio import (
     FakeAudioCaptureProvider,
 )
 from app.voice.base import AudioData, SpeechError
+from pydantic import ValidationError
 
 FRAME_BYTES = b"hello there"
 

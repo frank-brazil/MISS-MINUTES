@@ -2,7 +2,6 @@ import asyncio
 from typing import Any
 
 import pytest
-
 from app.research.base import ABSOLUTE_MAX_RESULTS, SearchRequest
 from app.research.http_provider import (
     DEFAULT_TIMEOUT_SECONDS,

@@ -2,7 +2,6 @@ import asyncio
 from collections.abc import Sequence
 
 import pytest
-
 from app.core.ai import (
     AIError,
     AIMessage,

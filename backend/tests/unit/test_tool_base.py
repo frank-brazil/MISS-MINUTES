@@ -1,9 +1,8 @@
 import asyncio
 
 import pytest
-from pydantic import BaseModel, ValidationError
-
 from app.tools.base import Tool, ToolArguments, ToolResult
+from pydantic import BaseModel, ValidationError
 
 
 class EchoArguments(BaseModel):

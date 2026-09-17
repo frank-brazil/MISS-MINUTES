@@ -2,7 +2,6 @@ import asyncio
 from collections.abc import Sequence
 
 import pytest
-
 from app.core.ai import AIMessage, AIModel, AIResponse, ToolCall, ToolDefinition
 from app.core.orchestrator import Orchestrator
 from app.core.permissions import ToolPermission

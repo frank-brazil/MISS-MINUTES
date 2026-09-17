@@ -1,7 +1,6 @@
 """Unit tests for app.api.dependencies — get_orchestrator dependency."""
 
 import pytest
-
 from app.api.dependencies import get_orchestrator
 from app.core.orchestrator import Orchestrator
 

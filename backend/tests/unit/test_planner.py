@@ -4,8 +4,6 @@ from datetime import datetime
 from uuid import UUID
 
 import pytest
-from pydantic import ValidationError
-
 from app.core.planner import (
     ManualPlanner,
     Plan,
@@ -13,6 +11,7 @@ from app.core.planner import (
     PlanStep,
 )
 from app.core.task import Task, TaskStatus
+from pydantic import ValidationError
 
 
 class FakePlanner(Planner):

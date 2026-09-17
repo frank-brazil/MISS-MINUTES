@@ -1,5 +1,3 @@
-from fastapi.testclient import TestClient
-
 from app.distributed.auth import AUTH_HEADER
 from app.distributed.config import DistributedConfig
 from app.distributed.coordinator import DistributedCoordinator
@@ -14,6 +12,7 @@ from app.distributed.models import (
 from app.distributed.queue import DistributedTaskQueue
 from app.distributed.registry import WorkerRegistry
 from app.distributed.service import WorkerService
+from fastapi.testclient import TestClient
 
 
 def _master_client(*, token=None, max_retries=2):

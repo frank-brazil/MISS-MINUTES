@@ -1,8 +1,6 @@
 from pathlib import Path
 
 import pytest
-from pydantic import ValidationError
-
 from app.vision.models import (
     DEFAULT_MAX_IMAGE_BYTES,
     BoundingBox,
@@ -15,6 +13,7 @@ from app.vision.models import (
     VisionResult,
     image_reference,
 )
+from pydantic import ValidationError
 
 
 def test_valid_image_input_with_data() -> None:

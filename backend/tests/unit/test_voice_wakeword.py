@@ -1,14 +1,13 @@
 import asyncio
 
 import pytest
-from pydantic import ValidationError
-
 from app.voice.audio import AudioFrame
 from app.voice.wakeword import (
     FakeWakeWordDetector,
     WakeWordDetector,
     WakeWordResult,
 )
+from pydantic import ValidationError
 
 
 def _frame() -> AudioFrame:

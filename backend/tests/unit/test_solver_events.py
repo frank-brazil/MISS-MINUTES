@@ -2,9 +2,8 @@ from datetime import datetime
 from uuid import UUID
 
 import pytest
-from pydantic import ValidationError
-
 from app.solver.events import ExecutionEvent, ExecutionEventType
+from pydantic import ValidationError
 
 
 def test_event_type_values() -> None:

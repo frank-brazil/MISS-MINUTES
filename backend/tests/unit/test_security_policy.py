@@ -1,5 +1,4 @@
 import pytest
-
 from app.security.models import (
     Permission,
     PermissionCategory,

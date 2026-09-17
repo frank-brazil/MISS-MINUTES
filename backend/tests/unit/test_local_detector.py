@@ -1,7 +1,6 @@
 import asyncio
 
 import pytest
-
 from app.voice.language import LanguageDetector, LanguageLabel
 from app.voice.local_detector import LocalLanguageDetector
 

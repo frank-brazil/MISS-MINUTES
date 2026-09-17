@@ -1,8 +1,6 @@
 """Expression system and mouth controller."""
 
 import pytest
-from pydantic import ValidationError
-
 from app.avatar.expression import (
     DEFAULT_EXPRESSIONS,
     PREDEFINED_EXPRESSION_NAMES,
@@ -12,6 +10,7 @@ from app.avatar.expression import (
     UnknownExpressionError,
 )
 from app.avatar.mouth import MouthController, MouthShape, MouthState
+from pydantic import ValidationError
 
 PREPARAMS = {
     "eye_openness": 0.8,

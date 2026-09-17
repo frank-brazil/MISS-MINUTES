@@ -1,9 +1,8 @@
 """Walking system."""
 
 import pytest
-from pydantic import ValidationError
-
 from app.avatar.walking import WalkConfig, WalkingController, WalkState
+from pydantic import ValidationError
 
 
 def test_walk_config_validation():

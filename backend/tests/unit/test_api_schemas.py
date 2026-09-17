@@ -1,9 +1,8 @@
 """Unit tests for app.api.schemas — TaskRequest and HealthResponse models."""
 
 import pytest
-from pydantic import ValidationError
-
 from app.api.schemas import HealthResponse, TaskRequest
+from pydantic import ValidationError
 
 
 def test_task_request_accepts_valid_description() -> None:

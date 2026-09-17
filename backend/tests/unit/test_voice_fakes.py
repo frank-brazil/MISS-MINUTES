@@ -2,7 +2,6 @@ import asyncio
 from datetime import timedelta
 
 import pytest
-
 from app.core.ai import AIMessage, AIModel, AIResponse
 from app.voice.base import (
     SpeechInput,

@@ -1,7 +1,6 @@
 from uuid import UUID
 
 import pytest
-
 from app.distributed.models import (
     DistributedTask,
     WorkerInfo,

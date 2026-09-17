@@ -4,7 +4,6 @@ import asyncio
 from collections.abc import Sequence
 
 import pytest
-
 from app.api.router import api_info, create_task, health
 from app.api.schemas import TaskRequest
 from app.core.ai import AIMessage, AIModel, AIResponse, ToolDefinition

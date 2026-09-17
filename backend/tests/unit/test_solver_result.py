@@ -1,12 +1,11 @@
 from uuid import UUID
 
 import pytest
-from pydantic import ValidationError
-
 from app.core.verification import VerificationStatus
 from app.solver.events import ExecutionEvent, ExecutionEventType
 from app.solver.result import ProblemSolvingResult
 from app.solver.session import ProblemSolvingStatus
+from pydantic import ValidationError
 
 
 def test_result_requires_core_fields() -> None:

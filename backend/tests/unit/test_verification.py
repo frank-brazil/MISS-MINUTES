@@ -3,8 +3,6 @@ from datetime import datetime
 from uuid import UUID
 
 import pytest
-from pydantic import ValidationError
-
 from app.core.verification import (
     CONFIDENCE_RANGE_DESCRIPTION,
     VERIFICATION_NOT_SUCCESS_NOTICE,
@@ -17,6 +15,7 @@ from app.core.verification import (
     VerificationStatus,
     Verifier,
 )
+from pydantic import ValidationError
 
 
 def expectation(**kwargs: object) -> VerificationExpectation:

@@ -3,8 +3,6 @@
 import math
 
 import pytest
-from pydantic import ValidationError
-
 from app.avatar.expression import AvatarExpression
 from app.avatar.eyes import (
     EyeConfig,
@@ -14,6 +12,7 @@ from app.avatar.eyes import (
     EyeTrackingInput,
     FakeEyeTracker,
 )
+from pydantic import ValidationError
 
 
 class _Clock:

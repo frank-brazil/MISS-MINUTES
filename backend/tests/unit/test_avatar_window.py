@@ -1,10 +1,9 @@
 """Window/UI boundary: config validation and the fake character window."""
 
 import pytest
-from pydantic import ValidationError
-
 from app.avatar.renderer import FakeAvatarRenderer
 from app.avatar.window import AvatarWindow, AvatarWindowConfig, FakeAvatarWindow
+from pydantic import ValidationError
 
 
 def test_window_config_defaults_are_character_first():

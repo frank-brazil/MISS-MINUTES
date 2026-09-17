@@ -1,7 +1,6 @@
 import asyncio
 
 import pytest
-
 from app.voice.audio import AudioData
 from app.voice.output import (
     AudioOutputProvider,

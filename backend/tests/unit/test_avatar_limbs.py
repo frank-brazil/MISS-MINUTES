@@ -1,11 +1,10 @@
 """Arms/legs: typed limb states, movement hooks and transform validation."""
 
 import pytest
-from pydantic import ValidationError
-
 from app.avatar.config import AvatarConfig
 from app.avatar.limbs import ArmsAndLegs, LimbSide, LimbState
 from app.avatar.models import AvatarPart, AvatarPose, AvatarTransform
+from pydantic import ValidationError
 
 LIMB_PARTS = (AvatarPart.LEFT_ARM, AvatarPart.RIGHT_ARM, AvatarPart.LEFT_LEG, AvatarPart.RIGHT_LEG)
 

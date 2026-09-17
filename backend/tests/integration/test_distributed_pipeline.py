@@ -8,7 +8,6 @@ dispatch -> execute -> result -> completed status.
 import asyncio
 
 import httpx
-
 from app.distributed.config import DistributedConfig
 from app.distributed.coordinator import DistributedCoordinator
 from app.distributed.executor import FakeWorkerExecutor

@@ -1,5 +1,4 @@
 import pytest
-
 from app.browser.policy import UrlPolicy, UrlValidationError
 
 

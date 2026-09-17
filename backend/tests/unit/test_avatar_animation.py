@@ -3,10 +3,9 @@
 import math
 
 import pytest
-from pydantic import ValidationError
-
 from app.avatar.animation import AnimationConfig, AnimationController, AnimationMode
 from app.avatar.models import AvatarPose
+from pydantic import ValidationError
 
 
 class Clock:

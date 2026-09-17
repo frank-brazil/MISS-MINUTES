@@ -2,8 +2,6 @@ import asyncio
 from collections.abc import Sequence
 
 import pytest
-from pydantic import ValidationError
-
 from app.core.ai import AIMessage, AIModel, AIResponse, ToolCall, ToolDefinition
 from app.core.orchestrator import Orchestrator
 from app.core.permissions import ToolPermission
@@ -19,6 +17,7 @@ from app.voice.brain import (
 )
 from app.voice.fakes import FakeAIModel
 from app.voice.language import LanguageLabel, ResponseStyle
+from pydantic import ValidationError
 
 
 def _run(coro):

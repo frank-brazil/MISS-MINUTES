@@ -2,10 +2,9 @@ import asyncio
 from uuid import UUID
 
 import pytest
-from pydantic import ValidationError
-
 from app.solver.actions import ActionExecutor, ActionRequest, ActionResult
 from app.solver.fakes import FakeActionExecutor
+from pydantic import ValidationError
 
 
 def _run(coro):

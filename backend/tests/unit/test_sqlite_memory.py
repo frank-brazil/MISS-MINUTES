@@ -5,10 +5,9 @@ from pathlib import Path
 from uuid import UUID, uuid4
 
 import pytest
-from pydantic import ValidationError
-
 from app.memory.base import Memory, MemoryBackendError, MemoryQueryResult, MemoryRecord
 from app.memory.sqlite_memory import DEFAULT_MEMORY_DB_ENV, SQLiteMemory
+from pydantic import ValidationError
 
 
 def make_memory(tmp_path: Path, name: str = "memory.db") -> SQLiteMemory:

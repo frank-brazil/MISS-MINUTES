@@ -2,7 +2,6 @@ import asyncio
 from pathlib import Path
 
 import pytest
-
 from app.core.permissions import ToolPermission
 from app.tools.base import Tool, ToolResult
 from app.tools.file_config import FileToolConfig

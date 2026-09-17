@@ -3,7 +3,6 @@
 from datetime import timedelta
 
 import pytest
-
 from app.avatar.lipsync import ApproximateLipSyncProvider, LipSyncController, TimingAccuracy
 from app.avatar.tts_adapter import TTSLipSyncAdapter
 

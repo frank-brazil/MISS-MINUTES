@@ -21,9 +21,9 @@ _backend_dir = str(Path(__file__).resolve().parent.parent)
 if _backend_dir not in sys.path:
     sys.path.insert(0, _backend_dir)
 
-from app.providers.openai_speech_to_text import OpenAISpeechToText
-from app.providers.openai_text_to_speech import OpenAITextToSpeech
-from app.voice.base import SpeechInput, TextToSpeechRequest
+from app.providers.openai_speech_to_text import OpenAISpeechToText  # noqa: E402
+from app.providers.openai_text_to_speech import OpenAITextToSpeech  # noqa: E402
+from app.voice.base import SpeechInput, TextToSpeechRequest  # noqa: E402
 
 
 async def transcribe(audio_path: Path) -> None:

@@ -1,7 +1,6 @@
 """Avatar state machine: valid/invalid transitions and history."""
 
 import pytest
-
 from app.avatar.models import AvatarState
 from app.avatar.state_machine import AvatarStateMachine, AvatarTransitionError
 

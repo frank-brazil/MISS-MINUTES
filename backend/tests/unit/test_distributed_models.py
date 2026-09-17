@@ -2,8 +2,6 @@ from datetime import datetime
 from uuid import uuid4
 
 import pytest
-from pydantic import ValidationError
-
 from app.distributed.models import (
     AssignmentStatus,
     DistributedTask,
@@ -15,6 +13,7 @@ from app.distributed.models import (
     WorkerResources,
     WorkerStatus,
 )
+from pydantic import ValidationError
 
 # ----------------------------------------------------------------------
 # WorkerResources

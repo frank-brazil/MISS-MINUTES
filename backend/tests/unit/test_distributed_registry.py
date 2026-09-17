@@ -2,7 +2,6 @@ from datetime import UTC, datetime, timedelta
 from uuid import uuid4
 
 import pytest
-
 from app.distributed.models import (
     WorkerHeartbeat,
     WorkerInfo,

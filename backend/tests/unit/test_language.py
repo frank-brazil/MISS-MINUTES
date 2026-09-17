@@ -1,8 +1,6 @@
 import asyncio
 
 import pytest
-from pydantic import ValidationError
-
 from app.voice.language import (
     ConversationLanguage,
     LanguageDetectionResult,
@@ -12,6 +10,7 @@ from app.voice.language import (
     LanguagePreference,
     ResponseStyle,
 )
+from pydantic import ValidationError
 
 
 class SampleLanguageDetector(LanguageDetector):

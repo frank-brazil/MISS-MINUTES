@@ -1,11 +1,10 @@
 """Clock-face component: markings, hands, angles and validation."""
 
 import pytest
-from pydantic import ValidationError
-
 from app.avatar.clockface import ClockFace, ClockHandState
 from app.avatar.config import AvatarConfig
 from app.avatar.models import AvatarPart
+from pydantic import ValidationError
 
 
 def test_marking_angles_count_and_spacing():

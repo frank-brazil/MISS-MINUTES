@@ -1,12 +1,11 @@
 import pytest
-from pydantic import ValidationError
-
 from app.voice.language import LanguageLabel, ResponseStyle
 from app.voice.response_policy import (
     DefaultVoiceResponsePolicy,
     SpokenResponseProfile,
     VoiceResponsePolicy,
 )
+from pydantic import ValidationError
 
 
 def _style(label: LanguageLabel) -> ResponseStyle:

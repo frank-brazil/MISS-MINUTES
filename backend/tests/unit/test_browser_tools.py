@@ -2,14 +2,13 @@ import asyncio
 from pathlib import Path
 
 import pytest
-from pydantic import ValidationError
-
 from app.browser.fakes import FakeBrowserProvider
 from app.browser.policy import UrlPolicy
 from app.browser.tools import BrowserToolBundle
 from app.core.permissions import ToolPermission
 from app.tools.base import Tool, ToolResult
 from app.tools.file_config import FileToolConfig
+from pydantic import ValidationError
 
 
 def _run(coro):

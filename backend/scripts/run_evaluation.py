@@ -9,8 +9,8 @@ if _backend_dir not in sys.path:
 
 _project_root = Path(__file__).resolve().parent.parent.parent
 
-from app.evaluation.reports import save_evaluation_report
-from app.evaluation.runners import run_all_evaluation_sync
+from app.evaluation.reports import save_evaluation_report  # noqa: E402
+from app.evaluation.runners import run_all_evaluation_sync  # noqa: E402
 
 run = run_all_evaluation_sync()
 s = run.summary

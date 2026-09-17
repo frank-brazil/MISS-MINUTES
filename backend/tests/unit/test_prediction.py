@@ -3,8 +3,6 @@ from datetime import datetime
 from uuid import UUID
 
 import pytest
-from pydantic import ValidationError
-
 from app.core.prediction import (
     BENEFIT_SCORE_RANGE_DESCRIPTION,
     CONFIDENCE_RANGE_DESCRIPTION,
@@ -20,6 +18,7 @@ from app.core.prediction import (
     Predictor,
     RiskLevel,
 )
+from pydantic import ValidationError
 
 
 def prediction(**kwargs: object) -> Prediction:

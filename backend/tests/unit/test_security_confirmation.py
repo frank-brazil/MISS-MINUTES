@@ -2,7 +2,6 @@ from datetime import UTC, datetime, timedelta
 from uuid import uuid4
 
 import pytest
-
 from app.security.confirmation import ConfirmationManager
 from app.security.exceptions import (
     ConfirmationRequired,

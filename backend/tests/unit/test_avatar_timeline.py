@@ -1,7 +1,6 @@
 """Deterministic animation timelines."""
 
 import pytest
-
 from app.avatar.timeline import AnimationTimeline, Easing, TimelineKeyframe, ease
 
 

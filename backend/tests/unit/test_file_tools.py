@@ -2,8 +2,6 @@ import asyncio
 from pathlib import Path
 
 import pytest
-from pydantic import ValidationError
-
 from app.core.permissions import ToolPermission
 from app.tools.base import ToolResult
 from app.tools.file_config import FileToolConfig
@@ -11,6 +9,7 @@ from app.tools.file_create import FileCreateTool
 from app.tools.file_edit import FileEditTool
 from app.tools.file_read import FileReadTool
 from app.tools.file_search import FileSearchTool
+from pydantic import ValidationError
 
 
 @pytest.fixture

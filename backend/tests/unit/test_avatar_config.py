@@ -1,9 +1,8 @@
 """Avatar config: defaults, validation and customization."""
 
 import pytest
-from pydantic import ValidationError
-
 from app.avatar.config import AvatarConfig, AvatarProportions
+from pydantic import ValidationError
 
 
 def test_defaults_are_characteric():

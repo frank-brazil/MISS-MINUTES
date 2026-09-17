@@ -2,14 +2,13 @@ import asyncio
 from uuid import UUID
 
 import pytest
-from pydantic import ValidationError
-
 from app.solver.fakes import FakeObservationProvider
 from app.solver.observation import (
     ObservationProvider,
     ObservationRequest,
     ObservationResult,
 )
+from pydantic import ValidationError
 
 
 def _run(coro):

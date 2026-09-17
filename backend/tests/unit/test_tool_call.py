@@ -1,9 +1,8 @@
 import pytest
-from pydantic import ValidationError
-
 from app.core.ai import AIMessage, AIResponse, ToolCall, ToolDefinition
 from app.tools.base import ToolArguments
 from app.tools.calculator import CalculatorTool
+from pydantic import ValidationError
 
 
 def test_tool_definition_fields() -> None:

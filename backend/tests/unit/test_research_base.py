@@ -1,7 +1,6 @@
 import asyncio
 
 import pytest
-
 from app.research.base import (
     ABSOLUTE_MAX_RESULTS,
     DEFAULT_MAX_RESULTS,

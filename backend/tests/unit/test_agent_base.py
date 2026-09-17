@@ -1,7 +1,6 @@
 import asyncio
 
 import pytest
-
 from app.agents.base import Agent, AgentResult
 from app.core.task import Task
 

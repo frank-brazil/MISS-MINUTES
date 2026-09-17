@@ -2,7 +2,6 @@ import asyncio
 from uuid import UUID
 
 import pytest
-
 from app.agents.base import Agent, AgentResult
 from app.core.critic import (
     Critic,

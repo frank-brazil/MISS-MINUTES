@@ -1,7 +1,6 @@
 """Avatar movement controller."""
 
 import pytest
-
 from app.avatar.movement import AvatarMovementController, MovementConfig
 
 

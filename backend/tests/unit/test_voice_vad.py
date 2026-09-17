@@ -1,8 +1,6 @@
 import asyncio
 
 import pytest
-from pydantic import ValidationError
-
 from app.voice.audio import AudioFrame
 from app.voice.vad import (
     FakeVoiceActivityDetector,
@@ -10,6 +8,7 @@ from app.voice.vad import (
     VADState,
     VoiceActivityDetector,
 )
+from pydantic import ValidationError
 
 
 def _frame(seq: int = 0) -> AudioFrame:

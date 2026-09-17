@@ -1,7 +1,6 @@
 import asyncio
 
 import pytest
-
 from app.distributed.executor import (
     FakeWorkerExecutor,
     WorkerExecutor,

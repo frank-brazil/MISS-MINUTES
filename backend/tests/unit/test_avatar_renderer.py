@@ -1,8 +1,6 @@
 """Renderer boundary: primitives, deterministic frames and the fake renderer."""
 
 import pytest
-from pydantic import ValidationError
-
 from app.avatar.config import AvatarConfig
 from app.avatar.expression import AvatarExpression
 from app.avatar.eyes import EyeState
@@ -14,6 +12,7 @@ from app.avatar.renderer import (
     RenderFrame,
     RenderPrimitive,
 )
+from pydantic import ValidationError
 
 
 def _renderer() -> FakeAvatarRenderer:

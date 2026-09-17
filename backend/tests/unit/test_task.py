@@ -3,9 +3,8 @@ from datetime import datetime
 from uuid import UUID
 
 import pytest
-from pydantic import ValidationError
-
 from app.core.task import Task, TaskStatus
+from pydantic import ValidationError
 
 
 def test_valid_task_creation() -> None:

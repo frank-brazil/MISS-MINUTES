@@ -1,14 +1,13 @@
 import asyncio
 
 import pytest
-from pydantic import BaseModel, ValidationError
-
 from app.tools.base import Tool, ToolResult
 from app.tools.calculator import (
     CalculatorArguments,
     CalculatorOperation,
     CalculatorTool,
 )
+from pydantic import BaseModel, ValidationError
 
 
 def test_calculator_metadata() -> None:

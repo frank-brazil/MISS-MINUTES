@@ -168,9 +168,8 @@ class TestAppCreation:
         assert app.state.runtime is runtime
 
     def test_app_has_routes(self):
-        from fastapi.testclient import TestClient
-
         from app.api.app import create_app
+        from fastapi.testclient import TestClient
 
         app = create_app()
         client = TestClient(app)
@@ -184,9 +183,8 @@ class TestHealthEndpoint:
     """Verify health endpoint works."""
 
     def test_health_returns_ok(self):
-        from fastapi.testclient import TestClient
-
         from app.api.app import create_app
+        from fastapi.testclient import TestClient
 
         app = create_app()
         client = TestClient(app)
@@ -196,9 +194,8 @@ class TestHealthEndpoint:
         assert data["status"] == "ok"
 
     def test_root_returns_info(self):
-        from fastapi.testclient import TestClient
-
         from app.api.app import create_app
+        from fastapi.testclient import TestClient
 
         app = create_app()
         client = TestClient(app)

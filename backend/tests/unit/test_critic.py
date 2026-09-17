@@ -3,8 +3,6 @@ from datetime import datetime
 from uuid import UUID
 
 import pytest
-from pydantic import ValidationError
-
 from app.core.critic import (
     CONFIDENCE_RANGE_DESCRIPTION,
     CRITIQUE_IS_ESTIMATE_NOTICE,
@@ -16,6 +14,7 @@ from app.core.critic import (
     FakeCritic,
     Severity,
 )
+from pydantic import ValidationError
 
 
 def point(**kwargs: object) -> CritiquePoint:

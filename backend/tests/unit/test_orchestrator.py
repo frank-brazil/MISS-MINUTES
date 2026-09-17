@@ -3,7 +3,6 @@ from collections.abc import Sequence
 from uuid import UUID
 
 import pytest
-
 from app.agents.base import Agent, AgentResult
 from app.core.ai import AIMessage, AIModel, AIResponse, ToolDefinition
 from app.core.orchestrator import OrchestrationResult, Orchestrator

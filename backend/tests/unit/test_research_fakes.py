@@ -1,7 +1,6 @@
 import asyncio
 
 import pytest
-
 from app.research.base import (
     ResearchProvider,
     ResearchResponse,
