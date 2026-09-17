@@ -2,8 +2,12 @@ from __future__ import annotations
 
 import logging
 from contextlib import asynccontextmanager
+from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
 from app.api.router import router
 from app.core.ai import AIModel
@@ -14,6 +18,9 @@ from app.runtime.runtime import MissMinutesRuntime
 from app.security.manager import SecurityManager
 
 logger = logging.getLogger(__name__)
+
+_STATIC_DIR = Path(__file__).resolve().parents[2] / "app" / "api" / "static"
+_TEMPLATE_DIR = Path(__file__).resolve().parents[2] / "app" / "api" / "templates"
 
 
 def create_app(
@@ -67,6 +74,35 @@ def create_app(
             app.state.security_manager = security_manager
 
     app.include_router(router)
+
+    # Mount static files for web UI
+    if _STATIC_DIR.exists():
+        app.mount("/static", StaticFiles(directory=str(_STATIC_DIR)), name="static")
+
+    # Mount avatar assets (PNGs, character.json, etc.)
+    _ASSETS_DIR = Path(__file__).resolve().parents[2] / "ui" / "avatar" / "assets"
+    if _ASSETS_DIR.exists():
+        app.mount("/assets", StaticFiles(directory=str(_ASSETS_DIR)), name="assets")
+
+    # Setup Jinja2 templates
+    templates = Jinja2Templates(directory=str(_TEMPLATE_DIR))
+
+    # UI routes
+    @app.get("/", response_class=HTMLResponse)
+    async def ui_root(request: Request) -> HTMLResponse:
+        return templates.TemplateResponse(request, "index.html")
+
+    @app.get("/ui", response_class=HTMLResponse)
+    async def ui_redirect(request: Request) -> HTMLResponse:
+        return templates.TemplateResponse(request, "index.html")
+
+    @app.get("/dashboard", response_class=HTMLResponse)
+    async def ui_dashboard(request: Request) -> HTMLResponse:
+        return templates.TemplateResponse(request, "dashboard.html")
+
+    @app.get("/settings", response_class=HTMLResponse)
+    async def ui_settings(request: Request) -> HTMLResponse:
+        return templates.TemplateResponse(request, "settings.html")
 
     # Optional distributed master: when a coordinator is supplied, expose the
     # /distributed/* API on this app.

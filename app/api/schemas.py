@@ -47,3 +47,26 @@ class TaskCancelResponse(BaseModel):
     task_id: str
     cancelled: bool
     message: str
+
+
+class ChatRequest(BaseModel):
+    message: str
+
+    @field_validator("message")
+    @classmethod
+    def _message_not_blank(cls, v: str) -> str:
+        if not v.strip():
+            raise ValueError("message must not be blank")
+        return v
+
+
+class ChatResponse(BaseModel):
+    message: str
+    status: str
+    task_id: str | None = None
+
+
+class AvatarStateResponse(BaseModel):
+    state: str
+    expression: str
+    running: bool

@@ -4,6 +4,9 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from app.api.dependencies import get_orchestrator, get_runtime
 from app.api.schemas import (
+    AvatarStateResponse,
+    ChatRequest,
+    ChatResponse,
     HealthResponse,
     RuntimeStatusResponse,
     TaskCancelResponse,
@@ -20,8 +23,8 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
-@router.get("/")
-async def root() -> dict[str, str]:
+@router.get("/api/info")
+async def api_info() -> dict[str, str]:
     return {
         "name": "MISSMINUTES",
         "version": "0.1.0",
@@ -93,3 +96,43 @@ async def cancel_task(
         cancelled=False,
         message="Cancellation not yet supported for in-flight tasks",
     )
+
+
+@router.post("/api/chat", response_model=ChatResponse)
+async def api_chat(
+    request: ChatRequest,
+    runtime: MissMinutesRuntime | None = Depends(get_runtime),
+) -> ChatResponse:
+    if runtime is None:
+        raise HTTPException(status_code=503, detail="Runtime not available")
+    result = await runtime.handle_text(request.message)
+    return ChatResponse(
+        message=result.text_response or "",
+        status="success" if result.success else "error",
+        task_id=result.request_id,
+    )
+
+
+@router.get("/api/avatar/state", response_model=AvatarStateResponse)
+async def avatar_state(
+    runtime: MissMinutesRuntime | None = Depends(get_runtime),
+) -> AvatarStateResponse:
+    if runtime is None or runtime.avatar_controller is None:
+        return AvatarStateResponse(state="idle", expression="neutral", running=False)
+    ctrl = runtime.avatar_controller
+    return AvatarStateResponse(
+        state=ctrl.state.value,
+        expression=ctrl.expression,
+        running=ctrl.running,
+    )
+
+
+@router.post("/api/avatar/signal")
+async def avatar_signal(
+    signal: str,
+    runtime: MissMinutesRuntime | None = Depends(get_runtime),
+) -> dict:
+    if runtime is None or runtime.avatar_controller is None:
+        raise HTTPException(status_code=503, detail="Avatar not available")
+    accepted = runtime.avatar_controller.handle(signal)
+    return {"signal": signal, "accepted": accepted}
