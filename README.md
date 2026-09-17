@@ -28,14 +28,6 @@ User Input (text/voice/image)
 FastAPI Server (port 8000)
     │
     ▼
-┌─────────────────────────────────────┐
-│  Local Web Interface (HTML/CSS/JS)  │
-│  - Chat UI with animated avatar     │
-│  - Dashboard & Settings pages       │
-│  - System status sidebar            │
-└─────────────────────────────────────┘
-    │
-    ▼
 Orchestrator ──→ Agents ──→ Tools ──→ Result
     │                │           │
     │                │           ▼
@@ -66,39 +58,37 @@ Response (text/voice/avatar)
 
 ```
 MISSMINUTES/
-├── app/                        # Application source code
-│   ├── agents/                 # Specialized AI agents
-│   ├── api/                    # FastAPI server and routes
-│   │   ├── static/             # Web UI static assets (CSS, JS)
-│   │   └── templates/          # Jinja2 HTML templates
-│   ├── avatar/                 # Avatar animation engine
-│   ├── browser/                # Browser automation
-│   ├── config/                 # Configuration schema and loading
-│   ├── core/                   # Orchestrator, planner, routing, AI
-│   ├── distributed/            # Multi-worker coordination
-│   ├── evaluation/             # Benchmark framework
-│   ├── memory/                 # SQLite memory backend
-│   ├── providers/              # OpenAI provider implementations
-│   ├── research/               # Research provider abstraction
-│   ├── runtime/                # Application lifecycle
-│   ├── security/               # Security policy and audit
-│   ├── solver/                 # Problem-solving engine
-│   ├── tools/                  # Tool implementations
-│   ├── vision/                 # Screen understanding
-│   └── voice/                  # Voice pipeline
-├── config/                     # Configuration files
-│   └── missminutes.toml        # Default configuration
-├── data/                       # Runtime data (memory DB, evaluation)
-├── docs/                       # Documentation
-├── scripts/                    # Utility scripts
-├── tests/                      # Test suite
-│   ├── unit/                   # 155+ unit test files
-│   └── integration/            # 15 integration test files
-├── ui/                         # Avatar assets
-├── main.py                     # Application entry point
-├── pyproject.toml              # Package configuration
-├── requirements.txt            # Runtime dependencies
-└── .env.example                # Environment variable template
+├── app/                    # Application source code
+│   ├── agents/             # Specialized AI agents
+│   ├── api/                # FastAPI server and routes
+│   ├── avatar/             # Avatar animation engine
+│   ├── browser/            # Browser automation
+│   ├── config/             # Configuration schema and loading
+│   ├── core/               # Orchestrator, planner, routing, AI
+│   ├── distributed/        # Multi-worker coordination
+│   ├── evaluation/         # Benchmark framework
+│   ├── memory/             # SQLite memory backend
+│   ├── providers/          # OpenAI provider implementations
+│   ├── research/           # Research provider abstraction
+│   ├── runtime/            # Application lifecycle
+│   ├── security/           # Security policy and audit
+│   ├── solver/             # Problem-solving engine
+│   ├── tools/              # Tool implementations
+│   ├── vision/             # Screen understanding
+│   └── voice/              # Voice pipeline
+├── config/                 # Configuration files
+│   └── missminutes.toml    # Default configuration
+├── data/                   # Runtime data (memory DB, evaluation)
+├── docs/                   # Documentation
+├── scripts/                # Utility scripts
+├── tests/                  # Test suite
+│   ├── unit/               # 155+ unit test files
+│   └── integration/        # 14 integration test files
+├── ui/                     # Avatar assets
+├── main.py                 # Application entry point
+├── pyproject.toml          # Package configuration
+├── requirements.txt        # Runtime dependencies
+└── .env.example            # Environment variable template
 ```
 
 ## Requirements
@@ -158,57 +148,6 @@ python main.py --headless
 
 All subsystems use deterministic fake providers. No network access required.
 
-## Local Web Interface
-
-MISSMINUTES includes a built-in web interface for interacting with the AI assistant locally.
-
-### Quick Start
-
-```powershell
-python main.py
-```
-
-Open your browser to: **http://127.0.0.1:8000**
-
-### Features
-
-- **Chat Interface** — Type messages and receive responses from the AI assistant
-- **Animated Avatar** — Clock-themed SVG avatar with idle, listening, thinking, speaking, and working states
-- **System Status Panel** — Real-time status of all subsystems (Backend, Orchestrator, Memory, Agents, etc.)
-- **Activity Log** — Recent events and operations
-- **Task Visualization** — Pipeline stages (Understanding → Planning → Agent → Tool → Verification → Response)
-- **Dashboard** — System metrics and subsystem overview
-- **Settings** — Configuration options (AI providers show NOT CONFIGURED in local mode)
-
-### Pages
-
-| Path | Description |
-|------|-------------|
-| `/` | Main chat interface |
-| `/dashboard` | System dashboard |
-| `/settings` | Settings page |
-
-### Local Mode
-
-The web interface works **without any external API keys**. In local mode:
-
-- All AI responses use fake/local providers
-- Voice is in mock mode (no real STT/TTS)
-- Browser automation is disabled
-- External APIs show "NOT CONFIGURED"
-
-### Chat API
-
-```bash
-# Send a chat message
-curl -X POST http://127.0.0.1:8000/api/chat \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Hello Miss Minutes"}'
-
-# Response
-{"message": "Hello! I'm MISSMINUTES.", "status": "success", "task_id": "..."}
-```
-
 ## Custom Port
 
 ```powershell
@@ -261,14 +200,8 @@ cat data/evaluation/EVALUATION_REPORT.md
 
 | Method | Path | Description |
 |--------|------|-------------|
-| GET | `/` | Local web interface (HTML) |
-| GET | `/dashboard` | Dashboard page (HTML) |
-| GET | `/settings` | Settings page (HTML) |
+| GET | `/` | Root info (name, version, status) |
 | GET | `/health` | Health check |
-| POST | `/api/chat` | Send chat message |
-| GET | `/api/info` | API info (JSON) |
-| GET | `/api/avatar/state` | Avatar state |
-| POST | `/api/avatar/signal` | Send avatar signal |
 | POST | `/tasks` | Submit a task |
 | GET | `/runtime/status` | Runtime capabilities and uptime |
 | POST | `/voice/session` | Voice request |
@@ -339,9 +272,8 @@ docker run -p 8000:8000 -e OPENAI_API_KEY=your-key missminutes
 | CHUNK 34 | Integration |
 | CHUNK 35 | Evaluation framework (248/248 tests passed) |
 | CHUNK 36 | Packaging, deployment, demo readiness |
-| CHUNK 37 | Local web interface (UI milestone) |
 
-**Test suite:** 2081+ tests passing
+**Test suite:** 2061+ tests passing
 
 ## License
 

@@ -12,13 +12,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy project files
-COPY backend/pyproject.toml ./
-COPY backend/requirements.txt ./
+COPY pyproject.toml ./
+COPY requirements.txt ./
 COPY config/ config/
-COPY backend/app/ app/
-COPY backend/main.py ./
+COPY app/ app/
+COPY main.py ./
 COPY data/ data/
-COPY frontend/ frontend/
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -e .
