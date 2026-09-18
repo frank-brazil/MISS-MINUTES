@@ -102,7 +102,7 @@ def test_health_and_root_alongside_tasks() -> None:
     app = create_app(ai_model=ai)
     client = TestClient(app)
 
-    root_resp = client.get("/")
+    root_resp = client.get("/api/info")
     assert root_resp.status_code == 200
     assert root_resp.json()["name"] == "MISSMINUTES"
 

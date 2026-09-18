@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}MISSMINUTES — Settings{% endblock %}
+{% block body %}
+<header class="topbar">
+    <div class="topbar-left">
+        <div class="topbar-logo">
+            <svg viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="12" stroke="#f59e0b" stroke-width="2" fill="none"/><circle cx="14" cy="14" r="1.5" fill="#f59e0b"/><line x1="14" y1="14" x2="14" y2="7" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round"/><line x1="14" y1="14" x2="19" y2="14" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round"/></svg>
+            MISSMINUTES
+        </div>
+    </div>
+    <div class="topbar-center">SETTINGS</div>
+    <div class="topbar-right">
+        <a href="/" class="topbar-btn">Chat</a>
+        <a href="/dashboard" class="topbar-btn">Dashboard</a>
+    </div>
+</header>
+<div class="page-container">
+    <h1 class="page-title">Settings</h1>
+    <p class="page-subtitle">Configuration options</p>
+    <div class="settings-section">
+        <div class="settings-section-header">AI Providers</div>
+        <div class="settings-item">
+            <div><div class="settings-item-label">OpenAI</div><div class="settings-item-desc">Configure OPENAI_API_KEY in .env</div></div>
+            <div class="settings-value">NOT CONFIGURED</div>
+        </div>
+        <div class="settings-item">
+            <div><div class="settings-item-label">OpenRouter</div><div class="settings-item-desc">Configure OPENROUTER_API_KEY in .env</div></div>
+            <div class="settings-value">NOT CONFIGURED</div>
+        </div>
+    </div>
+    <div class="settings-section">
+        <div class="settings-section-header">Voice</div>
+        <div class="settings-item">
+            <div><div class="settings-item-label">Speech-to-Text</div><div class="settings-item-desc">Requires microphone and STT provider</div></div>
+            <div class="settings-value">NOT CONFIGURED</div>
+        </div>
+        <div class="settings-item">
+            <div><div class="settings-item-label">Text-to-Speech</div><div class="settings-item-desc">Requires TTS provider (e.g. ElevenLabs)</div></div>
+            <div class="settings-value">NOT CONFIGURED</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

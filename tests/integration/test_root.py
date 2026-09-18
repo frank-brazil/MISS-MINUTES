@@ -11,7 +11,7 @@ def test_root_returns_200() -> None:
 
 
 def test_root_returns_missminutes_identity() -> None:
-    response = client.get("/")
+    response = client.get("/api/info")
     data = response.json()
     assert data["name"] == "MISSMINUTES"
     assert data["version"] == "0.1.0"
