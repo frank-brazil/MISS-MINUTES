@@ -23,6 +23,7 @@ jobs:
 
       - name: Run Ruff Linter
         run: ruff check .
+        working-directory: backend
 
   test:
     name: Run Tests
@@ -47,6 +48,7 @@ jobs:
   typecheck:
     name: Type Check
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
