@@ -11,10 +11,11 @@ Verifies:
 
 from pathlib import Path
 
+from fastapi.testclient import TestClient
+
 from app.api.app import create_app
 from app.config.settings import load_config
 from app.runtime.runtime import MissMinutesRuntime
-from fastapi.testclient import TestClient
 
 
 def _headless_runtime() -> MissMinutesRuntime:

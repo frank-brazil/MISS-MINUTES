@@ -80,9 +80,9 @@ def create_app(
         app.mount("/static", StaticFiles(directory=str(_STATIC_DIR)), name="static")
 
     # Mount avatar assets (PNGs, character.json, etc.)
-    _ASSETS_DIR = Path(__file__).resolve().parents[2] / "ui" / "avatar" / "assets"
-    if _ASSETS_DIR.exists():
-        app.mount("/assets", StaticFiles(directory=str(_ASSETS_DIR)), name="assets")
+    assets_dir = Path(__file__).resolve().parents[2] / "ui" / "avatar" / "assets"
+    if assets_dir.exists():
+        app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="assets")
 
     # Setup Jinja2 templates
     templates = Jinja2Templates(directory=str(_TEMPLATE_DIR))
