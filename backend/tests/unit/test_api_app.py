@@ -45,7 +45,7 @@ def test_create_app_no_security_manager_by_default() -> None:
 def test_create_app_routes_are_included() -> None:
     application = create_app()
     client = TestClient(application)
-    response = client.get("/")
+    response = client.get("/api/info")
     assert response.status_code == 200
     assert response.json()["name"] == "MISSMINUTES"
 

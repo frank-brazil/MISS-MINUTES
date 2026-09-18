@@ -56,7 +56,7 @@ class TestAvatarAssetsServed:
 class TestNoExternalAPIStrings:
     def test_no_provider_references_in_frontend(self):
         """Frontend JS files must not reference external API providers."""
-        js_dir = Path("app/api/static/js")
+        js_dir = Path("frontend/static/js")
         forbidden = ["openai", "gemini", "groq", "elevenlabs", "brave", "openrouter", "api_key"]
         for js_file in js_dir.glob("*.js"):
             content = js_file.read_text().lower()

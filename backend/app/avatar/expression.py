@@ -3,7 +3,7 @@
 Expressions are data/config driven: they are named collections of parameter
 deltas controlling eye openness, pupil position, eyebrow lift, mouth shape and
 openness, face tilt and body tilt. A default set ships in code and is mirrored
-as JSON data under ``ui/avatar/assets/expressions/`` so appearance can be
+as JSON data under ``backend/assets/avatar/expressions/`` so appearance can be
 adjusted without touching behaviour.
 """
 

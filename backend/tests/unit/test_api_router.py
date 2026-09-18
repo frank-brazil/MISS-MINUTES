@@ -5,7 +5,7 @@ from collections.abc import Sequence
 
 import pytest
 
-from app.api.router import create_task, health, root
+from app.api.router import api_info, create_task, health
 from app.api.schemas import TaskRequest
 from app.core.ai import AIMessage, AIModel, AIResponse, ToolDefinition
 from app.core.orchestrator import OrchestrationResult, Orchestrator
@@ -26,7 +26,7 @@ class FakeAIModel(AIModel):
 
 
 def test_root_returns_identity() -> None:
-    result = asyncio.run(root())
+    result = asyncio.run(api_info())
     assert result["name"] == "MISSMINUTES"
     assert result["version"] == "0.1.0"
     assert result["status"] == "running"

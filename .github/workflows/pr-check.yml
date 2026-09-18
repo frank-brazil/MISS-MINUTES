@@ -1,4 +1,4 @@
-name: PR Lint Check
+name: PR Checks
 
 on:
   pull_request:
@@ -23,3 +23,43 @@ jobs:
 
       - name: Run Ruff Linter
         run: ruff check .
+
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+        working-directory: backend
+
+      - name: Run Tests
+        run: python -m pytest tests/ -q
+        working-directory: backend
+
+  typecheck:
+    name: Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+        working-directory: backend
+
+      - name: Run Mypy
+        run: mypy app/
+        working-directory: backend

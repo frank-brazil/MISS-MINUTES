@@ -73,7 +73,7 @@ class SpriteSheetRenderer(AvatarRenderer, ABC):
 
         self._config = config or AvatarConfig()
         self._now_fn = now_fn or _time.time
-        self._asset_root = asset_root or Path("ui/avatar/assets/character")
+        self._asset_root = asset_root or Path("backend/assets/avatar/character")
 
         self._pose = AvatarPose.idle()
         self._expression_name = "neutral"

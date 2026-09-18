@@ -19,8 +19,8 @@ from app.security.manager import SecurityManager
 
 logger = logging.getLogger(__name__)
 
-_STATIC_DIR = Path(__file__).resolve().parents[2] / "app" / "api" / "static"
-_TEMPLATE_DIR = Path(__file__).resolve().parents[2] / "app" / "api" / "templates"
+_STATIC_DIR = Path(__file__).resolve().parents[3] / "frontend" / "static"
+_TEMPLATE_DIR = Path(__file__).resolve().parents[3] / "frontend" / "templates"
 
 
 def create_app(
@@ -80,7 +80,7 @@ def create_app(
         app.mount("/static", StaticFiles(directory=str(_STATIC_DIR)), name="static")
 
     # Mount avatar assets (PNGs, character.json, etc.)
-    assets_dir = Path(__file__).resolve().parents[2] / "ui" / "avatar" / "assets"
+    assets_dir = Path(__file__).resolve().parents[3] / "backend" / "assets" / "avatar"
     if assets_dir.exists():
         app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="assets")
 

@@ -9,6 +9,8 @@ from pathlib import Path
 
 import pytest
 
+_PROJECT_ROOT = Path(__file__).resolve().parents[3]
+
 
 class TestPackageInstallation:
     """Verify the package is correctly installed and importable."""
@@ -71,7 +73,7 @@ class TestConfigurationValidation:
     def test_toml_config_loads(self):
         from app.config.settings import load_config
 
-        config = load_config(path="config/missminutes.toml")
+        config = load_config(path=str(_PROJECT_ROOT / "config" / "missminutes.toml"))
         assert config.ai.provider == "openai"
         assert config.security.audit_enabled is True
 
@@ -177,6 +179,7 @@ class TestAppCreation:
         # Verify key endpoints respond
         assert client.get("/").status_code == 200
         assert client.get("/health").status_code == 200
+        assert client.get("/api/info").status_code == 200
         assert client.get("/runtime/status").status_code in (200, 503)
 
 
@@ -202,7 +205,7 @@ class TestHealthEndpoint:
 
         app = create_app()
         client = TestClient(app)
-        resp = client.get("/")
+        resp = client.get("/api/info")
         assert resp.status_code == 200
         data = resp.json()
         assert data["name"] == "MISSMINUTES"
@@ -213,10 +216,10 @@ class TestEnvironmentExample:
     """Verify .env.example exists and is well-formed."""
 
     def test_env_example_exists(self):
-        assert Path(".env.example").is_file()
+        assert (_PROJECT_ROOT / ".env.example").is_file()
 
     def test_env_example_has_required_vars(self):
-        content = Path(".env.example").read_text()
+        content = (_PROJECT_ROOT / ".env.example").read_text()
         required = [
             "OPENAI_API_KEY",
             "MISSMINUTES_HOST",
@@ -229,7 +232,7 @@ class TestEnvironmentExample:
             assert var in content, f"{var} missing from .env.example"
 
     def test_env_example_has_no_real_secrets(self):
-        content = Path(".env.example").read_text()
+        content = (_PROJECT_ROOT / ".env.example").read_text()
         # Should only have empty values or placeholders
         for line in content.splitlines():
             if line.startswith("#") or "=" not in line:
@@ -244,23 +247,23 @@ class TestGitignore:
     """Verify .gitignore covers critical patterns."""
 
     def test_gitignore_excludes_env(self):
-        content = Path(".gitignore").read_text()
+        content = (_PROJECT_ROOT / ".gitignore").read_text()
         assert ".env" in content
 
     def test_gitignore_excludes_venv(self):
-        content = Path(".gitignore").read_text()
+        content = (_PROJECT_ROOT / ".gitignore").read_text()
         assert ".venv/" in content
 
     def test_gitignore_excludes_pycache(self):
-        content = Path(".gitignore").read_text()
+        content = (_PROJECT_ROOT / ".gitignore").read_text()
         assert "__pycache__/" in content
 
     def test_gitignore_excludes_egg_info(self):
-        content = Path(".gitignore").read_text()
+        content = (_PROJECT_ROOT / ".gitignore").read_text()
         assert "*.egg-info/" in content
 
     def test_gitignore_excludes_build_artifacts(self):
-        content = Path(".gitignore").read_text()
+        content = (_PROJECT_ROOT / ".gitignore").read_text()
         assert "dist/" in content
         assert "build/" in content
 
@@ -269,12 +272,12 @@ class TestTOMLConfig:
     """Verify the TOML config file is valid."""
 
     def test_toml_config_exists(self):
-        assert Path("config/missminutes.toml").is_file()
+        assert (_PROJECT_ROOT / "config" / "missminutes.toml").is_file()
 
     def test_toml_config_parseable(self):
         import tomllib
 
-        with open("config/missminutes.toml", "rb") as f:
+        with open(_PROJECT_ROOT / "config" / "missminutes.toml", "rb") as f:
             data = tomllib.load(f)
         assert "ai" in data
         assert "security" in data
@@ -283,7 +286,7 @@ class TestTOMLConfig:
     def test_toml_config_has_app_section(self):
         import tomllib
 
-        with open("config/missminutes.toml", "rb") as f:
+        with open(_PROJECT_ROOT / "config" / "missminutes.toml", "rb") as f:
             data = tomllib.load(f)
         assert "app" in data
         assert data["app"]["host"] == "127.0.0.1"
@@ -350,12 +353,11 @@ class TestSecurityAudit:
 
     def test_no_secrets_in_source(self):
         """Scan key source files for accidental hardcoded secrets."""
-        source_dirs = ["app/", "config/"]
+        source_dirs = [_PROJECT_ROOT / "app", _PROJECT_ROOT / "config"]
         for d in source_dirs:
-            path = Path(d)
-            if not path.exists():
+            if not d.exists():
                 continue
-            for py_file in path.rglob("*.py"):
+            for py_file in d.rglob("*.py"):
                 content = py_file.read_text(errors="ignore")
                 for line in content.splitlines():
                     if self._has_hardcoded_secret(line):
@@ -363,7 +365,7 @@ class TestSecurityAudit:
 
     def test_env_example_no_real_values(self):
         """Double-check .env.example has no real secrets."""
-        env_file = Path(".env.example")
+        env_file = _PROJECT_ROOT / ".env.example"
         if not env_file.exists():
             pytest.skip(".env.example not found")
         content = env_file.read_text()

@@ -1,7 +1,7 @@
 """Asset loaders.
 
 Behaviour lives in ``app.avatar``; visual data/config lives under
-``ui/avatar/assets/``. These helpers load character, expression and window
+``backend/assets/avatar/``. These helpers load character, expression and window
 data from that layout, falling back to built-in defaults when the repository
 asset files are absent (so the avatar engine has no hard filesystem
 dependency).
@@ -18,7 +18,7 @@ from app.avatar.window import AvatarWindowConfig
 
 logger = logging.getLogger(__name__)
 
-_ASSETS_ROOT = Path(__file__).resolve().parents[2] / "ui" / "avatar" / "assets"
+_ASSETS_ROOT = Path(__file__).resolve().parents[3] / "backend" / "assets" / "avatar"
 
 CHARACTER_JSON = _ASSETS_ROOT / "character" / "character.json"
 EXPRESSIONS_JSON = _ASSETS_ROOT / "expressions" / "expressions.json"
